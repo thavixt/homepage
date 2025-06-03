@@ -31,26 +31,6 @@ const features: { title: string; link: string; description?: string }[] = [
   }
 ]
 
-function ListItem({
-  title,
-  children,
-  href,
-  ...props
-}: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
-  return (
-    <li {...props}>
-      <NavigationMenuLink asChild>
-        <Link to={href}>
-          <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-            {children}
-          </p>
-        </Link>
-      </NavigationMenuLink>
-    </li>
-  )
-}
-
 export function Header() {
   return (
     <header className="flex flex-col items-center z-1000">
@@ -83,12 +63,15 @@ export function Header() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link to="/stats">Stats</Link>
-            </NavigationMenuLink>
-            <NavigationMenuLink asChild>
-              <Link to="/about">About</Link>
-            </NavigationMenuLink>
+          <NavigationMenuLink asChild>
+            <Link to="/stats">Stats</Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild>
+            <Link to="/settings">Settings</Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild>
+            <Link to="/about">About</Link>
+          </NavigationMenuLink>
         </NavigationMenuList>
       </NavigationMenu>
     </header>

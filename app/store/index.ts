@@ -1,10 +1,12 @@
 import { configureStore, combineReducers, type ThunkAction, type Action } from '@reduxjs/toolkit'
+import bookmarksReducer from '../reducers/bookmarksReducer'
 import todosReducer from '../reducers/todosReducer'
 
 const preloadedState = loadState();
 
 const rootReducer = combineReducers({
   todos: todosReducer,
+  bookmarks: bookmarksReducer, 
 });
 
 export const store = configureStore({

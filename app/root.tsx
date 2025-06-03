@@ -12,6 +12,7 @@ import { store } from './store'
 import type { Route } from "./+types/root";
 import "./app.css";
 import { useEffect } from "react";
+import { Toaster } from "./components/ui/sonner";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -51,16 +52,17 @@ function Root() {
 export default function App() {
   useEffect(() => {
     const seed = [
+      new Date().getMonth(),
       new Date().getDate(),
       new Date().getHours(),
     ].join('-');
-    console.log(seed);
     const url = `url('https://picsum.photos/seed/${seed}/1920/1080')`;
     document.body.style.setProperty('--bg-img', url);
   })
   return (
     <Provider store={store}>
       <Root />
+      <Toaster />
     </Provider>
   );
 }
