@@ -6,9 +6,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Provider } from 'react-redux'
+import { store } from './store'
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { useEffect } from "react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,8 +44,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
+function Root() {
   return <Outlet />;
+}
+
+export default function App() {
+  useEffect(() => {
+    const seed = [
+      new Date().getDate(),
+      new Date().getHours(),
+    ].join('-');
+    console.log(seed);
+    const url = `url('https://picsum.photos/seed/${seed}/1920/1080')`;
+    document.body.style.setProperty('--bg-img', url);
+  })
+  return (
+    <Provider store={store}>
+      <Root />
+    </Provider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
