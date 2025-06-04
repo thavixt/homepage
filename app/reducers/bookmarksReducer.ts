@@ -11,7 +11,7 @@ export interface Bookmark {
   href: string;
 }
 
-const initialState: BookmarksState = {
+export const initialState: BookmarksState = {
   bookmarks: [],
 }
 
@@ -41,9 +41,6 @@ export const bookmarkSlice = createSlice({
 
 export const { clearBookmarks, createBookmark, deleteBookmark } = bookmarkSlice.actions
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.bookmark.value)`
 export const getBookmarks = (state: RootState) => state.bookmarks.bookmarks;
 
 export default bookmarkSlice.reducer

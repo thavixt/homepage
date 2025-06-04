@@ -1,12 +1,16 @@
 import { configureStore, combineReducers, type ThunkAction, type Action } from '@reduxjs/toolkit'
-import bookmarksReducer from '../reducers/bookmarksReducer'
-import todosReducer from '../reducers/todosReducer'
+import bookmarksReducer, { initialState as initialBookmarksState } from '../reducers/bookmarksReducer'
+import todosReducer, { initialState as initialTodosState } from '../reducers/todosReducer'
+import statsReducer, { initialState as initialStatsState } from '../reducers/statsReducer'
+import settingsReducer, { initialState as initialSettingsState } from '../reducers/settingsReducer'
 
 const preloadedState = loadState();
 
 const rootReducer = combineReducers({
   todos: todosReducer,
-  bookmarks: bookmarksReducer, 
+  bookmarks: bookmarksReducer,
+  stats: statsReducer,
+  settings: settingsReducer,
 });
 
 export const store = configureStore({
@@ -33,7 +37,11 @@ export function loadState() {
     if (serializedState === null) return undefined;
     return JSON.parse(serializedState);
   } catch (err) {
-    return undefined;
+    return {
+      bookmarks: initialBookmarksState,
+      stats: initialStatsState,
+      todos: initialTodosState
+    };
   }
 }
 

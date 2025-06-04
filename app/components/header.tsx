@@ -1,3 +1,4 @@
+import { ChartLineIcon, HomeIcon, SettingsIcon, WrenchIcon } from "lucide-react";
 import { Link } from "react-router";
 import {
   NavigationMenu,
@@ -37,41 +38,47 @@ export function Header() {
       {/* <div className="text-2xl font-semibold">Your home page</div> */}
       <NavigationMenu viewport={false}>
         <NavigationMenuList>
+
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link to="/">Index</Link>
+              <Link to="/"><HomeIcon size={18} className="text-blue-500" /></Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
+
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Apps</NavigationMenuTrigger>
+            <NavigationMenuTrigger><WrenchIcon size={18} className="text-blue-500" /></NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[300px] gap-4">
                 {features.map(feature => (
                   <li key={feature.link}>
                     <NavigationMenuLink asChild>
-                      <Link to={feature.link}>
-                        <div className="font-medium">{feature.title}</div>
-                        {feature.description ? (
-                          <div className="text-muted-foreground">
+                      <div>
+                        <Link to={feature.link} className="flex flex-col gap-2">
+                          <div className="font-medium">{feature.title}</div>
+                          <p className="text-muted-foreground whitespace-pre-wrap">
                             {feature.description}
-                          </div>
-                        ) : null}
-                      </Link>
+                          </p>
+                        </Link>
+                      </div>
                     </NavigationMenuLink>
                   </li>
                 ))}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link to="/stats">Stats</Link>
-          </NavigationMenuLink>
-          <NavigationMenuLink asChild>
-            <Link to="/settings">Settings</Link>
-          </NavigationMenuLink>
-          <NavigationMenuLink asChild>
-            <Link to="/about">About</Link>
-          </NavigationMenuLink>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link to="/Stats"><ChartLineIcon size={18} className="text-blue-500" /></Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link to="/settings"><SettingsIcon size={18} className="text-blue-500" /></Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
         </NavigationMenuList>
       </NavigationMenu>
     </header>

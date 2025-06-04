@@ -17,6 +17,10 @@ body {
   } */
 }
 
+html {
+  background-color: black;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -26,12 +30,16 @@ body::before {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  opacity: 0.65;
+  opacity: 0;
   pointer-events: none;
+  transition: opacity 1s ease-in;
+}
+body.bg-loaded::before {
+  opacity: 0.75;
 }
 
-.link {
-  @apply leading-normal text-blue-700 hover:underline dark:text-blue-500;
+a {
+  @apply leading-normal text-blue-700 hover:underline dark:text-blue-500 truncate max-w-sm w-full;
 }
 
 @theme inline {

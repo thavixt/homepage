@@ -20,10 +20,11 @@ import { Label } from "~/components/ui/label"; import {
 import { toast } from "sonner";
 import { TrashIcon } from "lucide-react";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { Badge } from "~/components/ui/badge";
 
 export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "Your home page" },
+    { title: "Home" },
     { name: "description", content: "Welcome to the internet" },
   ];
 }
@@ -48,12 +49,7 @@ export default function Home() {
             <ul>
               {resources.map(({ href, name: text }) => (
                 <li key={href}>
-                  <a
-                    className="link"
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href={href} rel="noreferrer">
                     {text}
                   </a>
                 </li>
@@ -103,7 +99,10 @@ function Favourites() {
     if (!searchValue) {
       return true;
     }
-    return bookmark.name.toLowerCase().includes(searchValue);
+    return (
+      bookmark.name.toLowerCase().includes(searchValue) ||
+      bookmark.href.toLowerCase().includes(searchValue)
+    );
   })
 
   const onSearch: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -124,13 +123,17 @@ function Favourites() {
   }
 
   const onClear = () => {
-    toast.warning('Bookmarks cleared');
-    dispatch(clearBookmarks());
+    if (confirm('Are you sure you want to delete ALL your bookmarks?')) {
+      toast.success('Bookmarks cleared');
+      dispatch(clearBookmarks());
+    }
   }
 
   const onDelete: React.MouseEventHandler<SVGSVGElement> = (e) => {
-    toast.warning(`Bookmark "${e.currentTarget.dataset.name}" deleted`);
-    dispatch(deleteBookmark(e.currentTarget.dataset.id as string));
+    if (confirm(`Are you sure you want to delete the bookmark "${e.currentTarget.dataset.name}"?`)) {
+      toast.success(`Bookmark "${e.currentTarget.dataset.name}" deleted`);
+      dispatch(deleteBookmark(e.currentTarget.dataset.id as string));
+    }
   }
 
   return (
@@ -139,35 +142,36 @@ function Favourites() {
         <Label htmlFor="search"></Label>
         <Input type="search" id="search" name="search" placeholder="Search in your bookmarks ..." onChange={onSearch} />
       </div>
-      <div className="flex flex-col gap-2 min-h-[300px]">
+      <div className="flex flex-col gap-2 min-h-[300px] justify-between">
         <div>Your bookmarks:</div>
         {!sortedBookmarks.length ? (
-          <div className="font-light text-sm">Nothing here, yet</div>
-        ) : null}
-        <ScrollArea className="h-[300px]">
-          <ul>
-            {filteredBookmarks.map(bookmark => (
-              <li key={bookmark.id} className="flex justify-between items-center gap-2 hover:bg-accent rounded-sm px-2">
-                <a
-                  className="link truncate max-w-sm w-full"
-                  href={bookmark.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={`${bookmark.name} - ${bookmark.href}`}
-                >
-                  {bookmark.name}
-                </a>
-                <TrashIcon data-id={bookmark.id} data-name={bookmark.name} className="cursor-pointer" size={16} onClick={onDelete} />
-              </li>
-            ))}
-          </ul>
-        </ScrollArea>
+          <div className="flex flex-col gap-2 font-light text-sm">
+            <p>Nothing to visit for now.</p>
+            <p>Click the <Badge>Add bookmark</Badge> button below to add a bookmark.</p>
+          </div>
+        ) : (
+          <ScrollArea className="h-[300px]">
+            <ul>
+              {filteredBookmarks.map(bookmark => (
+                <li key={bookmark.id} className="flex justify-between items-center gap-2 hover:bg-accent rounded-sm px-3 py-1">
+                  <a
+                    href={bookmark.href}
+                    rel="noopener noreferrer"
+                  >
+                    {bookmark.name}
+                  </a>
+                  <TrashIcon data-id={bookmark.id} data-name={bookmark.name} className="cursor-pointer" size={16} onClick={onDelete} />
+                </li>
+              ))}
+            </ul>
+          </ScrollArea>
+        )}
       </div>
       <div className="flex justify-between gap-4">
-        <Button variant="ghost" onClick={onClear}>Clear</Button>
+        <Button variant="ghost" onClick={onClear}>Clear bookmarks</Button>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline">Add bookmark</Button>
+            <Button>Add bookmark</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <form ref={formRef} onSubmit={onSubmit}>

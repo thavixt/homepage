@@ -16,22 +16,15 @@ export interface Todo {
   completed: string | null;
 }
 
-const initialState: TodoState = {
+export const initialState: TodoState = {
   todos: [],
 }
 
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     createTodo: (state, action: PayloadAction<Omit<Todo, 'id' | 'status' | 'completed'>>) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      // state.value += 1
-      console.log('add todo', action.payload);
       state.todos.push({
         id: crypto.randomUUID().slice(0, 8),
         status: 'initial',
@@ -71,15 +64,15 @@ export const todoSlice = createSlice({
         }
         return todo;
       })
-    }
+    },
+    clearTodos: (state) => {
+      state.todos = []
+    },
   },
 })
 
-export const { createTodo, cancelTodo, completeTodo, startTodo } = todoSlice.actions
+export const { createTodo, cancelTodo, completeTodo, startTodo, clearTodos } = todoSlice.actions
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.todo.value)`
 export const getTodos = (state: RootState) => state.todos.todos
 
 export default todoSlice.reducer

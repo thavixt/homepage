@@ -11,10 +11,14 @@ import { store } from './store'
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "./components/ui/sonner";
+import { useAppDispatch, useAppSelector } from "./hooks/state";
+import { incrementStat } from "./reducers/statsReducer";
+import { getSettings } from "./reducers/settingsReducer";
 
 export const links: Route.LinksFunction = () => [
+  { rel: "icon", href: "/favicon.jpg" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
@@ -36,7 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="dark">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -45,23 +49,55 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Root() {
-  return <Outlet />;
+function Root({ mounted }: { mounted: boolean }) {
+  const dispatch = useAppDispatch();
+  const settings = useAppSelector(getSettings);
+  const backgroundChangeFrequency = settings.background.value;
+
+  const seed = [
+    backgroundChangeFrequency === 'monthly' ? new Date().getMonth() : '*',
+    backgroundChangeFrequency === 'weekly' ? new Date().getDate() : '*',
+    backgroundChangeFrequency === 'daily' ? new Date().getDay() : '*',
+    backgroundChangeFrequency === 'hourly' ? new Date().getHours() : '*',
+  ].join('-');
+
+  const onClick = () => {
+    dispatch(incrementStat('clicks'));
+  }
+
+  useEffect(() => {
+    if (mounted) {
+      return;
+    }
+    dispatch(incrementStat('opened'));
+  }, [])
+
+  useEffect(() => {
+    // Remove the class to trigger fade-out
+    document.body.classList.remove('bg-loaded');
+    document.body.style.setProperty('--bg-img', `url('https://picsum.photos/seed/${seed}/1920/1080')`);
+    setTimeout(() => {
+      document.body.classList.add('bg-loaded');
+    }, 250);
+  }, [seed]);
+
+  return (
+    <div onClick={onClick}>
+      <Outlet />
+    </div>
+  );
 }
 
 export default function App() {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    const seed = [
-      new Date().getMonth(),
-      new Date().getDate(),
-      new Date().getHours(),
-    ].join('-');
-    const url = `url('https://picsum.photos/seed/${seed}/1920/1080')`;
-    document.body.style.setProperty('--bg-img', url);
+    setMounted(true);
   })
+
   return (
     <Provider store={store}>
-      <Root />
+      <Root mounted={mounted} />
       <Toaster />
     </Provider>
   );
