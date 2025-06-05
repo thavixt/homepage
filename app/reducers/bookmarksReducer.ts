@@ -9,6 +9,7 @@ export interface Bookmark {
   id: string;
   name: string;
   href: string;
+  pinned?: boolean;
 }
 
 export const initialState: BookmarksState = {
@@ -28,6 +29,18 @@ export const bookmarkSlice = createSlice({
         }
       ]
     },
+    updateBookmark: (state, action: PayloadAction<Pick<Bookmark, 'id' | 'name' | 'href' | 'pinned'>>) => {
+      const updatedBookmarks = state.bookmarks.map((bookmark) => {
+        if (bookmark.id === action.payload.id) {
+          return {
+            ...bookmark,
+            ...action.payload,
+          }
+        }
+        return bookmark;
+      });
+      state.bookmarks = updatedBookmarks;
+    },
     clearBookmarks: (state) => {
       state.bookmarks = [];
     },
@@ -39,7 +52,7 @@ export const bookmarkSlice = createSlice({
   },
 })
 
-export const { clearBookmarks, createBookmark, deleteBookmark } = bookmarkSlice.actions
+export const { clearBookmarks, createBookmark, deleteBookmark, updateBookmark } = bookmarkSlice.actions
 
 export const getBookmarks = (state: RootState) => state.bookmarks.bookmarks;
 

@@ -70,7 +70,7 @@ export function Header() {
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link to="/Stats">
+              <Link to="/stats">
                 <ChartLineIcon size={18} className="text-blue-500" />
               </Link>
             </NavigationMenuLink>

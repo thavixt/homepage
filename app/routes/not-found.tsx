@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import type { Route } from "./+types/home";
 import { Link } from "react-router";
 
@@ -11,13 +11,18 @@ export function meta({ }: Route.MetaArgs) {
 
 export default function About() {
   return (
-    <Card className="w-[500px]">
-      <CardHeader className="w-full text-center font-bold text-4xl">
-        That was a wrong turn :/
+    <Card className="w-[600px]">
+      <CardHeader className="w-full text-center font-bold text-8xl">
+        <p>404</p>
       </CardHeader>
-      <CardContent className="flex flex-col items-center justify-center pt-16 pb-4 gap-8">
-        <Link to="/" className="link">Let's go back.</Link>
+      <CardContent className="flex items-center justify-center py-6">
+        <small>... maybe it's just not fully implemented yet? Check back later!</small>
       </CardContent>
+      <CardFooter className="flex items-center justify-center py-6">
+        <div>
+          <Link to="/">Let's just go back <i>home</i> for now.</Link>
+        </div>
+      </CardFooter>
     </Card>
   );
 }

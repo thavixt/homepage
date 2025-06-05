@@ -28,22 +28,38 @@ export function WeatherWidget() {
     <div className="relative border rounded-md p-4">
       {(weatherData && !loading) ? (
         <div className="flex flex-col items-center">
-          <div>{weatherData.location.country}, {weatherData.location.name}</div>
+          <div title="Your current location">{weatherData.location.country}, {weatherData.location.name}</div>
           <div className="flex items-center">
-            <div>{weatherData.current.condition.text} - {weatherData.current.temp_c} °C</div>
-            <img src={`https:${weatherData.current.condition.icon}`} alt="Weather condition icon" className="h-12" />
+            <span title="Weather condition and temperature">{weatherData.current.condition.text} - {weatherData.current.temp_c}°C</span>
+            <img
+              title={`${weatherData.current.condition.text} icon`}
+              src={`https:${weatherData.current.condition.icon}`}
+              alt="Weather condition icon"
+              className="h-12"
+            />
           </div>
           <div className="w-full flex justify-between">
-            <small>Wind: {weatherData.current.wind_kph}km/h</small>
-            <small>Precipitation: {weatherData.current.precip_mm}mm</small>
+            <small title="Wind speed, or wind flow speed, is a fundamental atmospheric quantity caused by air moving from high to low pressure, usually due to changes in temperature">
+              Wind: {weatherData.current.wind_kph}km/h
+            </small>
+            <small title="What the temperature feels like to the human body when relative humidity is combined with the air temperature">
+              Heat index: {weatherData.current.heatindex_c}°C
+            </small>
           </div>
           <div className="w-full flex justify-between">
-            <small>Humidity: {weatherData.current.humidity}%</small>
+            <small title="Rain, snow, sleet, or hail that falls to or condenses on the ground">
+              Precipitation: {weatherData.current.precip_mm}mm
+            </small>
+            <small title="Concentration of water vapor present in the air">
+              Humidity: {weatherData.current.humidity}%
+            </small>
           </div>
-          <small className="mt-2 text-[10px] opacity-50">(weather data from: {new Date(weatherData.current.last_updated).toLocaleString()})</small>
+          <small className="mt-2 text-[10px] opacity-50">
+            (from <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a> at {new Date(weatherData.current.last_updated).toLocaleString()})
+          </small>
         </div>
       ) : (
-        <div className="animate-pulse flex items-center justify-start h-12 gap-2">
+        <div className="animate-pulse flex items-center justify-center h-32 gap-2">
           <span>Loading weather data ...</span>
           <LoaderPinwheel className="animate-spin opacity-50" />
         </div>
