@@ -35,13 +35,14 @@ const features: { title: string; link: string; description?: string }[] = [
 export function Header() {
   return (
     <header className="flex flex-col items-center z-1000">
-      {/* <div className="text-2xl font-semibold">Your home page</div> */}
       <NavigationMenu viewport={false}>
         <NavigationMenuList>
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link to="/"><HomeIcon size={18} className="text-blue-500" /></Link>
+              <Link to="/">,
+                <HomeIcon size={18} className="text-blue-500" />
+              </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
@@ -69,13 +70,17 @@ export function Header() {
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link to="/Stats"><ChartLineIcon size={18} className="text-blue-500" /></Link>
+              <Link to="/Stats">
+                <ChartLineIcon size={18} className="text-blue-500" />
+              </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link to="/settings"><SettingsIcon size={18} className="text-blue-500" /></Link>
+              <Link to="/settings">
+                <SettingsIcon size={18} className="text-blue-500" />
+              </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
 

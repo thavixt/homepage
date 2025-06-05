@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/home";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
@@ -18,9 +18,11 @@ import { Label } from "~/components/ui/label"; import {
   DialogTrigger,
 } from "~/components/ui/dialog"
 import { toast } from "sonner";
-import { TrashIcon } from "lucide-react";
+import { CalendarIcon, CheckCircleIcon, CloudSunIcon, NotebookPenIcon, TrashIcon } from "lucide-react";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Badge } from "~/components/ui/badge";
+import { Clock, getCurrentDate } from "~/components/clock";
+import { WeatherWidget } from "~/components/weather";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -31,18 +33,42 @@ export function meta({ }: Route.MetaArgs) {
 
 export default function Home() {
   return (
-    <Card className="w-3xl flex flex-col items-center gap-8 min-h-0">
+    <Card className="w-full max-w-5xl flex flex-col items-center gap-8 min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
-        Welcome back!
-        <Separator />
+        <div className="flex gap-4 items-center justify-between">
+          <span className="inline">{getCurrentDate()}</span>
+          <Clock />
+        </div>
       </CardHeader>
-      <CardContent className="grid grid-cols-[1fr_auto_1fr] gap-8 w-full space-y-6 px-4">
-        <div className="flex flex-col gap-8">
+      <Separator />
+      <CardContent className="grid grid-cols-1 md:grid-cols-[1fr_auto_2fr] gap-8 w-full space-y-6 px-4">
+        <div className="flex flex-col gap-6">
+          <WeatherWidget />
           <ul>
-            <li><Link className="link" to="todos">Cross out some of my todos</Link></li>
-            <li><Link className="link" to="calendar">Check my calendar</Link></li>
-            <li><Link className="link" to="notes">Write some notes</Link></li>
-            <li><Link className="link" to="weather">How about the weather outside?</Link></li>
+            <li>
+              <Link className="link flex gap-2 items-center" to="todos">
+                <CheckCircleIcon className="inline" size={16} />
+                <span>Todos</span>
+              </Link>
+            </li>
+            <li>
+              <Link className="link flex gap-2 items-center" to="notes">
+                <NotebookPenIcon className="inline" size={16} />
+                <span>Notes</span>
+              </Link>
+            </li>
+            <li>
+              <Link className="link flex gap-2 items-center" to="calendar">
+                <CalendarIcon className="inline" size={16} />
+                <span>Calendar</span>
+              </Link>
+            </li>
+            <li>
+              <Link className="link flex gap-2 items-center" to="weather">
+                <CloudSunIcon className="inline" size={16} />
+                <span>Weather forcast</span>
+              </Link>
+            </li>
           </ul>
           <div>
             <p className="pb-2 font-light">Frequent resources for development:</p>
@@ -150,10 +176,10 @@ function Favourites() {
             <p>Click the <Badge>Add bookmark</Badge> button below to add a bookmark.</p>
           </div>
         ) : (
-          <ScrollArea className="h-[300px]">
-            <ul>
+          <ScrollArea className="h-[400px]">
+            <div className="w-full grid grid-cols-2 gap-x-2 items-start justify-center">
               {filteredBookmarks.map(bookmark => (
-                <li key={bookmark.id} className="flex justify-between items-center gap-2 hover:bg-accent rounded-sm px-3 py-1">
+                <div key={bookmark.id} className="flex justify-between items-center gap-2 hover:bg-accent rounded-sm px-3 py-1">
                   <a
                     href={bookmark.href}
                     rel="noopener noreferrer"
@@ -161,9 +187,9 @@ function Favourites() {
                     {bookmark.name}
                   </a>
                   <TrashIcon data-id={bookmark.id} data-name={bookmark.name} className="cursor-pointer" size={16} onClick={onDelete} />
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </ScrollArea>
         )}
       </div>

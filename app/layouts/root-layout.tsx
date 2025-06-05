@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router';
 import { Footer } from '~/components/footer';
 import { Header } from '~/components/header';
-import { Card, CardContent } from '~/components/ui/card';
 
 export default function RootLayout() {
   return (
