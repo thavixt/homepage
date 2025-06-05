@@ -40,7 +40,7 @@ export function Header() {
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link to="/">,
+              <Link to="/">
                 <HomeIcon size={18} className="text-blue-500" />
               </Link>
             </NavigationMenuLink>
