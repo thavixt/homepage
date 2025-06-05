@@ -4,15 +4,13 @@ import { Button } from "./ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { cn } from "~/lib/utils";
-
-const HALF_HOUR = 30 * 60 * 1000; // 1 hour in milliseconds
+import { Link } from "react-router";
 
 export function WeatherWidget() {
-  // TODO: error handling
   const { data: weatherData, isPending, refetch } = useQuery({
     queryFn: getWeather,
     queryKey: ['weather'],
-    // TODO: retry options with backoff
+    refetchInterval: 60 * 1000 * 15, // 15 minutes
   });
 
   const refetchWeather = () => {
@@ -32,15 +30,18 @@ export function WeatherWidget() {
     <div className="relative border rounded-md p-4">
       {(weatherData && !isPending) ? (
         <div className="flex flex-col items-center">
-          <div title="Your current location">{weatherData.location.country}, {weatherData.location.name}</div>
+          <div title="Your current location">{weatherData.location.country}, {weatherData.location.region}</div>
           <div className="flex items-center">
             <span title="Weather condition and temperature">{weatherData.current.condition.text} - {weatherData.current.temp_c}°C</span>
-            <img
-              title={`${weatherData.current.condition.text} icon`}
-              src={`https:${weatherData.current.condition.icon}`}
-              alt="Weather condition icon"
-              className="h-12"
-            />
+            <span>
+              <Link to="/weather" title="View detailed weather information">
+                <img
+                  src={`https:${weatherData.current.condition.icon}`}
+                  alt="Weather condition icon"
+                  className="scale-[0.75] hover:scale-[1.05] transition-transform cursor-pointer"
+                />
+              </Link>
+            </span>
           </div>
           <div className="w-full flex justify-between">
             <small title="Wind speed, or wind flow speed, is a fundamental atmospheric quantity caused by air moving from high to low pressure, usually due to changes in temperature">
@@ -59,7 +60,7 @@ export function WeatherWidget() {
             </small>
           </div>
           <small className="mt-2 text-[10px] opacity-50">
-            (from <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a> at {new Date(weatherData.current.last_updated).toLocaleString()})
+            (from <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>, updated every 15 minutes)
           </small>
         </div>
       ) : (

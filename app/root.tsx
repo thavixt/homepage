@@ -18,12 +18,11 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       // TODO: review these settings
-      gcTime: 1000 * 60 * 60 * 24, // 24 hours
+      gcTime: 1000 * 60 * 60 * 12, // 12 hours
       networkMode: 'offlineFirst',
       refetchInterval: 30 * 60 * 1000, // 30 minutes
       refetchIntervalInBackground: true,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       retry: 3,
       staleTime: 30 * 60 * 1000, // 30 minutes
     },
