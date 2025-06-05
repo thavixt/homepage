@@ -1,4 +1,4 @@
-import { clearBookmarks, createBookmark, deleteBookmark, getBookmarks, updateBookmark, type Bookmark as IBookmark } from "~/reducers/bookmarksReducer";
+import { clearBookmarks, createBookmark, deleteBookmark, getBookmarks } from "~/reducers/bookmarksReducer";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -7,12 +7,13 @@ import { toast } from "sonner";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Badge } from "~/components/ui/badge";
 import { useState } from "react";
-import { PenIcon, Trash2Icon, TrashIcon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { FormDialog } from "./dialogs/formDialog";
 import { BookmarkForm } from "./forms/bookmarkForm";
 import { AlertDialog } from "./dialogs/alertDialog";
+import { Bookmark } from "./bookmark";
 
-export function Bookmarks() {
+export function BookmarkList() {
   const bookmarks = useAppSelector(getBookmarks);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState('');
@@ -43,11 +44,12 @@ export function Bookmarks() {
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string;
     const href = formData.get("href") as string;
+    const pinned = formData.get("pinned") === 'on';
     if (!name || !href) {
       toast('Must provide a name and link for the bookmark');
       return;
     }
-    dispatch(createBookmark({ name, href }));
+    dispatch(createBookmark({ name, href, pinned }));
     toast.success(`Bookmark "${name}" saved`);
     setDialogOpen(false);
   }
@@ -111,59 +113,4 @@ export function Bookmarks() {
       </div>
     </div>
   )
-}
-
-function Bookmark({ bookmark }: { bookmark: IBookmark }) {
-  const dispatch = useAppDispatch();
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-
-  const onDeleteConfirm = () => {
-    dispatch(deleteBookmark(bookmark.id));
-    toast.success(`Bookmark "${bookmark.name}" deleted`);
-  }
-
-  const onEditSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get("name") as string;
-    const href = formData.get("href") as string;
-    const pinned = formData.get("pinned") === 'on';
-    if (!name || !href) {
-      toast('Must provide a name and link for the bookmark');
-      return;
-    }
-    dispatch(updateBookmark({ id: bookmark.id, name, href, pinned }));
-    toast.success(`Bookmark "${bookmark.name}" updated`);
-    setEditDialogOpen(false);
-  }
-
-  return (
-    <div className="flex justify-between items-center gap-2 hover:bg-accent/50 rounded-sm px-3 py-1">
-      <a href={bookmark.href} rel="noopener noreferrer">{bookmark.name}</a>
-      <AlertDialog
-        trigger={(
-          <div className="border rounded-md p-1" title="Delete bookmark">
-            <TrashIcon className="cursor-pointer" size={16} />
-          </div>
-        )}
-        onConfirm={onDeleteConfirm}
-        title="Delete bookmark"
-        description={`Are you sure you want to delete the bookmark for "${bookmark.name}", that points to "${bookmark.href}"?`}
-      />
-      <FormDialog
-        trigger={(
-          <div className="border rounded-md p-1" title="Edit bookmark">
-            <PenIcon className="cursor-pointer" size={16} />
-          </div>
-        )}
-        onSubmit={onEditSubmit}
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
-        title="Edit bookmark"
-        description="Edit the name and the URL it points to."
-      >
-        <BookmarkForm bookmark={bookmark} />
-      </FormDialog>
-    </div >
-  );
 }

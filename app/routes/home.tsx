@@ -5,7 +5,7 @@ import { Separator } from "~/components/ui/separator";
 import { BookOpenIcon, WorkflowIcon } from "lucide-react";
 import { Clock, getCurrentDate } from "~/components/clock";
 import { WeatherWidget } from "~/components/weather";
-import { Bookmarks } from "~/components/bookmarks";
+import { BookmarkList } from "~/components/bookmarkList";
 import { Label } from "@radix-ui/react-context-menu";
 import { FEATURES } from "~/components/header";
 
@@ -72,7 +72,7 @@ export default function Home() {
         </div>
         <Separator orientation="vertical" />
         <div className="flex">
-          <Bookmarks />
+          <BookmarkList />
         </div>
       </CardContent>
     </Card>

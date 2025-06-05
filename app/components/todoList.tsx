@@ -32,10 +32,15 @@ export function TodoList() {
     (a, b) => a.deadline < b.deadline ? 1 : -1
   )
 
-  // TODO: optimize this filtering logic a bit
   const filteredTodos = sortedTodos.filter(
-    (todo) => todo.title.toLowerCase().includes(searchValue.toLowerCase()) || todo.description?.toLowerCase().includes(searchValue.toLowerCase())
-  ).filter(t => filterTodosByState(filter, t));
+    (todo) => {
+      return (
+        todo.title.toLowerCase().includes(searchValue.toLowerCase())
+        || todo.description?.toLowerCase().includes(searchValue.toLowerCase())
+        || filterTodosByState(filter, todo)
+      )
+    }
+  )
 
   const onSearch: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearchValue(e.currentTarget.value)
