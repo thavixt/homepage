@@ -1,21 +1,34 @@
-import {
-  isRouteErrorResponse,
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "react-router";
-import { Provider } from 'react-redux'
-import { store } from './store'
-
+import { useEffect, useState } from "react";
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { Provider as ReduxProvider } from 'react-redux'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { persistQueryClient } from '@tanstack/react-query-persist-client'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import type { Route } from "./+types/root";
 import "./app.css";
-import { useEffect, useState } from "react";
+
+import { store } from './store'
 import { Toaster } from "./components/ui/sonner";
 import { useAppDispatch, useAppSelector } from "./hooks/state";
 import { incrementStat } from "./reducers/statsReducer";
 import { getSettings } from "./reducers/settingsReducer";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // TODO: review these settings
+      gcTime: 1000 * 60 * 60 * 24, // 24 hours
+      networkMode: 'offlineFirst',
+      refetchInterval: 30 * 60 * 1000, // 30 minutes
+      refetchIntervalInBackground: true,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      retry: 3,
+      staleTime: 30 * 60 * 1000, // 30 minutes
+    },
+  },
+});
 
 export const links: Route.LinksFunction = () => [
   { rel: "icon", href: "/favicon.jpg" },
@@ -93,13 +106,28 @@ export default function App() {
 
   useEffect(() => {
     setMounted(true);
+
+    if (typeof window !== "undefined") {
+      const localStoragePersister = createSyncStoragePersister({
+        storage: window.localStorage,
+        key: 'homepage-tanstack-query-offline-cache',
+      });
+
+      persistQueryClient({
+        queryClient,
+        persister: localStoragePersister,
+      });
+    }
   })
 
   return (
-    <Provider store={store}>
-      <Root mounted={mounted} />
-      <Toaster />
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={true} buttonPosition="bottom-left" />
+      <ReduxProvider store={store}>
+        <Root mounted={mounted} />
+        <Toaster />
+      </ReduxProvider>
+    </QueryClientProvider>
   );
 }
 

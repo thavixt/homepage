@@ -1,32 +1,36 @@
 import { LoaderPinwheel, RefreshCwIcon } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { getWeather, type WeatherResponse } from "~/api/weather";
+import { getWeather } from "~/api/weather";
 import { Button } from "./ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { cn } from "~/lib/utils";
+
+const HALF_HOUR = 30 * 60 * 1000; // 1 hour in milliseconds
 
 export function WeatherWidget() {
-  const [loading, setLoading] = useState(true);
-  const [weatherData, setWeatherData] = useState<WeatherResponse | null>(null);
+  // TODO: error handling
+  const { data: weatherData, isPending, refetch } = useQuery({
+    queryFn: getWeather,
+    queryKey: ['weather'],
+    // TODO: retry options with backoff
+  });
 
-  // TODO: should use React Query
-  const fetchWeather = useCallback(async () => {
-    setLoading(true);
-    const data = await getWeather();
-    setWeatherData(data);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    fetchWeather();
-  }, []);
-
-  const refreshData = () => {
-    // TODO: should be throttled! (React Query would handle this)
-    fetchWeather();
-  }
+  const refetchWeather = () => {
+    refetch();
+    toast.success(
+      'Weather data refreshed',
+      {
+        description: [
+          `Weather data for ${weatherData?.location.name}, ${weatherData?.location.country} is up to date.`,
+        ].join(' '),
+        position: 'top-left',
+      },
+    );
+  };
 
   return (
     <div className="relative border rounded-md p-4">
-      {(weatherData && !loading) ? (
+      {(weatherData && !isPending) ? (
         <div className="flex flex-col items-center">
           <div title="Your current location">{weatherData.location.country}, {weatherData.location.name}</div>
           <div className="flex items-center">
@@ -61,15 +65,15 @@ export function WeatherWidget() {
       ) : (
         <div className="animate-pulse flex items-center justify-center h-32 gap-2">
           <span>Loading weather data ...</span>
-          <LoaderPinwheel className="animate-spin opacity-50" />
+          <LoaderPinwheel className={cn('opacity-50', { 'animate-spin': isPending })} />
         </div>
       )}
       <div
         className="absolute top-2 right-2 cursor-pointer"
-        onClick={refreshData}
+        onClick={refetchWeather}
         title="Refresh weather data"
       >
-        <Button disabled={loading} variant="outline">
+        <Button disabled={isPending} variant="outline">
           <RefreshCwIcon />
         </Button>
       </div>

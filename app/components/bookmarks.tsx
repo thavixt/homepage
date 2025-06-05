@@ -59,15 +59,15 @@ export function Bookmarks() {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div>
-        <Label htmlFor="search"></Label>
-        <Input type="search" id="search" name="search" placeholder="Search in your bookmarks ..." onChange={onSearch} />
+      <div className="grid grid-cols-[1fr_2fr] gap-4">
+        <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
+        <Input type="search" id="search" name="search" placeholder="Search for something you saved earlier..." onChange={onSearch} />
       </div>
       <div className="flex flex-col gap-2 min-h-[300px] justify-between">
         {!sortedBookmarks.length ? (
           <div className="flex flex-col gap-2 font-light text-sm">
             <p>Nothing to visit for now.</p>
-            <p>Click the <Badge>Add bookmark</Badge> button below to add a bookmark.</p>
+            <p>Click the <Badge>Add a new bookmark</Badge> button below to add a bookmark.</p>
           </div>
         ) : (
           <div className="flex flex-col gap-2">
@@ -89,7 +89,7 @@ export function Bookmarks() {
       <div className="flex justify-between gap-4">
         <AlertDialog
           trigger={(
-            <div className="border rounded-md p-1" title="Delete all bookmark">
+            <div className="border rounded-md p-1" title="Delete all bookmarks">
               <Trash2Icon className="cursor-pointer" size={16} />
             </div>
           )}
@@ -99,7 +99,7 @@ export function Bookmarks() {
           confirm="Delete ALL of my bookmarks"
         />
         <FormDialog
-          trigger={<Button>Add bookmark</Button>}
+          trigger={<Button>Add a new bookmark</Button>}
           onSubmit={onSubmit}
           open={dialogOpen}
           onOpenChange={setDialogOpen}
@@ -133,6 +133,7 @@ function Bookmark({ bookmark }: { bookmark: IBookmark }) {
       return;
     }
     dispatch(updateBookmark({ id: bookmark.id, name, href, pinned }));
+    toast.success(`Bookmark "${bookmark.name}" updated`);
     setEditDialogOpen(false);
   }
 
