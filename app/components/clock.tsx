@@ -15,12 +15,13 @@ export function Clock() {
   )
 }
 
+export const dateFormatOptions: Intl.DateTimeFormatOptions = {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+  weekday: 'long',
+}
+
 export const getCurrentDate = () => {
-  const dateFormatOptions: Intl.DateTimeFormatOptions = {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    weekday: 'long',
-  }
   return new Date().toLocaleDateString(navigator.language, dateFormatOptions);
 };

@@ -13,7 +13,7 @@ import {
 interface AlertDialogProps {
   cancel?: string;
   confirm?: string;
-  description: string;
+  description?: string;
   open?: boolean;
   title: string;
   trigger: React.ReactNode;
@@ -36,7 +36,7 @@ export function AlertDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{cancel}</AlertDialogCancel>

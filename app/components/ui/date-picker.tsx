@@ -10,19 +10,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover"
+import type { SelectSingleEventHandler } from "react-day-picker"
 
 interface DatePickerProps {
   defaultValue?: Date;
-  onChange?: (value?: Date) => void
+  onChange?: (value?: Date) => void;
+  id?: string;
+  name?: string;
 }
 
-export function DatePicker({ defaultValue, onChange }: DatePickerProps) {
+export function DatePicker({ name, id, defaultValue, onChange }: DatePickerProps) {
   const [date, setDate] = React.useState<Date | undefined>(defaultValue);
-  const onDateChange = (value?: Date) => {
-    if (!value) {
-      setDate(undefined);
-      return;
-    }
+
+  const onSelect: SelectSingleEventHandler = (value) => {
     setDate(value);
     onChange?.(value);
   }
@@ -43,12 +43,22 @@ export function DatePicker({ defaultValue, onChange }: DatePickerProps) {
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
+          id={id}
           mode="single"
           selected={date}
-          onSelect={onDateChange}
+          onSelect={onSelect}
           initialFocus
         />
       </PopoverContent>
+      <input
+        aria-hidden="true"
+        defaultValue={(date ?? new Date()).toString()}
+        hidden
+        id={name}
+        name={name}
+        type="text"
+        value={date?.toString()}
+      />
     </Popover>
   )
 }

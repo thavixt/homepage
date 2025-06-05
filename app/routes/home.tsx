@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <Card className="w-full max-w-5xl flex flex-col items-center gap-8 min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
-        <div className="flex gap-4 items-center justify-between text-4xl">
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between text-4xl">
           <span className="inline">Today is {getCurrentDate()}.</span>
           <Clock />
         </div>
