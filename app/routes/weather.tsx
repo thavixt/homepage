@@ -16,7 +16,7 @@ export default function WeatherForecast() {
   const { data: forecastData, isPending } = useQuery({
     queryFn: getWeatherForecast,
     queryKey: ['weather-forecast'],
-    refetchInterval: 60 * 1000 * 15, // 15 minutes
+    refetchInterval: 60 * 1000 * 60, // 60 minutes
   });
 
   return (

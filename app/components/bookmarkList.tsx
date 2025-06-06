@@ -56,7 +56,7 @@ export function BookmarkList() {
 
   const onDeleteAll = () => {
     dispatch(clearBookmarks());
-    dispatch(incrementStat({stat: "bookmarkDeleted", count: bookmarks.length}));
+    dispatch(incrementStat({ stat: "bookmarkDeleted", count: bookmarks.length }));
     toast.success('Bookmarks cleared');
   }
 
@@ -75,7 +75,7 @@ export function BookmarkList() {
         if (bookmark.name && bookmark.href) {
           dispatch(createBookmark(bookmark));
         }
-        dispatch(incrementStat({stat: "bookmarkImported"}));
+        dispatch(incrementStat({ stat: "bookmarkImported" }));
       },
       "Bookmarks imported successfully",
       "Failed to import bookmarks",
@@ -89,7 +89,14 @@ export function BookmarkList() {
           <BookOpenIcon />
           <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
         </div>
-        <Input type="search" id="search" name="search" placeholder="Search for something you saved earlier..." onChange={onSearch} />
+        <Input
+          autoFocus
+          type="search"
+          id="search"
+          name="search"
+          placeholder="Type to search in your bookmarks"
+          onChange={onSearch}
+        />
       </div>
       <div className="h-full flex flex-col gap-2 min-h-[520px] justify-between">
         {!filteredBookmarks.length ? (

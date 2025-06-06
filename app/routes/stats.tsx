@@ -39,7 +39,13 @@ export default function Stats() {
       <CardContent className="flex flex-col gap-4 w-full px-0">
         <div className="w-full grid grid-cols-[1fr_2fr] px-8">
           <Label htmlFor="stat">Search for a statistic:</Label>
-          <Input name="stat" id="stat" placeholder="Search..." onChange={(e) => setSearchValue(e.currentTarget.value)} />
+          <Input
+            autoFocus
+            name="stat"
+            id="stat"
+            placeholder="Search..."
+            onChange={(e) => setSearchValue(e.currentTarget.value)}
+          />
         </div>
         <Separator />
         <ScrollArea className="h-[400px] w-full px-8">

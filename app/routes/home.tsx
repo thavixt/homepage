@@ -6,7 +6,7 @@ import { WeatherWidget } from "~/components/weatherWidget";
 import { BookmarkList } from "~/components/bookmarkList";
 import { FEATURES } from "~/components/header";
 import { HotKey } from "~/components/ui/hotkey";
-import { CalendarDays } from "lucide-react";
+import { CalendarDaysIcon } from "lucide-react";
 
 export function meta() {
   return [
@@ -21,7 +21,7 @@ export default function Home() {
       <CardHeader className="w-full text-center font-bold text-4xl">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex gap-2 items-center">
-            <CalendarDays />
+            <CalendarDaysIcon />
             <span className="inline text-4xl">Today is {getCurrentDate()}</span>
           </div>
           <Clock className="border rounded-md p-4 text-5xl" />

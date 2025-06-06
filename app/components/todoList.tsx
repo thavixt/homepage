@@ -73,7 +73,14 @@ export function TodoList() {
   return (
     <div className="flex flex-col gap-4 items-center">
       <div className="flex gap-4 justify-between px-4">
-        <Input type="search" className="w-36" id="search" name="search" placeholder="Search" onChange={onSearch} />
+        <Input
+          autoFocus
+          type="search"
+          className="w-36"
+          id="search"
+          name="search"
+          placeholder="Search" onChange={onSearch}
+        />
         <div className="flex items-center gap-2">
           <Switch defaultChecked={filter.initial} id="initial" onCheckedChange={onFilterChange('initial')} />
           <Label htmlFor="initial">Show initial</Label>

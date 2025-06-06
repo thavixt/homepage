@@ -22,12 +22,8 @@ import { FEATURES } from "./components/header";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // TODO: review these defaults
       gcTime: 1000 * 60 * 60 * 12, // 12 hours
       networkMode: 'offlineFirst',
-      refetchInterval: 30 * 60 * 1000, // 30 minutes
-      refetchIntervalInBackground: true,
-      refetchOnWindowFocus: true,
       retry: 3,
       staleTime: 30 * 60 * 1000, // 30 minutes
     },
