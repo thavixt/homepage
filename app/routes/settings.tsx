@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
-import { changeSetting, getSettings, resetSettings, type Setting } from "~/reducers/settingsReducer";
+import { changeSetting, getSettings, resetSettings, type BackgroundChangeFrequency, type Setting } from "~/reducers/settingsReducer";
 import { Fragment } from "react/jsx-runtime";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { clearBookmarks } from "~/reducers/bookmarksReducer";
@@ -55,7 +55,7 @@ export default function Stats() {
                     <SelectValue>{state.value}</SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {VALUES[key as Setting].map(v => (
+                    {SETTINGS_VALUES[key as Setting].map(v => (
                       <SelectItem key={v} value={v}>{v}</SelectItem>
                     ))}
                   </SelectContent>
@@ -86,10 +86,11 @@ export default function Stats() {
   );
 }
 
-const VALUES: Record<Setting, Array<string>> = {
+const SETTINGS_VALUES: Record<Setting, BackgroundChangeFrequency[]> = {
   background: [
     'hourly',
     'daily',
     'weekly',
+    'monthly',
   ]
 }
