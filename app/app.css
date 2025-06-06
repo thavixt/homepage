@@ -32,14 +32,14 @@ body::before {
   background-size: cover;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1s ease-in;
+  transition: opacity 0.5s ease-in;
 }
 body.bg-loaded::before {
   opacity: 0.75;
 }
 
 body {
-  animation: 1s ease-in 0s 1 appear;
+  animation: 0.75s ease-in 0s 1 appear;
 }
 
 a {

@@ -5,8 +5,6 @@ import { toast } from "sonner";
 import { changeSetting, getSettings, resetSettings, type BackgroundChangeFrequency, type Setting } from "~/reducers/settingsReducer";
 import { Fragment } from "react/jsx-runtime";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
-import { clearBookmarks } from "~/reducers/bookmarksReducer";
-import { clearTodos } from "~/reducers/todosReducer";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
 
 export function meta() {
@@ -26,10 +24,12 @@ export default function Stats() {
   }
 
   const onClearAllData = () => {
-    dispatch(resetSettings());
-    dispatch(clearBookmarks());
-    dispatch(clearTodos());
-    toast.success('All settings reset to defaults and all stored data deleted');
+    window.localStorage.removeItem('homepage-redux-state');
+    window.localStorage.removeItem('homepage-tanstack-query-offline-cache');
+    toast.success('Reloading - all stored data was cleared/reset');
+    setTimeout(() => {
+      window.location.pathname = '/';
+    }, 2000);
   }
 
   const onChange = (key: Setting) => (value: string) => {
@@ -69,7 +69,7 @@ export default function Stats() {
             triggerAsChild
             onConfirm={onClearAllData}
             title="Clear all app data"
-            description="Are you sure you want to reset EVERYTHING to defaults? This will delete all stored bookmarks, todos, and all other stored data and settings."
+            description="Are you sure you want to reset EVERYTHING to defaults? This will reset all bookmarks, todos, and all other stored data and settings."
             confirm="Reset everything to defaults"
           />
           <AlertDialog

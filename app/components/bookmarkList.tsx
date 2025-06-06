@@ -1,4 +1,4 @@
-import { DownloadIcon, ImportIcon, Trash2Icon } from "lucide-react";
+import { BookOpenIcon, DownloadIcon, ImportIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { clearBookmarks, createBookmark, getBookmarks, type Bookmark as IBookmark } from "~/reducers/bookmarksReducer";
@@ -13,6 +13,7 @@ import { BookmarkForm } from "./forms/bookmarkForm";
 import { AlertDialog } from "./dialogs/alertDialog";
 import { Bookmark } from "./bookmark";
 import { exportDataToJson, importDataFromJson, sortBy } from "~/lib/utils";
+import { incrementStat } from "~/reducers/statsReducer";
 
 export function BookmarkList() {
   const bookmarks = useAppSelector(getBookmarks);
@@ -54,6 +55,7 @@ export function BookmarkList() {
 
   const onDeleteAll = () => {
     dispatch(clearBookmarks());
+    dispatch(incrementStat({stat: "bookmarkDeleted", count: bookmarks.length}));
     toast.success('Bookmarks cleared');
   }
 
@@ -72,6 +74,7 @@ export function BookmarkList() {
         if (bookmark.name && bookmark.href) {
           dispatch(createBookmark(bookmark));
         }
+        dispatch(incrementStat({stat: "bookmarkImported"}));
       },
       "Bookmarks imported successfully",
       "Failed to import bookmarks",
@@ -80,8 +83,11 @@ export function BookmarkList() {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="grid grid-cols-[1fr_2fr] gap-4">
-        <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
+      <div className="grid grid-cols-[auto_1fr] gap-4 items-center">
+        <div className="flex gap-1 items-center">
+          <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
+          <BookOpenIcon />
+        </div>
         <Input type="search" id="search" name="search" placeholder="Search for something you saved earlier..." onChange={onSearch} />
       </div>
       <div className="h-full flex flex-col gap-2 min-h-[520px] justify-between">

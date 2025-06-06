@@ -13,7 +13,40 @@ export type Bookmark = {
 }
 
 export const initialState: BookmarksState = {
-  bookmarks: [],
+  bookmarks: [
+    {
+      href: "https://reactrouter.com/docs",
+      name: "React Router",
+    },
+    {
+      href: "https://redux.js.org/tutorials/essentials/part-1-overview-concepts",
+      name: "Redux",
+    },
+    {
+      href: "https://lucide.dev/icons",
+      name: "Lucide",
+    },
+    {
+      href: "https://tailwindcss.com/docs/installation/using-vite",
+      name: "Tailwindcss",
+    },
+    {
+      href: "https://tanstack.com/query/latest/docs/framework/react/installation",
+      name: "TanStack Query",
+    },
+    {
+      href: "https://ui.shadcn.com/",
+      name: "Shadcn",
+    },
+    {
+      href: "https://vercel.com/",
+      name: "Vercel",
+    },
+    {
+      href: "https://vite.dev/guide/#scaffolding-your-first-vite-project",
+      name: "Vite",
+    },
+  ].map((bookmark, i) => ({ ...bookmark, id: `initial-${i}`, pinned: true})),
 }
 
 export const bookmarkSlice = createSlice({

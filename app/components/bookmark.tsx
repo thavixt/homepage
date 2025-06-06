@@ -6,6 +6,7 @@ import { deleteBookmark, updateBookmark, type Bookmark as IBookmark } from "~/re
 import { FormDialog } from "./dialogs/formDialog";
 import { BookmarkForm } from "./forms/bookmarkForm";
 import { AlertDialog } from "./dialogs/alertDialog";
+import { incrementStat } from "~/reducers/statsReducer";
 
 export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
   const dispatch = useAppDispatch();
@@ -13,6 +14,7 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
 
   const onDeleteConfirm = () => {
     dispatch(deleteBookmark(bookmark.id));
+    dispatch(incrementStat({stat: "bookmarkDeleted"}));
     toast.success(`Bookmark "${bookmark.name}" deleted`);
   }
 
@@ -27,13 +29,18 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
       return;
     }
     dispatch(updateBookmark({ id: bookmark.id, name, href, pinned }));
+    dispatch(incrementStat({stat: "bookmarkEdited"}));
     toast.success(`Bookmark "${bookmark.name}" updated`);
     setEditDialogOpen(false);
   }
 
+  const onBookmarkClick = () => {
+    dispatch(incrementStat({stat: "bookmarkClicked"}));
+  }
+
   return (
     <div className="flex justify-between items-center gap-2 hover:bg-accent/50 rounded-sm px-3 py-1">
-      <a href={bookmark.href} rel="noopener noreferrer">{bookmark.name}</a>
+      <a href={bookmark.href} rel="noopener noreferrer" onClick={onBookmarkClick}>{bookmark.name}</a>
       <AlertDialog
         trigger={(
           <div className="border rounded-md p-1" title="Delete bookmark">

@@ -77,7 +77,7 @@ export function exportDataToJson<T extends Record<string, ExportableValue>>(
 }
 
 export function importDataFromJson<T extends Record<string, ExportableValue>>(
-  transform: (item: T) => void,
+  transform: (item: T, i: number, totalCount: number) => void,
   onSuccess: string = "Data imported from file successfully",
   onError: string = "An error happened trying to import from a file",
 ) {
@@ -97,8 +97,8 @@ export function importDataFromJson<T extends Record<string, ExportableValue>>(
       if (!Array.isArray(importedItems)) {
         throw new Error('Invalid import format');
       }
-      importedItems.forEach(item => {
-        transform(item);
+      importedItems.forEach((item, i) => {
+        transform(item, i, importedItems.length);
       });
       toast.success(onSuccess);
     } catch (error) {

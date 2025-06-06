@@ -15,6 +15,7 @@ import { incrementStat } from "./reducers/statsReducer";
 import { getSettings, incrementBackgroundCounter } from "./reducers/settingsReducer";
 import { getBackgroundSeed } from "./lib/utils";
 import { Button } from "./components/ui/button";
+import { LoaderCircle } from "lucide-react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -70,14 +71,14 @@ function Root({ mounted }: { mounted: boolean }) {
   const backgroundCounter = settings.background.counter;
 
   const onClick = () => {
-    dispatch(incrementStat('clicks'));
+    dispatch(incrementStat({ stat: 'click' }));
   }
 
   useEffect(() => {
     if (mounted) {
       return;
     }
-    dispatch(incrementStat('opened'));
+    dispatch(incrementStat({ stat: 'opened' }));
   }, [dispatch, mounted])
 
   useEffect(() => {
@@ -85,13 +86,24 @@ function Root({ mounted }: { mounted: boolean }) {
       dispatch(incrementBackgroundCounter());
       return;
     }
+
+    let cancelled = false;
     document.body.classList.remove('bg-loaded');
-    setTimeout(() => {
-      document.body.style.setProperty('--bg-img', `url('https://picsum.photos/seed/${backgroundSeed}/1920/1080')`);
-    }, 1000);
-    setTimeout(() => {
+    const img = new Image();
+    const backgroundSrc = `https://picsum.photos/seed/${backgroundSeed}/1920/1080`;
+
+    img.addEventListener('load', () => {
+      if (cancelled) {
+        return;
+      }
+      document.body.style.setProperty('--bg-img', `url('${backgroundSrc}')`);
       document.body.classList.add('bg-loaded');
-    }, 2000);
+    });
+    img.src = backgroundSrc;
+
+    return () => {
+      cancelled = true;
+    };
   }, [backgroundCounter, backgroundSeed, dispatch]);
 
   return (
@@ -177,5 +189,14 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         )}
       </div>
     </main>
+  );
+}
+
+export function HydrateFallback() {
+  return (
+    <div className="h-screen w-screen flex gap-4 items-center justify-center animate-pulse">
+      <LoaderCircle className='animate-spin' size={40} />
+      <span className="ml-2 text-2xl font-semibold">Loading ...</span>
+    </div>
   );
 }

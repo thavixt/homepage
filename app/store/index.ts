@@ -36,20 +36,22 @@ export function loadState() {
     return;
   }
 
+  const intialStoreState = {
+    bookmarks: initialBookmarksState,
+    settings: initialSettingsState,
+    stats: initialStatsState,
+    todos: initialTodosState,
+  }
+
   try {
     const serializedState = localStorage.getItem("homepage-redux-state");
     if (serializedState === null) {
-      return undefined;
+      return intialStoreState;
     }
     return JSON.parse(serializedState);
   } catch (err) {
     console.error(err);
-    return {
-      bookmarks: initialBookmarksState,
-      settings: initialSettingsState,
-      stats: initialStatsState,
-      todos: initialTodosState
-    };
+    return intialStoreState;
   }
 }
 
