@@ -32,6 +32,10 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 >
 
 export function loadState() {
+  if (!global.window || !global.window.localStorage) {
+    return;
+  }
+
   try {
     const serializedState = localStorage.getItem("homepage-redux-state");
     if (serializedState === null) return undefined;
@@ -47,6 +51,10 @@ export function loadState() {
 }
 
 export function saveState(state: unknown) {
+  if (!global.window || !global.window.localStorage) {
+    return;
+  }
+
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem("homepage-redux-state", serializedState);
