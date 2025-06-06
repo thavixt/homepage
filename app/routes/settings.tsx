@@ -8,11 +8,12 @@ import { Fragment } from "react/jsx-runtime";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { clearBookmarks } from "~/reducers/bookmarksReducer";
 import { clearTodos } from "~/reducers/todosReducer";
+import { AlertDialog } from "~/components/dialogs/alertDialog";
 
 export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "Statistics" },
-    { name: "description", content: "Statistics collected on your home page" },
+    { title: "Homepage - Statistics" },
+    { name: "description", content: "Tweak your home page a bit" },
   ];
 }
 
@@ -20,24 +21,21 @@ export default function Stats() {
   const settings = useAppSelector(getSettings);
   const dispatch = useAppDispatch();
 
-  const onReset = () => {
-    if (confirm('Are you sure you want to reset settings to defaults?')) {
-      dispatch(resetSettings());
-      toast.success('Settings reset to defaults');
-    }
+  const onResetSettings = () => {
+    dispatch(resetSettings());
+    toast.success('Settings reset to defaults');
   }
 
-  const onResetAll = () => {
-    if (confirm('Are you sure you want to reset EVERYTHING to defaults? This will also delete all stored bookmarks, todos, and all stored data!')) {
-      dispatch(resetSettings());
-      dispatch(clearBookmarks());
-      dispatch(clearTodos());
-      toast.success('All settings reset to defaults and all stored data deleted');
-    }
+  const onClearAllData = () => {
+    dispatch(resetSettings());
+    dispatch(clearBookmarks());
+    dispatch(clearTodos());
+    toast.success('All settings reset to defaults and all stored data deleted');
   }
 
   const onChange = (key: Setting) => (value: string) => {
-    dispatch(changeSetting({ setting: key, value }));
+    // TODO: fix types
+    dispatch(changeSetting({ setting: key, value: value as any }));
   }
 
   return (
@@ -46,7 +44,7 @@ export default function Stats() {
         Settings
       </CardHeader>
       <CardContent className="flex flex-col gap-8">
-        <div className="grid grid-cols-[3fr_1fr] justify-between">
+        <div className="grid grid-cols-[3fr_1fr] items-center justify-between">
           {Object.entries(settings)
             .sort(([, a], [, b]) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
             .map(([key, state]) => (
@@ -66,8 +64,22 @@ export default function Stats() {
             ))}
         </div>
         <div className="flex gap-4 justify-center items-center w-full">
-          <Button variant="outline" onClick={onResetAll}>Reset everything</Button>
-          <Button variant="outline" onClick={onReset}>Reset settings</Button>
+          <AlertDialog
+            trigger={<Button variant="ghost">Clear all app data</Button>}
+            triggerAsChild
+            onConfirm={onClearAllData}
+            title="Clear all app data"
+            description="Are you sure you want to reset EVERYTHING to defaults? This will delete all stored bookmarks, todos, and all other stored data and settings."
+            confirm="Reset everything to defaults"
+          />
+          <AlertDialog
+            trigger={<Button variant="outline">Reset settings</Button>}
+            triggerAsChild
+            onConfirm={onResetSettings}
+            title="Reset settings"
+            description="Are you sure you want to reset settings to defaults?"
+            confirm="Reset settings"
+          />
         </div>
       </CardContent>
     </Card>

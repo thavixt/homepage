@@ -52,7 +52,6 @@ export function TodoList() {
     const deadline = formData.get("deadline") as string;
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
-    console.log('onSubmit', { deadline, title, description });
     if (!title || !deadline) {
       toast('Must provide a title and deadline for the todo');
       return;
@@ -97,8 +96,12 @@ export function TodoList() {
         <div className="flex flex-col gap-4 w-full">
           {!todos.length ? (
             <div className="flex flex-col gap-12 h-[250px] items-center justify-end">
-              <p>Nothing yet!</p>
-              <p>Click on the <Badge>Create new task</Badge> button below to create a new <em>task to do</em>!</p>
+              <div>Nothing - for now.</div>
+              <div className="flex gap-2 items-center">
+                <span>Click the</span>
+                <Badge>Create new task</Badge>
+                <span>button below to create a new <em>task to do</em>!</span>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">

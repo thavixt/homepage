@@ -4,10 +4,11 @@ import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { getStats, resetStats } from "~/reducers/statsReducer";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
+import { sortBy } from "~/lib/utils";
 
 export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "Statistics" },
+    { title: "Homepage - Statistics" },
     { name: "description", content: "Statistics collected on your home page" },
   ];
 }
@@ -30,10 +31,9 @@ export default function Stats() {
       </CardHeader>
       <CardContent className="flex flex-col gap-8">
         <ul>
-          {Object.entries(stats)
-            .sort(([, a], [, b]) => a.description.toLowerCase().localeCompare(b.description.toLowerCase()))
-            .map(([key, state]) => (
-              <li key={key}>{state.description}: {state.count}</li>
+          {sortBy('description', Object.values(stats))
+            .map((stat) => (
+              <li key={stat.description}>{stat.description}: {stat.count}</li>
             ))}
         </ul>
         <div className="flex flex-col gap-4 justify-between items-center w-full">

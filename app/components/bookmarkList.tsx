@@ -1,17 +1,18 @@
-import { clearBookmarks, createBookmark, deleteBookmark, getBookmarks } from "~/reducers/bookmarksReducer";
+import { DownloadIcon, ImportIcon, Trash2Icon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { clearBookmarks, createBookmark, getBookmarks, type Bookmark as IBookmark } from "~/reducers/bookmarksReducer";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { toast } from "sonner";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Badge } from "~/components/ui/badge";
-import { useState } from "react";
-import { Trash2Icon } from "lucide-react";
 import { FormDialog } from "./dialogs/formDialog";
 import { BookmarkForm } from "./forms/bookmarkForm";
 import { AlertDialog } from "./dialogs/alertDialog";
 import { Bookmark } from "./bookmark";
+import { exportDataToJson, importDataFromJson, sortBy } from "~/lib/utils";
 
 export function BookmarkList() {
   const bookmarks = useAppSelector(getBookmarks);
@@ -19,10 +20,7 @@ export function BookmarkList() {
   const [searchValue, setSearchValue] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const sortedBookmarks = [...bookmarks].sort(
-    (a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-  )
-  const filteredBookmarks = sortedBookmarks.filter(bookmark => {
+  const filteredBookmarks = sortBy('name', bookmarks).filter(bookmark => {
     if (!searchValue) {
       return true;
     }
@@ -59,17 +57,47 @@ export function BookmarkList() {
     toast.success('Bookmarks cleared');
   }
 
+  const exportBookmarks = () => {
+    exportDataToJson<IBookmark>(
+      bookmarks,
+      'homepage-bookmarks.json',
+      'Bookmarks exported as JSON',
+      ({ id: _, ...rest }) => ({ ...rest }),
+    );
+  }
+
+  const importBookmarks = () => {
+    importDataFromJson<IBookmark>(
+      (bookmark) => {
+        if (bookmark.name && bookmark.href) {
+          dispatch(createBookmark(bookmark));
+        }
+      },
+      "Bookmarks imported successfully",
+      "Failed to import bookmarks",
+    )
+  }
+
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="grid grid-cols-[1fr_2fr] gap-4">
         <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
         <Input type="search" id="search" name="search" placeholder="Search for something you saved earlier..." onChange={onSearch} />
       </div>
-      <div className="flex flex-col gap-2 min-h-[300px] justify-between">
-        {!sortedBookmarks.length ? (
-          <div className="flex flex-col gap-2 font-light text-sm">
+      <div className="h-full flex flex-col gap-2 min-h-[520px] justify-between">
+        {!filteredBookmarks.length ? (
+          <div className="h-full my-2 flex flex-col items-center justify-center gap-8 font-light text-sm">
             <p>Nothing to visit for now.</p>
-            <p>Click the <Badge>Add a new bookmark</Badge> button below to add a bookmark.</p>
+            <div className="flex flex-wrap gap-2 items-center">
+              Click the
+              <Badge>Add a new bookmark</Badge>
+              button below to add a bookmark.
+            </div>
+            <div className="flex flex-wrap gap-2 items-center">
+              Click the Import button
+              <ImportIcon className="cursor-pointer" size={16} />
+              on the left to import your old bookmarks.
+            </div>
           </div>
         ) : (
           <div className="flex flex-col gap-2">
@@ -88,18 +116,26 @@ export function BookmarkList() {
           </div>
         )}
       </div>
-      <div className="flex justify-between gap-4">
-        <AlertDialog
-          trigger={(
-            <div className="border rounded-md p-1" title="Delete all bookmarks">
-              <Trash2Icon className="cursor-pointer" size={16} />
-            </div>
-          )}
-          onConfirm={onDeleteAll}
-          title="Delete all bookmarks"
-          description="Are you sure you want to delete *all* of your bookmarks?"
-          confirm="Delete ALL of my bookmarks"
-        />
+      <div className="flex justify-between gap-4 items-center">
+        <div className="flex gap-4 items-center">
+          <AlertDialog
+            trigger={(
+              <div className="border rounded-md p-1" title="Delete all bookmarks">
+                <Trash2Icon className="cursor-pointer" size={16} />
+              </div>
+            )}
+            onConfirm={onDeleteAll}
+            title="Delete all bookmarks"
+            description="Are you sure you want to delete *all* of your bookmarks? Consider exporting them first."
+            confirm="I'm sure, delete all of my bookmarks"
+          />
+          <div className="border rounded-md p-1" title="Export bookmarks as JSON" onClick={exportBookmarks}>
+            <DownloadIcon className="cursor-pointer" size={16} />
+          </div>
+          <div className="border rounded-md p-1" title="Import bookmarks from JSON file" onClick={importBookmarks}>
+            <ImportIcon className="cursor-pointer" size={16} />
+          </div>
+        </div>
         <FormDialog
           trigger={<Button>Add a new bookmark</Button>}
           onSubmit={onSubmit}

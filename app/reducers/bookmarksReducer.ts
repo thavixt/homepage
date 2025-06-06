@@ -5,7 +5,7 @@ export interface BookmarksState {
   bookmarks: Array<Bookmark>
 }
 
-export interface Bookmark {
+export type Bookmark = {
   id: string;
   name: string;
   href: string;

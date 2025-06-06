@@ -1,10 +1,10 @@
 import type { Route } from "./+types/home";
+import { TodoList } from "~/components/todoList";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
-import { TodoList } from "~/components/todolist";
 
 export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "@todo" },
+    { title: "Homepage - Todo" },
     { name: "description", content: "Better get on that!" },
   ];
 }

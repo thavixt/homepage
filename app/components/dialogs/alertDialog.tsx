@@ -17,6 +17,7 @@ interface AlertDialogProps {
   open?: boolean;
   title: string;
   trigger: React.ReactNode;
+  triggerAsChild?: boolean;
 
   onOpenChange?: (open: boolean) => void;
   onConfirm: () => void;
@@ -24,13 +25,13 @@ interface AlertDialogProps {
 
 export function AlertDialog({
   open, onOpenChange, onConfirm,
-  title, description, trigger,
+  title, description, trigger, triggerAsChild,
   cancel = "Cancel",
   confirm = "Continue",
 }: AlertDialogProps) {
   return (
     <AlertDialogRoot open={open} onOpenChange={onOpenChange}>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild={triggerAsChild}>
         {trigger}
       </AlertDialogTrigger>
       <AlertDialogContent>

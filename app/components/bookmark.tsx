@@ -43,6 +43,7 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
         onConfirm={onDeleteConfirm}
         title="Delete bookmark"
         description={`Are you sure you want to delete the bookmark for "${bookmark.name}", that points to "${bookmark.href}"?`}
+        confirm="Delete bookmark"
       />
       <FormDialog
         trigger={(
@@ -55,6 +56,7 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
         onOpenChange={setEditDialogOpen}
         title="Edit bookmark"
         description="Edit the name and the URL it points to."
+        submit="Save bookmark"
       >
         <BookmarkForm bookmark={bookmark} />
       </FormDialog>

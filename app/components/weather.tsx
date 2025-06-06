@@ -34,7 +34,7 @@ export function WeatherWidget() {
           <div className="flex items-center">
             <span title="Weather condition and temperature">{weatherData.current.condition.text} - {weatherData.current.temp_c}°C</span>
             <span>
-              <Link to="/weather" title="View detailed weather information">
+              <Link viewTransition to="/weather" title="View detailed weather information">
                 <img
                   src={`https:${weatherData.current.condition.icon}`}
                   alt="Weather condition icon"
@@ -64,7 +64,7 @@ export function WeatherWidget() {
           </small>
         </div>
       ) : (
-        <div className="animate-pulse flex items-center justify-center h-32 gap-2">
+        <div className="animate-pulse flex items-center justify-center h-38 gap-2">
           <span>Loading weather data ...</span>
           <LoaderPinwheel className={cn('opacity-50', { 'animate-spin': isPending })} />
         </div>

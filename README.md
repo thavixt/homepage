@@ -2,22 +2,32 @@
 
 Set the `homepage.komlosidev.net` URL as your home page, and customize it to you liking!
 
-Features:
-- [x] bookmarks
-- [x] showing local weather
-- [x] todo list
-- [x] dynamic background
+## Features:
+
+- [ ] calendar
+- [ ] light/dark theme
 - [ ] local settings
 - [ ] notes
-- [ ] calendar
 - [ ] site statistics
+  - clicks on the site
+  - background images seen
+  - `things` created/deleted/pinned/unpinned/etc
+- [ ] timer/reminder
+- [x] dynamic background
+- [x] bookmarks with import/export
+- [x] todo list
+- [x] weather widget
+
+Ideas to consider:
+- [ ] delete the "frequently used resources" section in favour of default pinned bookmarks?
+- [ ] i18n with react-i18n, genetate some locale files with ai and/or a gh action?
 
 ### Made with
 
 - React + Typescript
-- shadcn components
-- React-router
-- React-redux
+- React Router
+- Redux
 - Tailwind
 - Vite
-- deployed on Vercel
+- shadcn components
+- deployed with Vercel

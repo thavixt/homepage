@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "About this" },
+    { title: "Homepage - Oops!" },
     { name: "description", content: "Ummmmm..." },
   ];
 }
@@ -20,7 +20,7 @@ export default function About() {
       </CardContent>
       <CardFooter className="flex items-center justify-center py-6">
         <div>
-          <Link to="/">Let's just go back <i>home</i> for now.</Link>
+          <Link viewTransition to="/">Let's just go back <i>home</i> for now.</Link>
         </div>
       </CardFooter>
     </Card>

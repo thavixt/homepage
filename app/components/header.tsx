@@ -1,40 +1,53 @@
-import { CalendarIcon, ChartLineIcon, CheckCircleIcon, ClockAlertIcon, CloudSunIcon, HomeIcon, NotebookPenIcon, SettingsIcon, WrenchIcon } from "lucide-react";
+import { AlarmClockIcon, CalendarIcon, ChartLineIcon, CheckIcon, CloudSunIcon, HomeIcon, PenIcon, SettingsIcon } from "lucide-react";
 import { Link } from "react-router";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "~/components/ui/navigation-menu"
+import { sortBy } from "~/lib/utils";
 
-export const FEATURES = [
-  {
-    href: "/todos",
-    name: "Todos",
-    Icon: CheckCircleIcon,
-    description: "That sounds important - better write that down!"
-  },
-  {
-    href: "/calendar",
-    name: "Calendar",
-    Icon: CalendarIcon,
-    description: "What am I supposed to be doing this weekend?"
-  },
-  {
-    href: "/notes",
-    name: "Notes",
-    Icon: NotebookPenIcon,
-    description: "Keeping notes of the things that happened.",
-  },
-  {
-    href: "/weather",
-    name: "Weather forecast",
-    Icon: CloudSunIcon,
-    description: "I should bring an umbrella tomorrow..."
-  },
-  {
-    href: "/timer",
-    name: "Timer / reminder",
-    Icon: ClockAlertIcon,
-    description: "Set a timer or reminder for something important."
-  },
-].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
-.concat([
+type Feature = {
+  href: string;
+  name: string;
+  Icon: React.ComponentType<any>;
+  description: string;
+};
+
+const sortedFeatures: Feature[] = sortBy(
+  "name",
+  [
+    {
+      href: "/todos",
+      name: "Todos",
+      Icon: CheckIcon,
+      description: "That sounds important - better write that down!"
+    },
+    {
+      href: "/calendar",
+      name: "Calendar",
+      Icon: CalendarIcon,
+      description: "What am I supposed to be doing this weekend?"
+    },
+    {
+      href: "/notes",
+      name: "Notes",
+      Icon: PenIcon,
+      description: "Keeping notes of the things that happened.",
+    },
+    {
+      href: "/weather",
+      name: "Weather forecast",
+      Icon: CloudSunIcon,
+      description: "I should bring an umbrella tomorrow..."
+    },
+    {
+      href: "/timer",
+      name: "Timer / reminder",
+      Icon: AlarmClockIcon,
+      description: "Set a timer or reminder for something important."
+    },
+  ],
+);
+
+export const FEATURES: Feature[] = [
+  ...sortedFeatures,
   {
     href: "/stats",
     name: "Statistics",
@@ -47,7 +60,7 @@ export const FEATURES = [
     Icon: SettingsIcon,
     description: "Change the way this app works.",
   },
-]);
+];
 
 export function Header() {
   return (
@@ -56,7 +69,7 @@ export function Header() {
         <NavigationMenuList>
           <NavigationMenuItem title="Home">
             <NavigationMenuLink asChild>
-              <Link to="/">
+              <Link viewTransition to="/">
                 <HomeIcon size={18} className="text-blue-500" />
               </Link>
             </NavigationMenuLink>
@@ -64,7 +77,7 @@ export function Header() {
           {FEATURES.map(({ Icon, ...feature }) => (
             <NavigationMenuItem title={`${feature.name} - ${feature.description}`} key={feature.href}>
               <NavigationMenuLink asChild>
-                <Link to={feature.href}>
+                <Link viewTransition to={feature.href}>
                   <Icon size={18} className="text-blue-500" />
                 </Link>
               </NavigationMenuLink>

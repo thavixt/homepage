@@ -12,12 +12,14 @@ import { store } from './store'
 import { Toaster } from "./components/ui/sonner";
 import { useAppDispatch, useAppSelector } from "./hooks/state";
 import { incrementStat } from "./reducers/statsReducer";
-import { getSettings } from "./reducers/settingsReducer";
+import { getSettings, incrementBackgroundCounter } from "./reducers/settingsReducer";
+import { getBackgroundSeed } from "./lib/utils";
+import { Button } from "./components/ui/button";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // TODO: review these settings
+      // TODO: review these defaults
       gcTime: 1000 * 60 * 60 * 12, // 12 hours
       networkMode: 'offlineFirst',
       refetchInterval: 30 * 60 * 1000, // 30 minutes
@@ -64,14 +66,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 function Root({ mounted }: { mounted: boolean }) {
   const dispatch = useAppDispatch();
   const settings = useAppSelector(getSettings);
-  const backgroundChangeFrequency = settings.background.value;
-
-  const seed = [
-    backgroundChangeFrequency === 'monthly' ? new Date().getMonth() : '*',
-    backgroundChangeFrequency === 'weekly' ? new Date().getDate() : '*',
-    backgroundChangeFrequency === 'daily' ? new Date().getDay() : '*',
-    backgroundChangeFrequency === 'hourly' ? new Date().getHours() : '*',
-  ].join('-');
+  const backgroundSeed = getBackgroundSeed(settings);
 
   const onClick = () => {
     dispatch(incrementStat('clicks'));
@@ -85,13 +80,18 @@ function Root({ mounted }: { mounted: boolean }) {
   }, [])
 
   useEffect(() => {
-    // Remove the class to trigger fade-out
+    if (typeof settings.background.counter !== 'number') {
+      dispatch(incrementBackgroundCounter());
+      return;
+    }
     document.body.classList.remove('bg-loaded');
-    document.body.style.setProperty('--bg-img', `url('https://picsum.photos/seed/${seed}/1920/1080')`);
+    setTimeout(() => {
+      document.body.style.setProperty('--bg-img', `url('https://picsum.photos/seed/${backgroundSeed}/1920/1080')`);
+    }, 500);
     setTimeout(() => {
       document.body.classList.add('bg-loaded');
-    }, 250);
-  }, [seed]);
+    }, 1000);
+  }, [backgroundSeed]);
 
   return (
     <div onClick={onClick}>
@@ -131,7 +131,7 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
+  let message = "Oops! Something went really wrong.";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
 
@@ -146,15 +146,35 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     stack = error.stack;
   }
 
+  const reload = () => {
+    window.location.reload();
+  }
+  const resetAndReload = () => {
+    window.localStorage.removeItem('homepage-redux-state');
+    window.localStorage.removeItem('homepage-tanstack-query-offline-cache');
+    reload();
+  }
+
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
+    <main className="flex flex-col gap-8 pt-16 p-4 container mx-auto">
+      <h1 className="text-4xl">{message}</h1>
+      <div>
+        <div className="flex flex-col gap-2">
+          <span>You could try to:</span>
+          <ul className="flex flex-col gap-2">
+            <li><Button onClick={reload}>Just reload the page</Button></li>
+            <li><Button onClick={resetAndReload}>Reset all settings and reload</Button></li>
+          </ul>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <p>So the problem was: {details}</p>
+        {stack && (
+          <pre className="w-full p-4 overflow-x-auto rounded border-2 bg-accent">
+            <code>{stack}</code>
+          </pre>
+        )}
+      </div>
     </main>
   );
 }
