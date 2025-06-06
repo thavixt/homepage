@@ -8,7 +8,7 @@
     "checks": "npm run typecheck && npm run test && npm run eslint && npm run build",
     "build": "react-router build",
     "test": "echo 'TODO'",
-    "eslint": "eslint .",
+    "eslint": "eslint . --fix --cache",
     "typecheck": "react-router typegen && tsc",
     "prepare": "husky"
   },
