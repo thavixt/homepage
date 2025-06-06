@@ -3,18 +3,18 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 
 export function meta() {
   return [
-    { title: "Homepage - Todo" },
+    { title: "Homepage - Things to do" },
     { name: "description", content: "Better get on that!" },
   ];
 }
 
 export default function Todos() {
   return (
-    <Card className="w-full max-w-5xl flex flex-col items-center gap-8 min-h-0">
+    <Card className="w-full max-w-2xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         Things to do
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4 w-full px-0">
         <TodoList />
       </CardContent>
     </Card>

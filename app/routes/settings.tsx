@@ -6,10 +6,11 @@ import { changeSetting, getSettings, resetSettings, type BackgroundChangeFrequen
 import { Fragment } from "react/jsx-runtime";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
+import { Separator } from "~/components/ui/separator";
 
 export function meta() {
   return [
-    { title: "Homepage - Statistics" },
+    { title: "Homepage - Settings" },
     { name: "description", content: "Tweak your home page a bit" },
   ];
 }
@@ -39,12 +40,13 @@ export default function Stats() {
   }
 
   return (
-    <Card className="w-[500px]">
+    <Card className="w-full max-w-2xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         Settings
       </CardHeader>
-      <CardContent className="flex flex-col gap-8">
-        <div className="grid grid-cols-[3fr_1fr] items-center justify-between">
+      <CardContent className="flex flex-col gap-4 w-full px-0">
+        <Separator />
+        <div className="grid grid-cols-[3fr_1fr] items-center justify-between px-4">
           {Object.entries(settings)
             .sort(([, a], [, b]) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
             .map(([key, state]) => (
@@ -63,7 +65,8 @@ export default function Stats() {
               </Fragment>
             ))}
         </div>
-        <div className="flex gap-4 justify-center items-center w-full">
+        <Separator />
+        <div className="flex gap-4 justify-center items-center w-full px-4">
           <AlertDialog
             trigger={<Button variant="ghost">Clear all app data</Button>}
             triggerAsChild

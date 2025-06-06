@@ -32,17 +32,17 @@ export default function Stats() {
   }
 
   return (
-    <Card className="w-[500px]">
+    <Card className="w-full max-w-xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         Statistics collected
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <div className="w-full grid grid-cols-[1fr_2fr]">
-          <Label htmlFor="stat">Search a stat:</Label>
+      <CardContent className="flex flex-col gap-4 w-full px-0">
+        <div className="w-full grid grid-cols-[1fr_2fr] px-8">
+          <Label htmlFor="stat">Search for a statistic:</Label>
           <Input name="stat" id="stat" placeholder="Search..." onChange={(e) => setSearchValue(e.currentTarget.value)} />
         </div>
         <Separator />
-        <ScrollArea className="h-[400px] w-full">
+        <ScrollArea className="h-[400px] w-full px-8">
           <div className="grid grid-cols-[8fr_2fr] gap-1 items-start">
             {filteredStats
               .map((stat) => (
@@ -53,7 +53,8 @@ export default function Stats() {
               ))}
           </div>
         </ScrollArea>
-        <div className="flex flex-col gap-4 justify-between items-center w-full">
+        <Separator />
+        <div className="flex flex-col gap-4 justify-between items-center w-full px-8">
           <AlertDialog
             trigger={(
               <div className="border rounded-md p-1" title="Reset statistics">

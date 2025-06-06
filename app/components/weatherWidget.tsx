@@ -1,30 +1,15 @@
-import { LoaderPinwheel, RefreshCwIcon } from "lucide-react";
-import { getWeather } from "~/api/weather";
-import { Button } from "./ui/button";
+import { LoaderPinwheel } from "lucide-react";
+import { getCurrentWeather } from "~/api/weather";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { Link } from "react-router";
 
 export function WeatherWidget() {
-  const { data: weatherData, isPending, refetch } = useQuery({
-    queryFn: getWeather,
+  const { data: weatherData, isPending } = useQuery({
+    queryFn: getCurrentWeather,
     queryKey: ['weather'],
-    refetchInterval: 60 * 1000 * 15, // 15 minutes
+    refetchInterval: 60 * 1000 * 60, // 60 minutes
   });
-
-  const refetchWeather = () => {
-    refetch();
-    toast.success(
-      'Weather data refreshed',
-      {
-        description: [
-          `Weather data for ${weatherData?.location.name}, ${weatherData?.location.country} is up to date.`,
-        ].join(' '),
-        position: 'top-left',
-      },
-    );
-  };
 
   return (
     <div className="relative border rounded-md p-4">
@@ -60,7 +45,7 @@ export function WeatherWidget() {
             </small>
           </div>
           <small className="mt-2 text-[10px] opacity-50">
-            (from <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>, updated every 15 minutes)
+            (from <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>, updated every hour)
           </small>
         </div>
       ) : (
@@ -69,15 +54,6 @@ export function WeatherWidget() {
           <LoaderPinwheel className={cn('opacity-50', { 'animate-spin': isPending })} />
         </div>
       )}
-      <div
-        className="absolute top-2 right-2 cursor-pointer opacity-50 hover:opacity-100"
-        onClick={refetchWeather}
-        title="Refresh weather data"
-      >
-        <Button disabled={isPending} variant="outline">
-          <RefreshCwIcon />
-        </Button>
-      </div>
     </div>
   )
 }

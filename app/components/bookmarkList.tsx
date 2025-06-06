@@ -14,6 +14,7 @@ import { AlertDialog } from "./dialogs/alertDialog";
 import { Bookmark } from "./bookmark";
 import { exportDataToJson, importDataFromJson, sortBy } from "~/lib/utils";
 import { incrementStat } from "~/reducers/statsReducer";
+import { Separator } from "./ui/separator";
 
 export function BookmarkList() {
   const bookmarks = useAppSelector(getBookmarks);
@@ -122,6 +123,7 @@ export function BookmarkList() {
           </div>
         )}
       </div>
+      <Separator />
       <div className="flex justify-between gap-4 items-center">
         <div className="flex gap-4 items-center">
           <AlertDialog

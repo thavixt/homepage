@@ -7,6 +7,7 @@ export default [
     // apps
     route('todos', 'routes/todos.tsx'),
     // misc
+    route('weather', 'routes/weather.tsx'),
     route('stats', 'routes/stats.tsx'),
     route('settings', 'routes/settings.tsx'),
     route('about', 'routes/about.tsx'),

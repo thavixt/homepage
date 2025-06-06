@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { Clock, getCurrentDate } from "~/components/ui/clock";
-import { WeatherWidget } from "~/components/weather";
+import { WeatherWidget } from "~/components/weatherWidget";
 import { BookmarkList } from "~/components/bookmarkList";
 import { FEATURES } from "~/components/header";
 import { HotKey } from "~/components/ui/hotkey";
@@ -10,7 +10,7 @@ import { CalendarDays } from "lucide-react";
 
 export function meta() {
   return [
-    { title: "Home page" },
+    { title: "Homepage" },
     { name: "description", content: "Welcome to the internet" },
   ];
 }
