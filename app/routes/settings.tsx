@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
-import type { Route } from "./+types/home";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
@@ -10,7 +9,7 @@ import { clearBookmarks } from "~/reducers/bookmarksReducer";
 import { clearTodos } from "~/reducers/todosReducer";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Homepage - Statistics" },
     { name: "description", content: "Tweak your home page a bit" },
@@ -35,6 +34,7 @@ export default function Stats() {
 
   const onChange = (key: Setting) => (value: string) => {
     // TODO: fix types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatch(changeSetting({ setting: key, value: value as any }));
   }
 

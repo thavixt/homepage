@@ -6,6 +6,7 @@ import { sortBy } from "~/lib/utils";
 type Feature = {
   href: string;
   name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Icon: React.ComponentType<any>;
   description: string;
 };

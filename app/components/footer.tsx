@@ -4,10 +4,7 @@ import { incrementBackgroundCounter } from "~/reducers/settingsReducer";
 export function Footer() {
   const dispatch = useAppDispatch();
   const changeRandomBackground = () => {
-    document.body.classList.remove('bg-loaded');
-    setTimeout(() => {
-      dispatch(incrementBackgroundCounter());
-    }, 500);
+    dispatch(incrementBackgroundCounter());
   }
 
   return (

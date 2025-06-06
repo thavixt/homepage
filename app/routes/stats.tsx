@@ -1,12 +1,11 @@
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
-import type { Route } from "./+types/home";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { getStats, resetStats } from "~/reducers/statsReducer";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
 import { sortBy } from "~/lib/utils";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Homepage - Statistics" },
     { name: "description", content: "Statistics collected on your home page" },

@@ -67,6 +67,7 @@ function Root({ mounted }: { mounted: boolean }) {
   const dispatch = useAppDispatch();
   const settings = useAppSelector(getSettings);
   const backgroundSeed = getBackgroundSeed(settings);
+  const backgroundCounter = settings.background.counter;
 
   const onClick = () => {
     dispatch(incrementStat('clicks'));
@@ -77,21 +78,21 @@ function Root({ mounted }: { mounted: boolean }) {
       return;
     }
     dispatch(incrementStat('opened'));
-  }, [])
+  }, [dispatch, mounted])
 
   useEffect(() => {
-    if (typeof settings.background.counter !== 'number') {
+    if (typeof backgroundCounter !== 'number') {
       dispatch(incrementBackgroundCounter());
       return;
     }
     document.body.classList.remove('bg-loaded');
     setTimeout(() => {
       document.body.style.setProperty('--bg-img', `url('https://picsum.photos/seed/${backgroundSeed}/1920/1080')`);
-    }, 500);
+    }, 1000);
     setTimeout(() => {
       document.body.classList.add('bg-loaded');
-    }, 1000);
-  }, [backgroundSeed]);
+    }, 2000);
+  }, [backgroundCounter, backgroundSeed, dispatch]);
 
   return (
     <div onClick={onClick}>
@@ -117,7 +118,7 @@ export default function App() {
         persister: localStoragePersister,
       });
     }
-  })
+  }, [])
 
   return (
     <QueryClientProvider client={queryClient}>

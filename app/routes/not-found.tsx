@@ -1,8 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
-import type { Route } from "./+types/home";
 import { Link } from "react-router";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Homepage - Oops!" },
     { name: "description", content: "Ummmmm..." },

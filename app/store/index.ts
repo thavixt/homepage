@@ -2,7 +2,7 @@ import { configureStore, combineReducers, type ThunkAction, type Action } from '
 import bookmarksReducer, { initialState as initialBookmarksState } from '../reducers/bookmarksReducer'
 import todosReducer, { initialState as initialTodosState } from '../reducers/todosReducer'
 import statsReducer, { initialState as initialStatsState } from '../reducers/statsReducer'
-import settingsReducer, { initialState as initialSettingsState } from '../reducers/settingsReducer'
+import settingsReducer from '../reducers/settingsReducer'
 
 const preloadedState = loadState();
 
@@ -37,6 +37,7 @@ export function loadState() {
     if (serializedState === null) return undefined;
     return JSON.parse(serializedState);
   } catch (err) {
+    console.error(err);
     return {
       bookmarks: initialBookmarksState,
       stats: initialStatsState,
@@ -45,7 +46,7 @@ export function loadState() {
   }
 }
 
-export function saveState(state: any) {
+export function saveState(state: unknown) {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem("homepage-redux-state", serializedState);

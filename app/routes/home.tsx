@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import type { Route } from "./+types/home";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { BookOpenIcon } from "lucide-react";
@@ -10,7 +9,7 @@ import { Label } from "@radix-ui/react-context-menu";
 import { FEATURES } from "~/components/header";
 import { sortBy } from "~/lib/utils";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Homepage" },
     { name: "description", content: "Welcome to the internet" },

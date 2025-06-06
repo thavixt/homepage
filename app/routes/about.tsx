@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
-import type { Route } from "./+types/home";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Homepage - About" },
     { name: "description", content: "Some info about this Homepage site" },
