@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type HTMLAttributes } from "react";
+import { cn } from "~/lib/utils";
 
-export function Clock() {
+export function Clock(props: HTMLAttributes<HTMLElement>) {
   const [time, setTime] = useState(Date.now());
 
   useEffect(() => {
@@ -9,7 +10,7 @@ export function Clock() {
   }, []);
 
   return (
-    <code className="inline border rounded-md p-4">
+    <code {...props} className={cn("inline", props.className)}>
       {new Date(time).toLocaleTimeString(navigator.language)}
     </code>
   )

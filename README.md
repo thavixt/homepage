@@ -12,6 +12,7 @@ Set the `https://homepage.komlosidev.net` URL as your home page, and customize i
 - [ ] timer/reminder
 - [x] bookmarks with import/export
 - [x] dynamic background
+- [x] keyboard navigation
 - [x] site statistics
 - [x] todo list
 - [x] weather widget

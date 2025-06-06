@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigate } from "react-router";
 import { Provider as ReduxProvider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -16,6 +16,8 @@ import { getSettings, incrementBackgroundCounter } from "./reducers/settingsRedu
 import { getBackgroundSeed } from "./lib/utils";
 import { Button } from "./components/ui/button";
 import { LoaderCircle } from "lucide-react";
+import { HotKeyContextProvider } from "./context/hotkeyContext";
+import { FEATURES } from "./components/header";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -65,6 +67,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 function Root({ mounted }: { mounted: boolean }) {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const settings = useAppSelector(getSettings);
   const backgroundSeed = getBackgroundSeed(settings);
@@ -72,6 +75,19 @@ function Root({ mounted }: { mounted: boolean }) {
 
   const onClick = () => {
     dispatch(incrementStat({ stat: 'click' }));
+  }
+
+  const onHotkeyPressed = (hotkey: string) => {
+    if (hotkey === ' ') {
+      navigate('/', { viewTransition: true })
+    }
+    if (hotkey === 'B') {
+      dispatch(incrementBackgroundCounter())
+    }
+    const route = FEATURES.find(feat => feat.hotkey.toUpperCase() === hotkey.toUpperCase());
+    if (route) {
+      navigate(route.href, { viewTransition: true })
+    }
   }
 
   useEffect(() => {
@@ -107,9 +123,15 @@ function Root({ mounted }: { mounted: boolean }) {
   }, [backgroundCounter, backgroundSeed, dispatch]);
 
   return (
-    <div onClick={onClick}>
-      <Outlet />
-    </div>
+    <HotKeyContextProvider
+      keys={FEATURES.map(feat => feat.hotkey.toUpperCase()).concat(' ', 'B')}
+      onHotkeyPressed={onHotkeyPressed}
+      modifier="shift"
+    >
+      <div onClick={onClick}>
+        <Outlet />
+      </div>
+    </HotKeyContextProvider>
   );
 }
 

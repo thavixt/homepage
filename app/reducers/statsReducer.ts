@@ -8,6 +8,7 @@ export type Statistic =
   | 'bookmarkDeleted'
   | 'bookmarkEdited'
   | 'bookmarkImported'
+  | 'hotkeyPressed'
   | 'click'
   | 'opened';
 
@@ -46,8 +47,12 @@ export const initialState: StatisticsState = {
       count: 0,
       description: 'Bookmarks imported',
     },
+    hotkeyPressed: {
+      description: 'Hotkeys pressed',
+      count: 0,
+    },
     click: {
-      description: 'Clicks on this page',
+      description: 'Number of mouse clicks on this page',
       count: 0,
     },
     opened: {

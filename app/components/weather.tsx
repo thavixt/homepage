@@ -32,13 +32,13 @@ export function WeatherWidget() {
         <div className="flex flex-col items-center">
           <div title="Your current location">{weatherData.location.country}, {weatherData.location.region}</div>
           <div className="flex items-center">
-            <span title="Weather condition and temperature">{weatherData.current.condition.text} - {weatherData.current.temp_c}°C</span>
+            <span title="Weather condition and temperature">{weatherData.current.temp_c}°C - {weatherData.current.condition.text}</span>
             <span>
               <Link viewTransition to="/weather" title="View detailed weather information">
                 <img
                   src={`https:${weatherData.current.condition.icon}`}
                   alt="Weather condition icon"
-                  className="scale-[0.75] hover:scale-[1.05] transition-transform cursor-pointer"
+                  className="scale-[0.75] hover:scale-[1.1] transition-transform cursor-pointer"
                 />
               </Link>
             </span>
@@ -70,7 +70,7 @@ export function WeatherWidget() {
         </div>
       )}
       <div
-        className="absolute top-2 right-2 cursor-pointer"
+        className="absolute top-2 right-2 cursor-pointer opacity-50 hover:opacity-100"
         onClick={refetchWeather}
         title="Refresh weather data"
       >

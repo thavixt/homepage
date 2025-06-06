@@ -84,9 +84,9 @@ export function BookmarkList() {
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="grid grid-cols-[auto_1fr] gap-4 items-center">
-        <div className="flex gap-1 items-center">
-          <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
+        <div className="flex gap-2 items-center">
           <BookOpenIcon />
+          <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
         </div>
         <Input type="search" id="search" name="search" placeholder="Search for something you saved earlier..." onChange={onSearch} />
       </div>
@@ -108,13 +108,13 @@ export function BookmarkList() {
         ) : (
           <div className="flex flex-col gap-2">
             <ScrollArea className="h-[200px]">
-              <Label className="pb-2">Pinned bookmarks:</Label>
+              <Label className="pb-2">Pinned:</Label>
               <div className="w-full grid grid-cols-2 gap-x-2 items-start justify-center">
                 {pinnedBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
               </div>
             </ScrollArea>
             <ScrollArea className="h-[300px]">
-              <Label className="pb-2">Other bookmarks:</Label>
+              <Label className="pb-2">Other:</Label>
               <div className="w-full grid grid-cols-2 gap-x-2 items-start justify-center">
                 {otherBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
               </div>

@@ -39,7 +39,7 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
   }
 
   return (
-    <div className="flex justify-between items-center gap-2 hover:bg-accent/50 rounded-sm px-3 py-1">
+    <div className="flex justify-between items-center gap-2 hover:bg-primary/10 rounded-sm px-3 py-1">
       <a href={bookmark.href} rel="noopener noreferrer" onClick={onBookmarkClick}>{bookmark.name}</a>
       <AlertDialog
         trigger={(

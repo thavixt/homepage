@@ -43,7 +43,7 @@ body {
 }
 
 a {
-  @apply leading-normal text-blue-700 hover:underline dark:text-blue-500 truncate max-w-sm w-full;
+  @apply leading-normal text-blue-700 hover:underline dark:text-blue-500 truncate w-full;
 }
 
 @theme inline {
