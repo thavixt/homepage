@@ -15,7 +15,7 @@ Set the `https://homepage.komlosidev.net` URL as your home page, and customize i
 - [x] keyboard navigation
 - [x] site statistics
 - [x] todo list
-- [x] weather widget
+- [x] current weather widget and 3 day forecast
 
 ### Made with
 
