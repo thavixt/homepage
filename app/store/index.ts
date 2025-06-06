@@ -2,7 +2,7 @@ import { configureStore, combineReducers, type ThunkAction, type Action } from '
 import bookmarksReducer, { initialState as initialBookmarksState } from '../reducers/bookmarksReducer'
 import todosReducer, { initialState as initialTodosState } from '../reducers/todosReducer'
 import statsReducer, { initialState as initialStatsState } from '../reducers/statsReducer'
-import settingsReducer from '../reducers/settingsReducer'
+import settingsReducer, { initialState as initialSettingsState } from '../reducers/settingsReducer'
 
 const preloadedState = loadState();
 
@@ -32,18 +32,21 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 >
 
 export function loadState() {
-  if (!global.window || !global.window.localStorage) {
+  if (typeof window === "undefined" || typeof window.localStorage === "undefined") {
     return;
   }
 
   try {
     const serializedState = localStorage.getItem("homepage-redux-state");
-    if (serializedState === null) return undefined;
+    if (serializedState === null) {
+      return undefined;
+    }
     return JSON.parse(serializedState);
   } catch (err) {
     console.error(err);
     return {
       bookmarks: initialBookmarksState,
+      settings: initialSettingsState,
       stats: initialStatsState,
       todos: initialTodosState
     };
@@ -51,14 +54,14 @@ export function loadState() {
 }
 
 export function saveState(state: unknown) {
-  if (!global.window || !global.window.localStorage) {
+  if (typeof window === "undefined" || typeof window.localStorage === "undefined") {
     return;
   }
 
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem("homepage-redux-state", serializedState);
-  } catch {
-    // ignore write errors
+  } catch (err) {
+    console.error(err);
   }
 }
