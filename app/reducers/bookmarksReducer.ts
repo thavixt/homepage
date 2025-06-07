@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type RootState } from '../store'
+import { toast } from 'sonner';
 
 export interface BookmarksState {
   bookmarks: Array<Bookmark>
@@ -46,7 +47,7 @@ export const initialState: BookmarksState = {
       href: "https://vite.dev/guide/#scaffolding-your-first-vite-project",
       name: "Vite",
     },
-  ].map((bookmark, i) => ({ ...bookmark, id: `initial-${i}`, pinned: true})),
+  ].map((bookmark, i) => ({ ...bookmark, id: `initial-${i}`, pinned: true })),
 }
 
 export const bookmarkSlice = createSlice({
@@ -54,15 +55,35 @@ export const bookmarkSlice = createSlice({
   initialState,
   reducers: {
     createBookmark: (state, action: PayloadAction<Omit<Bookmark, 'id'>>) => {
+      if (state.bookmarks.find(b => b.name === action.payload.name)) {
+        toast.error(`A bookmark with the same name already exists for "${action.payload.name}"`);
+        return;
+      }
+      if (state.bookmarks.find(b => b.href === action.payload.href)) {
+        toast.error(`A bookmark to the same URL already exists for "${action.payload.href}"`);
+        return;
+      }
+
       state.bookmarks = [
         ...state.bookmarks,
         {
-          id: crypto.randomUUID().slice(0, 8),
           ...action.payload,
+          id: crypto.randomUUID().slice(0, 8),
+          pinned: action.payload.pinned ?? false,
         }
       ]
+      toast.success(`Bookmark "${action.payload.name}" saved`);
     },
     updateBookmark: (state, action: PayloadAction<Pick<Bookmark, 'id' | 'name' | 'href' | 'pinned'>>) => {
+      if (state.bookmarks.find(b => b.name === action.payload.name && b.id !== action.payload.id)) {
+        toast.error(`A bookmark with the same name already exists for "${action.payload.name}"`);
+        return;
+      }
+      if (state.bookmarks.find(b => b.href === action.payload.href && b.id !== action.payload.id)) {
+        toast.error(`A bookmark to the same URL already exists for "${action.payload.href}"`);
+        return;
+      }
+
       const updatedBookmarks = state.bookmarks.map((bookmark) => {
         if (bookmark.id === action.payload.id) {
           return {
@@ -73,14 +94,17 @@ export const bookmarkSlice = createSlice({
         return bookmark;
       });
       state.bookmarks = updatedBookmarks;
+      toast.success(`Bookmark "${action.payload.name}" updated`);
     },
     clearBookmarks: (state) => {
       state.bookmarks = [];
+      toast.success('Bookmarks cleared');
     },
     deleteBookmark: (state, action: PayloadAction<string>) => {
       state.bookmarks = state.bookmarks.filter(
         (bookmark) => bookmark.id !== action.payload
       );
+      toast.success(`Bookmark deleted`);
     },
   },
 })

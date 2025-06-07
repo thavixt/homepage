@@ -3,29 +3,27 @@ import { type RootState } from '../store'
 import { toast } from 'sonner';
 
 export type Setting = 'background';
-export type BackgroundChangeFrequency = 'hourly' | 'daily' | 'weekly' | 'monthly';
+
+export type BackgroundChangeFrequency = '5min' | '15min' | '30min' | 'hour' | 'day' | 'week';
+
 export type BackgroundSettings = SettingState<BackgroundChangeFrequency> & { counter: number };
 
 export interface SettingsState {
-  settings: {
-    background: BackgroundSettings,
-  }
+  background: BackgroundSettings,
 }
 
 export interface SettingState<T> {
   id: Setting;
-  name: string;
+  label: string;
   value: T;
 }
 
 export const initialState: SettingsState = {
-  settings: {
-    background: {
-      id: 'background',
-      name: 'Frequency of background change',
-      value: 'hourly',
-      counter: 0,
-    },
+  background: {
+    id: 'background',
+    label: 'Change background every',
+    value: 'hour',
+    counter: 0,
   },
 }
 
@@ -33,19 +31,22 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    changeSetting: (state, action: PayloadAction<{ setting: Setting, value: BackgroundChangeFrequency }>) => {
-      const stat = state.settings[action.payload.setting];
+    changeSetting: (state, action: PayloadAction<{
+      setting: Setting,
+      value: BackgroundChangeFrequency,
+    }>) => {
+      const stat = state[action.payload.setting];
       if (stat) {
-        state.settings[action.payload.setting] = {
+        state[action.payload.setting] = {
           ...stat,
           value: action.payload.value,
         };
       } else {
         if (action.payload.setting === 'background') {
-          state.settings[action.payload.setting] = {
+          state[action.payload.setting] = {
             id: action.payload.setting,
-            name: initialState.settings[action.payload.setting].name,
-            value: 'daily',
+            label: initialState[action.payload.setting].label,
+            value: 'day',
             counter: 0,
           };
         } else {
@@ -56,16 +57,16 @@ export const settingsSlice = createSlice({
       }
     },
     resetSettings: (state) => {
-      state.settings = initialState.settings;
+      state.background = initialState.background;
     },
     incrementBackgroundCounter: (state) => {
-      state.settings.background.counter++;
+      state.background.counter++;
     }
   },
 })
 
 export const { changeSetting, resetSettings, incrementBackgroundCounter } = settingsSlice.actions
 
-export const getSettings = (state: RootState) => state.settings.settings;
+export const getSettings = (state: RootState) => state.settings;
 
 export default settingsSlice.reducer

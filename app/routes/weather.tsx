@@ -22,14 +22,22 @@ export default function WeatherForecast() {
   return (
     <Card className="w-full max-w-5xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold">
-        <div className="text-4xl">Weather forecast{(!isPending && forecastData) ? ` in ${forecastData.location.name}, ${forecastData.location.country}` : ''}</div>
-        <div className="text-2xl">{(!isPending && forecastData) ? ' for the next 2 days' : ' is loading ...'}</div>
+        <div className="text-4xl">
+          Weather forecast{(!isPending && forecastData)
+            ? ` for ${forecastData.location.name}, ${forecastData.location.country}`
+            : ''
+          }
+        </div>
+        <div className="text-2xl">{(!isPending && forecastData) ? ' in the next 2 days' : ' is loading ...'}</div>
         <p className="font-light text-sm text-center">
-          Last updated {forecastData ? new Date(forecastData.current.last_updated).toLocaleString() : ' - not yet!'}
+          Last updated {forecastData
+            ? new Date(forecastData.current.last_updated).toLocaleString()
+            : ' - not yet!'
+          }
         </p>
       </CardHeader>
       <Separator />
-      <CardContent>
+      <CardContent className="min-h-[300px]">
         {forecastData ? (
           <div className="grid grid-cols-2 gap-4 py-4">
             <div className="flex flex-col gap-2">

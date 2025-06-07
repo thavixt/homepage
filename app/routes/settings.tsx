@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
-import { changeSetting, getSettings, resetSettings, type BackgroundChangeFrequency, type Setting } from "~/reducers/settingsReducer";
+import { changeSetting, getSettings, resetSettings, type Setting, type SettingsState } from "~/reducers/settingsReducer";
 import { Fragment } from "react/jsx-runtime";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
@@ -20,8 +20,8 @@ export default function Stats() {
   const dispatch = useAppDispatch();
 
   const onResetSettings = () => {
-    dispatch(resetSettings());
     toast.success('Settings reset to defaults');
+    dispatch(resetSettings());
   }
 
   const onClearAllData = () => {
@@ -33,10 +33,9 @@ export default function Stats() {
     }, 2000);
   }
 
-  const onChange = (key: Setting) => (value: string) => {
-    // TODO: fix types
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dispatch(changeSetting({ setting: key, value: value as any }));
+  const onChange = <T extends Setting>(key: T) => (value: SettingsState[T]['value']) => {
+    toast.success('Background update interval changed');
+    dispatch(changeSetting({ setting: key, value }));
   }
 
   return (
@@ -47,23 +46,16 @@ export default function Stats() {
       <CardContent className="flex flex-col gap-4 w-full px-0">
         <Separator />
         <div className="grid grid-cols-[3fr_1fr] items-center justify-between px-4">
-          {Object.entries(settings)
-            .sort(([, a], [, b]) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
-            .map(([key, state]) => (
-              <Fragment key={key}>
-                <div className="whitespace-pre-wrap">{state.name}</div>
-                <Select name={key} value={state.value} onValueChange={onChange(key as Setting)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue>{state.value}</SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SETTINGS_VALUES[key as Setting].map(v => (
-                      <SelectItem key={v} value={v}>{v}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Fragment>
-            ))}
+          {Object.keys(settings).map((k) => {
+            const key = k as Setting;
+            return (
+              <SettingSelector
+                key={key}
+                settingsKey={key}
+                onChange={onChange(key)}
+              />
+            )
+          })}
         </div>
         <Separator />
         <div className="flex gap-4 justify-center items-center w-full px-4">
@@ -89,11 +81,47 @@ export default function Stats() {
   );
 }
 
-const SETTINGS_VALUES: Record<Setting, BackgroundChangeFrequency[]> = {
-  background: [
-    'hourly',
-    'daily',
-    'weekly',
-    'monthly',
-  ]
+function SettingSelector<T extends keyof SettingsState>({ settingsKey, onChange }: {
+  settingsKey: T;
+  onChange: (value: SettingsState[T]['value']) => void;
+}) {
+  const settings = useAppSelector(getSettings);
+  const { id, label, value } = settings[settingsKey];
+
+  return (
+    <Fragment>
+      <div className="whitespace-pre-wrap">{label}</div>
+      <Select
+        name={settingsKey}
+        value={Object.keys(SETTINGS_VALUES[id]).find((k) => k === value)}
+        onValueChange={(v) => onChange(v as SettingsState[T]['value'])}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue>{value}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {Object.entries(SETTINGS_VALUES[id]).map(([k, v]) => (
+            <SelectItem key={k} value={k}>{v}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </Fragment>
+  )
+}
+
+const SETTINGS_VALUES: Record<
+  keyof SettingsState,
+  Record<
+    SettingsState[Setting]['value'],
+    string
+  >
+> = {
+  background: {
+    '5min': '5 minutes',
+    '15min': '15 minutes',
+    '30min': '30 minutes',
+    hour: '60 minutes',
+    day: '24 hours',
+    week: '7 days',
+  }
 }

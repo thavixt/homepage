@@ -12,12 +12,13 @@ import { store } from './store'
 import { Toaster } from "./components/ui/sonner";
 import { useAppDispatch, useAppSelector } from "./hooks/state";
 import { incrementStat } from "./reducers/statsReducer";
-import { getSettings, incrementBackgroundCounter } from "./reducers/settingsReducer";
+import { getSettings, incrementBackgroundCounter, type BackgroundSettings } from "./reducers/settingsReducer";
 import { getBackgroundSeed } from "./lib/utils";
 import { Button } from "./components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { HotKeyContextProvider } from "./context/hotkeyContext";
 import { FEATURES } from "./components/header";
+import { toast } from "sonner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,44 +31,13 @@ const queryClient = new QueryClient({
   },
 });
 
-export const links: Route.LinksFunction = () => [
-  { rel: "icon", href: "/favicon.jpg" },
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-];
-
-export function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body className="dark">
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
 function Root({ mounted }: { mounted: boolean }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const settings = useAppSelector(getSettings);
   const backgroundSeed = getBackgroundSeed(settings);
   const backgroundCounter = settings.background.counter;
+  const backgroundSettingValue = settings.background.value;
 
   const onClick = () => {
     dispatch(incrementStat({ stat: 'click' }));
@@ -86,6 +56,7 @@ function Root({ mounted }: { mounted: boolean }) {
     }
   }
 
+  // TODO: this effect is trash imo
   useEffect(() => {
     if (mounted) {
       return;
@@ -94,6 +65,8 @@ function Root({ mounted }: { mounted: boolean }) {
   }, [dispatch, mounted])
 
   useEffect(() => {
+    // NOTE: set an intitial count if missing (?)
+    // TODO: consider some migration processes instead
     if (typeof backgroundCounter !== 'number') {
       dispatch(incrementBackgroundCounter());
       return;
@@ -117,6 +90,14 @@ function Root({ mounted }: { mounted: boolean }) {
       cancelled = true;
     };
   }, [backgroundCounter, backgroundSeed, dispatch]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      toast('Background changed');
+      dispatch(incrementBackgroundCounter());
+    }, getMsByBackgroundSettingValue(backgroundSettingValue));
+    return () => clearInterval(interval);
+  }, [backgroundSettingValue, dispatch])
 
   return (
     <HotKeyContextProvider
@@ -217,4 +198,55 @@ export function HydrateFallback() {
       <span className="ml-2 text-2xl font-semibold">Loading ...</span>
     </div>
   );
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body className="dark">
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+export const links: Route.LinksFunction = () => [
+  { rel: "icon", href: "/favicon.jpg" },
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  {
+    rel: "preconnect",
+    href: "https://fonts.gstatic.com",
+    crossOrigin: "anonymous",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+  },
+];
+
+function getMsByBackgroundSettingValue(value: BackgroundSettings['value']) {
+  switch (value) {
+    case "5min":
+      return 5 * 60 * 1000; // 5 min in ms
+    case "15min":
+      return 15 * 60 * 1000; // 15 min in ms
+    case "30min":
+      return 30 * 60 * 1000; // 30 min in ms
+    case "hour":
+      return 60 * 60 * 1000; // 1 hour in ms
+    case "day":
+      return 24 * 60 * 60 * 1000; // 1 day in ms
+    case "week":
+      return 7 * 24 * 60 * 60 * 1000; // 1 week in ms
+    default:
+      return 24 * 60 * 60 * 1000; // fallback to 1 day
+  }
 }

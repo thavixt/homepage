@@ -7,34 +7,64 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function sleep(ms = 250) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+export async function asyncForEach<T>(
+  items: Array<T>,
+  callback: (item: T, index: number, totalCount: number) => void | Promise<void>,
+  delayMs?: number,
+) {
+  for (let i = 0; i < items.length; i++) {
+    callback(items[i], i, items.length);
+    await sleep(delayMs);
+  }
+}
+
 export function getBackgroundSeed(settings: Record<"background", BackgroundSettings>) {
   const backgroundChangeFrequency = settings.background.value;
-  const seedFixedParts = [ settings.background.counter, new Date().getFullYear() ]
+  const seedFixedParts = [settings.background.counter, new Date().getFullYear()]
   const seedVariableParts: Record<BackgroundChangeFrequency, string> = {
-    monthly: new Date().getMonth().toString(),
-    weekly: (new Date().getDate() % 7).toString(),
-    daily: new Date().getDate().toString(),
-    hourly: new Date().getHours().toString(),
+    week: (new Date().getDate() % 7).toString(),
+    day: new Date().getDate().toString(),
+    hour: new Date().getHours().toString(),
+    "30min": (new Date().getMinutes() % 30).toString(),
+    "15min": (new Date().getMinutes() % 15).toString(),
+    "5min": (new Date().getMinutes() % 5).toString(),
   }
 
   switch (backgroundChangeFrequency) {
-    case "monthly":
-      seedVariableParts.weekly = '*';
-      seedVariableParts.daily = '*';
-      seedVariableParts.hourly = '*';
+    case "week":
+      seedVariableParts.day = '*';
+      seedVariableParts.hour = '*';
+      seedVariableParts['5min'] = '*';
+      seedVariableParts['15min'] = '*';
+      seedVariableParts['30min'] = '*';
       break;
-    case "weekly":
-      seedVariableParts.daily = '*';
-      seedVariableParts.hourly = '*';
+    case "day":
+      seedVariableParts.hour = '*';
+      seedVariableParts['5min'] = '*';
+      seedVariableParts['15min'] = '*';
+      seedVariableParts['30min'] = '*';
       break;
-    case "daily":
-      seedVariableParts.hourly = '*';
+    case "hour":
+      seedVariableParts['5min'] = '*';
+      seedVariableParts['15min'] = '*';
+      seedVariableParts['30min'] = '*';
       break;
-    case "hourly":
+    case "30min":
+      seedVariableParts['15min'] = '*';
+      seedVariableParts['30min'] = '*';
+      break;
+    case "15min":
+      seedVariableParts['30min'] = '*';
+      break;
+    case "5min":
       break;
   }
 
-  return [...seedFixedParts,...Object.values(seedVariableParts)].join('-')
+  return [...seedFixedParts, ...Object.values(seedVariableParts)].join('-');
 }
 
 export function sortBy<T>(key: keyof T, arr: T[]): T[] {
@@ -76,10 +106,10 @@ export function exportDataToJson<T extends Record<string, ExportableValue>>(
   toast.success(onSuccess);
 }
 
-export function importDataFromJson<T extends Record<string, ExportableValue>>(
-  transform: (item: T, i: number, totalCount: number) => void,
-  onSuccess: string = "Data imported from file successfully",
-  onError: string = "An error happened trying to import from a file",
+export async function importDataFromJson<T extends Record<string, ExportableValue>>(
+  callback: (item: T, i: number, totalCount: number) => void,
+  onSuccess: (items: T[]) => void,
+  onError?: (e: Error) => void,
 ) {
   const input = document.createElement('input');
   input.hidden = true;
@@ -93,16 +123,16 @@ export function importDataFromJson<T extends Record<string, ExportableValue>>(
     }
     try {
       const text = await file.text();
-      const importedItems = JSON.parse(text);
+      const importedItems = JSON.parse(text) as T[];
       if (!Array.isArray(importedItems)) {
         throw new Error('Invalid import format');
       }
-      importedItems.forEach((item, i) => {
-        transform(item, i, importedItems.length);
-      });
-      toast.success(onSuccess);
+      await asyncForEach(importedItems, callback);
+      onSuccess(importedItems);
     } catch (error) {
       toast.error(`${onError}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error(error as Error)
+      onError?.(error as Error);
     }
     document.body.removeChild(input);
   };

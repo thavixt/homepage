@@ -16,6 +16,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
         } as React.CSSProperties
       }
       {...props}
+      closeButton
+      duration={10_000}
+      expand
+      position="top-left"
+      richColors
+      visibleToasts={5}
     />
   )
 }

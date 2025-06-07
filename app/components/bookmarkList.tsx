@@ -1,4 +1,4 @@
-import { BookOpenIcon, DownloadIcon, ImportIcon, Trash2Icon } from "lucide-react";
+import { BookOpenIcon, DownloadIcon, HardDriveUploadIcon, ImportIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { clearBookmarks, createBookmark, getBookmarks, type Bookmark as IBookmark } from "~/reducers/bookmarksReducer";
@@ -50,14 +50,12 @@ export function BookmarkList() {
       return;
     }
     dispatch(createBookmark({ name, href, pinned }));
-    toast.success(`Bookmark "${name}" saved`);
     setDialogOpen(false);
   }
 
   const onDeleteAll = () => {
     dispatch(clearBookmarks());
     dispatch(incrementStat({ stat: "bookmarkDeleted", count: bookmarks.length }));
-    toast.success('Bookmarks cleared');
   }
 
   const exportBookmarks = () => {
@@ -77,8 +75,10 @@ export function BookmarkList() {
         }
         dispatch(incrementStat({ stat: "bookmarkImported" }));
       },
-      "Bookmarks imported successfully",
-      "Failed to import bookmarks",
+      (importedItems) => {
+        toast.success(`${importedItems.length} bookmarks imported`)
+      },
+      () => toast.error("Failed to import bookmarks"),
     )
   }
 
@@ -144,11 +144,19 @@ export function BookmarkList() {
             description="Are you sure you want to delete *all* of your bookmarks? Consider exporting them first."
             confirm="I'm sure, delete all of my bookmarks"
           />
-          <div className="border rounded-md p-1" title="Export bookmarks as JSON" onClick={exportBookmarks}>
-            <DownloadIcon className="cursor-pointer" size={16} />
+          <div
+            className="border rounded-md p-1"
+            title="Import bookmarks from JSON file"
+            onClick={importBookmarks}
+          >
+            <HardDriveUploadIcon className="cursor-pointer" size={16} />
           </div>
-          <div className="border rounded-md p-1" title="Import bookmarks from JSON file" onClick={importBookmarks}>
-            <ImportIcon className="cursor-pointer" size={16} />
+          <div
+            className="border rounded-md p-1"
+            title="Export bookmarks as JSON"
+            onClick={exportBookmarks}
+          >
+            <DownloadIcon className="cursor-pointer" size={16} />
           </div>
         </div>
         <FormDialog

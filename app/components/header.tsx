@@ -62,7 +62,7 @@ export const FEATURES: Feature[] = [
   ...sortedFeatures,
   {
     href: "/stats",
-    name: "Statistics and data",
+    name: "Statistics",
     Icon: ChartLineIcon,
     description: "See how you are using this app.",
     hotkey: 'S',

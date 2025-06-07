@@ -15,7 +15,6 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
   const onDeleteConfirm = () => {
     dispatch(deleteBookmark(bookmark.id));
     dispatch(incrementStat({stat: "bookmarkDeleted"}));
-    toast.success(`Bookmark "${bookmark.name}" deleted`);
   }
 
   const onEditSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -30,7 +29,6 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
     }
     dispatch(updateBookmark({ id: bookmark.id, name, href, pinned }));
     dispatch(incrementStat({stat: "bookmarkEdited"}));
-    toast.success(`Bookmark "${bookmark.name}" updated`);
     setEditDialogOpen(false);
   }
 
