@@ -7,14 +7,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function sleep(ms = 250) {
+export function sleep(ms = 500) {
   return new Promise(res => setTimeout(res, ms));
 }
 
 export async function asyncForEach<T>(
   items: Array<T>,
   callback: (item: T, index: number, totalCount: number) => void | Promise<void>,
-  delayMs?: number,
+  delayMs = 150,
 ) {
   for (let i = 0; i < items.length; i++) {
     callback(items[i], i, items.length);
