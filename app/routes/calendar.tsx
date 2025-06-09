@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { dateFormatOptions } from "~/components/ui/clock";
 import { Separator } from "~/components/ui/separator";
 import { useAppDispatch } from "~/hooks/state";
+import { useTypesafeTranslation } from "~/i18n";
 import { getDateString } from "~/lib/date";
 import { addEvent } from "~/reducers/calendarReducer";
 
@@ -23,6 +24,7 @@ export function meta() {
 }
 
 export default function CalendarPage() {
+  const t = useTypesafeTranslation();
   const [date, setDate] = useState<Date>(new Date());
   const today = useRef(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -59,7 +61,7 @@ export default function CalendarPage() {
     const text = formData.get("text") as string;
     const date = formData.get("date") as string;
     if (!text || !date) {
-      toast.error('Must provide a date and description for the event');
+      toast.error(t('error.calendar.required'));
       return;
     }
     const d = new Date(date);
@@ -71,7 +73,7 @@ export default function CalendarPage() {
   return (
     <Card className=" backdrop-blur-lg w-full max-w-6xl flex flex-col items-center min-h-0 gap-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
-        Your calendar and diary
+        {t('features.calendar')}
       </CardHeader>
       <Separator className="mt-4" />
       <CardContent className="flex gap-8 w-full space-y-6 items-center justify-center px-4 p-0">
@@ -82,7 +84,7 @@ export default function CalendarPage() {
                 <ArrowLeftIcon />
               </Button>
               <Button title="Current month" size="sm" variant="outline" onClick={onToday}>
-                Today
+                {t('common.today')}
               </Button>
               <Button title="Next month" size="sm" variant="outline" onClick={onNextMonth}>
                 <ArrowRightIcon />
@@ -108,14 +110,18 @@ export default function CalendarPage() {
           <div className="grid grid-rows-[450px_200px] gap-2">
             <div className="flex flex-col gap-4 items-start justify-start size-full p-4">
               <div className="w-full flex items-center justify-between gap-4">
-                <span>Events scheduled for {date?.toLocaleDateString(navigator.language, dateFormatOptions)}:</span>
+                <span>
+                  {t('calendar.scheduledFor', {
+                    date: date?.toLocaleDateString(navigator.language, dateFormatOptions)
+                  })}
+                </span>
                 <FormDialog
-                  trigger={<Button>Create a new event</Button>}
+                  trigger={<Button>{t('calendar.createEvent')}</Button>}
                   onSubmit={onSubmitEvent}
                   open={dialogOpen}
                   onOpenChange={setDialogOpen}
-                  title="Create event"
-                  description="Set a date and description for the event."
+                  title={t('calendar.createEvent')}
+                  description={t('calendar.createEvent.description')}
                 >
                   <CalendarEventForm currentDate={date} />
                 </FormDialog>

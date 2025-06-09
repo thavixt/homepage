@@ -12,6 +12,8 @@ Set the `https://homepage.komlosidev.net` URL as your home page, and customize i
 
 - [ ] local settings
 - [ ] localization with react-i18n
+  - https://www.i18next.com/overview/getting-started#basic-sample
+  - https://dev.to/adrai/supercharge-your-typescript-app-mastering-i18next-for-type-safe-translations-2idp
 - [ ] notes
 - [ ] timer/reminder
 - [x] bookmarks with import/export

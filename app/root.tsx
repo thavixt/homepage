@@ -22,8 +22,8 @@ import { FEATURES } from "./components/header";
 import { toast } from "sonner";
 import { AuthButton } from "./components/authButton";
 import { UserContextProvider } from "./context/userContext";
-
-const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+import "./i18n";
+import { useTranslation } from "react-i18next";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,13 +36,14 @@ const queryClient = new QueryClient({
   },
 });
 
-function Root({ mounted }: { mounted: boolean }) {
+function Root({ initialized }: { initialized: boolean }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const settings = useAppSelector(getSettings);
   const backgroundSeed = getBackgroundSeed(settings);
   const backgroundCounter = settings.background.counter;
   const backgroundSettingValue = settings.background.value;
+  const { i18n } = useTranslation(); 
 
   const onClick = () => {
     dispatch(incrementStat({ stat: 'click' }));
@@ -63,11 +64,11 @@ function Root({ mounted }: { mounted: boolean }) {
 
   // TODO: this effect is trash imo
   useEffect(() => {
-    if (mounted) {
+    if (initialized) {
       return;
     }
     dispatch(incrementStat({ stat: 'opened' }));
-  }, [dispatch, mounted])
+  }, [dispatch, initialized])
 
   useEffect(() => {
     // NOTE: set an intitial count if missing (?)
@@ -104,6 +105,10 @@ function Root({ mounted }: { mounted: boolean }) {
     return () => clearInterval(interval);
   }, [backgroundSettingValue, dispatch])
 
+  if (!initialized || !i18n.isInitialized) {
+    return <HydrateFallback />
+  }
+
   return (
     <HotkeyContextProvider
       keys={FEATURES.map(feat => feat.hotkey.toUpperCase()).concat(' ', 'B')}
@@ -118,10 +123,13 @@ function Root({ mounted }: { mounted: boolean }) {
 }
 
 export default function App() {
-  const [mounted, setMounted] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    if (initialized) {
+      return;
+    }
+
     if (typeof window !== "undefined") {
       const localStoragePersister = createSyncStoragePersister({
         storage: window.localStorage,
@@ -132,15 +140,17 @@ export default function App() {
         persister: localStoragePersister,
       });
     }
-  }, []);
+
+    setInitialized(true);
+  }, [initialized]);
 
   return (
-    <GoogleOAuthProvider clientId={clientId}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <UserContextProvider>
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={true} buttonPosition="bottom-left" />
           <ReduxProvider store={store}>
-            <Root mounted={mounted} />
+            <Root initialized={initialized} />
             <Toaster />
             <AuthButton />
           </ReduxProvider>

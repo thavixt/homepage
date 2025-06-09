@@ -7,6 +7,7 @@ import { BookmarkList } from "~/components/bookmarkList";
 import { FEATURES } from "~/components/header";
 import { HotKey } from "~/components/ui/hotkey";
 import { CalendarDaysIcon } from "lucide-react";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function meta() {
   return [
@@ -16,13 +17,17 @@ export function meta() {
 }
 
 export default function HomePage() {
+  const t = useTypesafeTranslation();
+
   return (
      <Card className=" backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex gap-2 items-center">
             <CalendarDaysIcon />
-            <span className="inline text-4xl">Today is {getCurrentDate()}</span>
+            <span className="inline text-4xl">
+              {t('home.currentDate', {date: getCurrentDate()})}
+            </span>
           </div>
           <Clock className="border rounded-md p-4 text-5xl" />
         </div>
@@ -41,6 +46,8 @@ export default function HomePage() {
 }
 
 function FeatureList() {
+  const t = useTypesafeTranslation();
+
   return (
     <ul>
       {FEATURES.map(({ href, name, description, Icon, hotkey }) => (
@@ -54,7 +61,7 @@ function FeatureList() {
           </Link>
         </li>
       ))}
-      <li className="mt-1 text-xs text-right opacity-50">(to come back <i>home</i>, press Shift + Space)</li>
+      <li className="mt-1 text-xs text-right opacity-50">{t('features.hotkey')}</li>
     </ul>
   )
 }

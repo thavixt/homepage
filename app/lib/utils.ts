@@ -11,6 +11,9 @@ export function sleep(ms = 500) {
   return new Promise(res => setTimeout(res, ms));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const noop = (...args: unknown[]) => {};
+
 export async function asyncForEach<T>(
   items: Array<T>,
   callback: (item: T, index: number, totalCount: number) => void | Promise<void>,
