@@ -14,8 +14,10 @@ export function WeatherWidget() {
   return (
     <div className="relative border rounded-md p-4">
       {(weatherData && !isPending) ? (
-        <div className="flex flex-col items-center">
-          <div title="Your current location">{weatherData.location.country}, {weatherData.location.region}</div>
+        <div className="flex flex-col gap-2 items-center">
+          <div title="Your current location" className="font-bold text-lg">
+            {weatherData.location.country}, {weatherData.location.region}
+          </div>
           <div className="flex items-center">
             <span title="Weather condition and temperature">{weatherData.current.temp_c}°C - {weatherData.current.condition.text}</span>
             <span>
@@ -44,12 +46,12 @@ export function WeatherWidget() {
               Humidity: {weatherData.current.humidity}%
             </small>
           </div>
-          <small className="mt-2 text-[10px] opacity-50">
+          <small className="text-[10px] opacity-50">
             (from <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>, updated every hour)
           </small>
         </div>
       ) : (
-        <div className="animate-pulse flex items-center justify-center h-38 gap-2">
+        <div className="animate-pulse flex items-center justify-center h-40 gap-2">
           <span>Loading weather data ...</span>
           <LoaderPinwheel className={cn('opacity-50', { 'animate-spin': isPending })} />
         </div>

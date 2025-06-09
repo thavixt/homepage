@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type RootState } from '../store'
+import { toast } from 'sonner';
 
 export type TodoStatus = 'initial' | 'inprogress' | 'completed' | 'cancelled';
 
@@ -31,6 +32,7 @@ export const todoSlice = createSlice({
         completed: null,
         ...action.payload,
       })
+      toast.success('Todo item created');
     },
     startTodo: (state, action: PayloadAction<string>) => {
       state.todos = state.todos.map(todo => {
@@ -42,6 +44,7 @@ export const todoSlice = createSlice({
         }
         return todo;
       })
+      toast.success('Todo item marked as started');
     },
     completeTodo: (state, action: PayloadAction<string>) => {
       state.todos = state.todos.map(todo => {
@@ -53,6 +56,7 @@ export const todoSlice = createSlice({
         }
         return todo;
       })
+      toast.success('Todo item marked as completed');
     },
     cancelTodo: (state, action: PayloadAction<string>) => {
       state.todos = state.todos.map(todo => {
@@ -64,9 +68,11 @@ export const todoSlice = createSlice({
         }
         return todo;
       })
+      toast.success('Todo item marked as cancelled');
     },
     clearTodos: (state) => {
       state.todos = []
+      toast.success('Todo items cleared');
     },
   },
 })

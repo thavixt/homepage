@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type RootState } from '../store'
+import { toast } from 'sonner';
 
 export type Statistic =
   | 'backgroundChange'
@@ -83,6 +84,7 @@ export const statsSlice = createSlice({
     },
     resetStats: (state) => {
       state.stats = initialState.stats;
+      toast.success('All statistics reset to zero')
     }
   },
 })

@@ -21,7 +21,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       expand
       position="top-left"
       richColors
-      visibleToasts={5}
+      visibleToasts={8}
     />
   )
 }

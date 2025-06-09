@@ -8,9 +8,9 @@ export function meta() {
   ];
 }
 
-export default function About() {
+export default function NotFoundPage() {
   return (
-    <Card className="w-[600px]">
+     <Card className=" backdrop-blur-lg w-[600px]">
       <CardHeader className="w-full text-center font-bold text-8xl">
         <p>404</p>
       </CardHeader>

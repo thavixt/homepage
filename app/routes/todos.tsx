@@ -8,9 +8,9 @@ export function meta() {
   ];
 }
 
-export default function Todos() {
+export default function TodosPage() {
   return (
-    <Card className="w-full max-w-2xl flex flex-col items-center min-h-0">
+     <Card className=" backdrop-blur-lg w-full max-w-4xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         Things to do
       </CardHeader>

@@ -3,6 +3,7 @@ import bookmarksReducer, { initialState as initialBookmarksState } from '../redu
 import todosReducer, { initialState as initialTodosState } from '../reducers/todosReducer'
 import statsReducer, { initialState as initialStatsState } from '../reducers/statsReducer'
 import settingsReducer, { initialState as initialSettingsState } from '../reducers/settingsReducer'
+import calendarReducer, { initialState as initialCalendarState } from '../reducers/calendarReducer'
 
 const preloadedState = loadState();
 
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   bookmarks: bookmarksReducer,
   stats: statsReducer,
   settings: settingsReducer,
+  calendar: calendarReducer,
 });
 
 export const store = configureStore({
@@ -41,6 +43,7 @@ export function loadState() {
     settings: initialSettingsState,
     stats: initialStatsState,
     todos: initialTodosState,
+    calendar: initialCalendarState,
   }
 
   try {

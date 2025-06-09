@@ -29,7 +29,7 @@ const sortedFeatures: Feature[] = sortBy(
     },
     {
       href: "/calendar",
-      name: "Calendar",
+      name: "Calendar / diary",
       Icon: CalendarXIcon,
       description: "What am I supposed to be doing this weekend?",
       hotkey: 'C',

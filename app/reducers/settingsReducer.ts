@@ -58,6 +58,7 @@ export const settingsSlice = createSlice({
     },
     resetSettings: (state) => {
       state.background = initialState.background;
+      toast.success('Setting reset to defaults');
     },
     incrementBackgroundCounter: (state) => {
       state.background.counter++;

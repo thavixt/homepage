@@ -7,6 +7,10 @@ import { Fragment } from "react/jsx-runtime";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
 import { Separator } from "~/components/ui/separator";
+import { clearBookmarks } from "~/reducers/bookmarksReducer";
+import { clearCalendar } from "~/reducers/calendarReducer";
+import { resetStats } from "~/reducers/statsReducer";
+import { clearTodos } from "~/reducers/todosReducer";
 
 export function meta() {
   return [
@@ -15,7 +19,7 @@ export function meta() {
   ];
 }
 
-export default function Stats() {
+export default function SettingsPage() {
   const settings = useAppSelector(getSettings);
   const dispatch = useAppDispatch();
 
@@ -25,6 +29,11 @@ export default function Stats() {
   }
 
   const onClearAllData = () => {
+    dispatch(clearBookmarks());
+    dispatch(clearCalendar());
+    dispatch(resetSettings());
+    dispatch(resetStats());
+    dispatch(clearTodos());
     window.localStorage.removeItem('homepage-redux-state');
     window.localStorage.removeItem('homepage-tanstack-query-offline-cache');
     toast.success('Reloading - all stored data was cleared/reset');
@@ -39,7 +48,7 @@ export default function Stats() {
   }
 
   return (
-    <Card className="w-full max-w-2xl flex flex-col items-center min-h-0">
+     <Card className=" backdrop-blur-lg w-full max-w-2xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         Settings
       </CardHeader>

@@ -57,13 +57,11 @@ export function TodoList() {
       return;
     }
     dispatch(createTodo({ deadline, title, description }));
-    toast.success(`Todo tasks "${title}" saved`);
     setDialogOpen(false);
   }
 
   const onClearAllTodosConfirm = () => {
     dispatch(clearTodos());
-    toast.success('Todo list cleared');
   }
 
   const onFilterChange = (status: TodoStatus) => (checked: boolean) => {
@@ -71,7 +69,7 @@ export function TodoList() {
   }
 
   return (
-    <div className="flex flex-col gap-4 items-center">
+    <div className="flex flex-col gap-4 items-center w-full">
       <div className="flex gap-4 justify-between px-4">
         <Input
           autoFocus

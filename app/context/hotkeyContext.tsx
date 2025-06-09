@@ -22,7 +22,7 @@ const IGNORED_NODE_NAMES = [
   'TEXTAREA',
 ];
 
-export function HotKeyContextProvider({
+export function HotkeyContextProvider({
   children,
   modifier,
   keys,

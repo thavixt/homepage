@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { persistQueryClient } from '@tanstack/react-query-persist-client'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import type { Route } from "./+types/root";
 import "./app.css";
 
@@ -16,9 +17,13 @@ import { getSettings, incrementBackgroundCounter, type BackgroundSettings } from
 import { getBackgroundSeed } from "./lib/utils";
 import { Button } from "./components/ui/button";
 import { LoaderCircle } from "lucide-react";
-import { HotKeyContextProvider } from "./context/hotkeyContext";
+import { HotkeyContextProvider } from "./context/hotkeyContext";
 import { FEATURES } from "./components/header";
 import { toast } from "sonner";
+import { Login } from "./components/login";
+import { UserContextProvider } from "./context/userContext";
+
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -100,7 +105,7 @@ function Root({ mounted }: { mounted: boolean }) {
   }, [backgroundSettingValue, dispatch])
 
   return (
-    <HotKeyContextProvider
+    <HotkeyContextProvider
       keys={FEATURES.map(feat => feat.hotkey.toUpperCase()).concat(' ', 'B')}
       onHotkeyPressed={onHotkeyPressed}
       modifier="shift"
@@ -108,7 +113,7 @@ function Root({ mounted }: { mounted: boolean }) {
       <div onClick={onClick}>
         <Outlet />
       </div>
-    </HotKeyContextProvider>
+    </HotkeyContextProvider>
   );
 }
 
@@ -117,28 +122,31 @@ export default function App() {
 
   useEffect(() => {
     setMounted(true);
-
     if (typeof window !== "undefined") {
       const localStoragePersister = createSyncStoragePersister({
         storage: window.localStorage,
         key: 'homepage-tanstack-query-offline-cache',
       });
-
       persistQueryClient({
         queryClient,
         persister: localStoragePersister,
       });
     }
-  }, [])
+  }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={true} buttonPosition="bottom-left" />
-      <ReduxProvider store={store}>
-        <Root mounted={mounted} />
-        <Toaster />
-      </ReduxProvider>
-    </QueryClientProvider>
+    <GoogleOAuthProvider clientId={clientId}>
+      <UserContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={true} buttonPosition="bottom-left" />
+          <ReduxProvider store={store}>
+            <Root mounted={mounted} />
+            <Toaster />
+            <Login />
+          </ReduxProvider>
+        </QueryClientProvider>
+      </UserContextProvider>
+    </GoogleOAuthProvider>
   );
 }
 

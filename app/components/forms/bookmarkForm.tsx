@@ -8,15 +8,28 @@ export function BookmarkForm({ bookmark }: { bookmark?: Bookmark }) {
     <div className="grid gap-4 my-4">
       <div className="grid gap-3">
         <Label htmlFor="name">Name</Label>
-        <Input id="name" name="name" defaultValue={bookmark?.name} />
+        <Input
+          autoFocus
+          id="name"
+          name="name"
+          defaultValue={bookmark?.name}
+        />
       </div>
       <div className="grid gap-3">
         <Label htmlFor="href">Link</Label>
-        <Input id="href" name="href" defaultValue={bookmark?.href ?? 'http://'} />
+        <Input
+          id="href"
+          name="href"
+          defaultValue={bookmark?.href ?? 'http://'}
+        />
       </div>
       <div className="grid grid-cols-[auto_1fr] gap-3">
         <Label htmlFor="pinned">Pinned</Label>
-        <Checkbox defaultChecked={bookmark?.pinned} id="pinned" name="pinned" />
+        <Checkbox
+          defaultChecked={bookmark?.pinned}
+          id="pinned"
+          name="pinned"
+        />
       </div>
     </div>
   )

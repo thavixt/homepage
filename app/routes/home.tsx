@@ -15,9 +15,9 @@ export function meta() {
   ];
 }
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <Card className="w-full max-w-5xl flex flex-col items-center min-h-0">
+     <Card className=" backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex gap-2 items-center">

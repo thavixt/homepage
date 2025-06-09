@@ -12,7 +12,7 @@ export function meta() {
   ];
 }
 
-export default function WeatherForecast() {
+export default function WeatherPage() {
   const { data: forecastData, isPending } = useQuery({
     queryFn: getWeatherForecast,
     queryKey: ['weather-forecast'],
@@ -20,7 +20,7 @@ export default function WeatherForecast() {
   });
 
   return (
-    <Card className="w-full max-w-5xl flex flex-col items-center min-h-0">
+     <Card className=" backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold">
         <div className="text-4xl">
           Weather forecast{(!isPending && forecastData)

@@ -7,9 +7,9 @@ export function meta() {
   ];
 }
 
-export default function About() {
+export default function AboutPage() {
   return (
-    <Card className="w-[500px]">
+     <Card className=" backdrop-blur-lg w-[500px]">
       <CardHeader className="w-full text-center font-bold text-4xl">
         About this page
       </CardHeader>

@@ -19,7 +19,7 @@ export function meta() {
   ];
 }
 
-export default function Stats() {
+export default function StatsPage() {
   const stats = useAppSelector(getStats);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState('');
@@ -32,7 +32,7 @@ export default function Stats() {
   }
 
   return (
-    <Card className="w-full max-w-xl flex flex-col items-center min-h-0">
+     <Card className=" backdrop-blur-lg w-full max-w-xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         Statistics collected
       </CardHeader>
@@ -41,9 +41,10 @@ export default function Stats() {
           <Label htmlFor="stat">Search for a statistic:</Label>
           <Input
             autoFocus
+            type="search"
             name="stat"
             id="stat"
-            placeholder="Search..."
+            placeholder="Type here to search"
             onChange={(e) => setSearchValue(e.currentTarget.value)}
           />
         </div>
