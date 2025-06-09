@@ -1,9 +1,14 @@
-import { googleLogout, useGoogleLogin, type TokenResponse } from "@react-oauth/google";
-import { createContext, useCallback, useContext, useState, type PropsWithChildren } from "react";
+import { googleLogout, useGoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
+import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from "react";
 import { toast } from "sonner";
+import { getGoogleUserDataWithAccessToken, getGoogleUserDataFromCredential, type GoogleUserData } from "~/api/google";
 
-export type User = Omit<TokenResponse, "error" | "error_description" | "error_uri"> & {
-  // what else to store ?
+type UserTokenType = 'one-tap-login' | 'access-token';
+
+export type User = {
+  token: string;
+  tokenType: UserTokenType,
+  data: GoogleUserData | null;
 }
 
 interface UserContextValue {
@@ -21,26 +26,86 @@ const UserContext = createContext<UserContextValue>({
 });
 
 export function UserContextProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<User | undefined>(() => {
-    const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-    return stored ? JSON.parse(stored) : undefined;
+  const [authDisabled, setAuthDisabled] = useState(true);
+  const [user, setUser] = useState<User | undefined>();
+
+  useEffect(() => {
+    const storedAuth = typeof window !== "undefined"
+      ? localStorage.getItem("homepage-auth")
+      : null;
+    if (storedAuth) {
+      console.debug('Stored auth found...');
+      const user = JSON.parse(storedAuth) as User;
+      if (!user.data) {
+        console.debug('Stored auth user data missing - skipping')
+        return;
+      }
+      setUser(user);
+      console.debug(`Previously loggin in as ${user.data?.name}`)
+      setAuthDisabled(true);
+    } else {
+      setAuthDisabled(false);
+    }
+  }, []);
+
+  useGoogleOneTapLogin({
+    auto_select: true,
+    cancel_on_tap_outside: true,
+    disabled: authDisabled,
+    onSuccess: async (response) => {
+      if (!response.credential) {
+        console.error('Missing credential after Google OneTap login');
+        toast.error('Failed to log in with Google');
+        return;
+      }
+
+      const userData = await getGoogleUserDataFromCredential(response.credential);
+      if (!userData) {
+        localStorage.removeItem("homepage-auth");
+        toast.error('Failed to log in with Google');
+        return;
+      }
+
+      const storedAuth: User = {
+        token: response.credential,
+        tokenType: 'one-tap-login',
+        data: userData,
+      };
+
+      setUser(storedAuth)
+      localStorage.setItem("homepage-auth", JSON.stringify(storedAuth));
+      toast.success('Logged in with Google');
+    },
+    onError: () => {
+      const error = new Error('Failed to log in with Google');
+      console.error(error);
+      toast.error(error.message);
+    }
   });
 
   const login = useGoogleLogin({
-    onSuccess: (response) => {
-      setUser(response)
+    onSuccess: async (response) => {
+      const userData = await getGoogleUserDataWithAccessToken(response.access_token);
+      console.log(userData);
+      setUser({
+        token: response.access_token,
+        tokenType: 'access-token',
+        data: userData,
+      })
       localStorage.setItem("homepage-auth", JSON.stringify(response));
+      toast.success('Logged in with Google');
     },
     onError: (error) => {
       console.error(error);
       toast.error(`Google login failed - ${error.error_description}`);
     }
   });
-
+  
   const logout = useCallback(() => {
     googleLogout();
     setUser(undefined);
-    localStorage.removeItem("user");
+    localStorage.removeItem("homepage-auth");
+    toast.info('Logged out');
   }, []);
 
   return (
@@ -56,5 +121,17 @@ export function UserContextProvider({ children }: PropsWithChildren) {
 }
 
 export function useUser() {
-  return useContext(UserContext);
+  const {
+    login,
+    logout,
+    user,
+  } = useContext(UserContext);
+
+  return {
+    login,
+    logout,
+    authenticated: user?.data ? true : false,
+    token: user?.token ?? null,
+    userName: user?.data?.given_name ?? null,
+  }
 }

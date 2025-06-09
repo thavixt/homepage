@@ -20,7 +20,7 @@ import { LoaderCircle } from "lucide-react";
 import { HotkeyContextProvider } from "./context/hotkeyContext";
 import { FEATURES } from "./components/header";
 import { toast } from "sonner";
-import { Login } from "./components/login";
+import { AuthButton } from "./components/authButton";
 import { UserContextProvider } from "./context/userContext";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -142,7 +142,7 @@ export default function App() {
           <ReduxProvider store={store}>
             <Root mounted={mounted} />
             <Toaster />
-            <Login />
+            <AuthButton />
           </ReduxProvider>
         </QueryClientProvider>
       </UserContextProvider>

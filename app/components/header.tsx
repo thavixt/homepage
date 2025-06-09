@@ -80,7 +80,7 @@ export function Header() {
   const { pathname } = useLocation();
 
   return (
-    <header className="flex flex-col items-center z-1000">
+    <header className="flex flex-col items-center z-1000 mt-8 md:mt-0">
       <NavigationMenu viewport={false}>
         <NavigationMenuList>
           <NavigationMenuItem

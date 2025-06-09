@@ -48,22 +48,16 @@ export default function SettingsPage() {
   }
 
   return (
-     <Card className=" backdrop-blur-lg w-full max-w-2xl flex flex-col items-center min-h-0">
+    <Card className="backdrop-blur-lg w-full max-w-2xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         Settings
       </CardHeader>
       <CardContent className="flex flex-col gap-4 w-full px-0">
         <Separator />
-        <div className="grid grid-cols-[3fr_1fr] items-center justify-between px-4">
+        <div className="grid grid-cols-[3fr_1fr] items-start justify-between px-4 min-h-[300px]">
           {Object.keys(settings).map((k) => {
             const key = k as Setting;
-            return (
-              <SettingSelector
-                key={key}
-                settingsKey={key}
-                onChange={onChange(key)}
-              />
-            )
+            return <SettingSelector key={key} settingsKey={key} onChange={onChange(key)} />;
           })}
         </div>
         <Separator />
