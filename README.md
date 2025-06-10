@@ -13,6 +13,7 @@ Set the [https://homepage.komlosidev.net](https://homepage.komlosidev.net) URL a
 - [ ] local settings
 - [ ] notes
 - [ ] timer/reminder
+- [x] ai chat
 - [x] bookmarks with import/export
 - [x] calendar with diary
 - [x] current weather widget and 3 day forecast

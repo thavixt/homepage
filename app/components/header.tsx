@@ -1,4 +1,4 @@
-import { AlarmClockIcon, CalendarXIcon, ChartLineIcon, CheckCheckIcon, CloudSunIcon, HomeIcon, PenIcon, SettingsIcon } from "lucide-react";
+import { AlarmClockIcon, CalendarXIcon, ChartLineIcon, CheckCheckIcon, CloudSunIcon, HomeIcon, LightbulbIcon, PenIcon, SettingsIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "~/components/ui/navigation-menu"
 import { cn, sortArrayOfObjectsBy } from "~/lib/utils";
@@ -20,6 +20,13 @@ type Feature = {
 const sortedFeatures: Feature[] = sortArrayOfObjectsBy(
   "name",
   [
+    {
+      href: "/ai",
+      name: "AI assistant",
+      description: "Ask anything",
+      hotkey: "G",
+      Icon: LightbulbIcon,
+    },
     {
       href: "/todos",
       name: "Todos",

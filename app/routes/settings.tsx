@@ -134,6 +134,9 @@ function getSettingValues<T extends Setting>(setting: T): Record<SettingValueTyp
       fr: 'Français',
       de: "Deutsch",
       es: "Española",
+      ja: "日本語",
+      pt: "Português",
+      zh: "简体中文",
     } as Record<SettingsState[T]['value'], string>;
   }
 

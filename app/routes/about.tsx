@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 
 export function meta() {
   return [
-    { title: "Homepage - About" },
+    { title: "About - Homepage" },
     { name: "description", content: "Some info about this Homepage site" },
   ];
 }
