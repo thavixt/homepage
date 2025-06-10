@@ -32,6 +32,6 @@ Set the [https://homepage.komlosidev.net](https://homepage.komlosidev.net) URL a
 - [Tailwind](https://tailwindcss.com/)
 - [Vite](https://vite.dev/)
 - [shadcn](https://ui.shadcn.com/)-based components
-- deployed with [Vercel](https://vercel.com/) to [live page](homepage.komlosidev.net)
-- [react-i18n](https://react.i18next.com/)
+- localization with [react-i18next](https://react.i18next.com/)
   > used with a custom type-safe `useTypesafeTranslations` hook - see the [input dictionary](./app/locales/en.json), the [.d.ts generator](./generateTranslationTypes.ts), the [generated .d.ts file](./app/translations.d.ts) and the [custom hook](./app/i18n.ts) here
+- deployment with [Vercel](https://vercel.com/)

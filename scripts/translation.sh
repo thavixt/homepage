@@ -26,7 +26,7 @@ DEFAULT_LANG="en"
 OUTPUT_LANG="$1"
 
 echo
-echo "⌛ Translating to "$OUTPUT_LANG" (based on "$DEFAULT_LANG.json") language with gemini-2.0-flash with API key \"$GOOGLE_AI_STUDIO_API_KEY\""
+echo "⌛ Translating to "$OUTPUT_LANG.json" from "$DEFAULT_LANG.json" with gemini-2.0-flash:"
 echo
 
 # see: https://github.com/taahamahdi/i18n-ai-translate
@@ -39,5 +39,5 @@ NODE_OPTIONS="--no-deprecation" \
   --api-key=$GOOGLE_AI_STUDIO_API_KEY
 
 echo
-echo "✅ Translations to "$OUTPUT_LANG.json" from "$DEFAULT_LANG.json" done"
+echo "✅ Translations to "$OUTPUT_LANG.json" finished."
 echo
