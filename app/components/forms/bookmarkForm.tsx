@@ -2,12 +2,15 @@ import type { Bookmark } from "~/reducers/bookmarksReducer";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function BookmarkForm({ bookmark }: { bookmark?: Bookmark }) {
+  const t = useTypesafeTranslation();
+
   return (
     <div className="grid gap-4 my-4">
       <div className="grid gap-3">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">{t('bookmark.form.name')}</Label>
         <Input
           autoFocus
           id="name"
@@ -16,7 +19,7 @@ export function BookmarkForm({ bookmark }: { bookmark?: Bookmark }) {
         />
       </div>
       <div className="grid gap-3">
-        <Label htmlFor="href">Link</Label>
+        <Label htmlFor="href">{t('bookmark.form.url')}</Label>
         <Input
           id="href"
           name="href"
@@ -24,7 +27,7 @@ export function BookmarkForm({ bookmark }: { bookmark?: Bookmark }) {
         />
       </div>
       <div className="grid grid-cols-[auto_1fr] gap-3">
-        <Label htmlFor="pinned">Pinned</Label>
+        <Label htmlFor="pinned">{t('bookmark.form.pinned')}</Label>
         <Checkbox
           defaultChecked={bookmark?.pinned}
           id="pinned"

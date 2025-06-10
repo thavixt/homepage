@@ -73,7 +73,7 @@ export default function CalendarPage() {
   return (
     <Card className=" backdrop-blur-lg w-full max-w-6xl flex flex-col items-center min-h-0 gap-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
-        {t('features.calendar')}
+        {t('calendar.header')}
       </CardHeader>
       <Separator className="mt-4" />
       <CardContent className="flex gap-8 w-full space-y-6 items-center justify-center px-4 p-0">

@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { getStats, resetStats } from "~/reducers/statsReducer";
 import { toast } from "sonner";
-import { sortBy } from "~/lib/utils";
+import { sortArrayOfObjectsBy } from "~/lib/utils";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
 import { ArchiveXIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function meta() {
   return [
@@ -20,10 +21,11 @@ export function meta() {
 }
 
 export default function StatsPage() {
+  const t = useTypesafeTranslation();
   const stats = useAppSelector(getStats);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState('');
-  const sortedStats = sortBy('description', Object.values(stats));
+  const sortedStats = sortArrayOfObjectsBy('description', Object.values(stats));
   const filteredStats = sortedStats.filter(stat => stat.description.toLowerCase().includes(searchValue.toLowerCase()));
 
   const onReset = () => {
@@ -34,17 +36,17 @@ export default function StatsPage() {
   return (
      <Card className=" backdrop-blur-lg w-full max-w-xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
-        Statistics collected
+        {t('stats.header')}
       </CardHeader>
       <CardContent className="flex flex-col gap-4 w-full px-0">
         <div className="w-full grid grid-cols-[1fr_2fr] px-8">
-          <Label htmlFor="stat">Search for a statistic:</Label>
+          <Label htmlFor="stat">{t('stats.searchLabel')}</Label>
           <Input
             autoFocus
             type="search"
             name="stat"
             id="stat"
-            placeholder="Type here to search"
+            placeholder={t('common.searchPlaceholder')}
             onChange={(e) => setSearchValue(e.currentTarget.value)}
           />
         </div>
@@ -55,7 +57,7 @@ export default function StatsPage() {
               .map((stat) => (
                 <Fragment key={stat.description}>
                   <div className="truncate">{stat.description}:</div>
-                  <div>{stat.count} times</div>
+                  <div>{t('stats.counter', {count: stat.count.toString()})}</div>
                 </Fragment>
               ))}
           </div>
@@ -64,14 +66,14 @@ export default function StatsPage() {
         <div className="flex flex-col gap-4 justify-between items-center w-full px-8">
           <AlertDialog
             trigger={(
-              <div className="border rounded-md p-1" title="Reset statistics">
+              <div className="border rounded-md p-1" title={t('stats.reset.title')}>
                 <ArchiveXIcon className="cursor-pointer" size={16} />
               </div>
             )}
             onConfirm={onReset}
-            title="Reset statistics"
-            description="Reset all the statistics collected so far?"
-            confirm="Yes"
+            title={t('stats.reset.title')}
+            description={t('stats.reset.description')}
+            confirm={t('stats.reset.confirm')}
           />
         </div>
       </CardContent>

@@ -61,7 +61,7 @@ function FeatureList() {
           </Link>
         </li>
       ))}
-      <li className="mt-1 text-xs text-right opacity-50">{t('features.hotkey')}</li>
+      <li className="mt-1 text-xs text-right opacity-50">{t('hotkey.header')}</li>
     </ul>
   )
 }

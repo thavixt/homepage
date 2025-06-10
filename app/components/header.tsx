@@ -1,7 +1,7 @@
 import { AlarmClockIcon, CalendarXIcon, ChartLineIcon, CheckCheckIcon, CloudSunIcon, HomeIcon, PenIcon, SettingsIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "~/components/ui/navigation-menu"
-import { cn, sortBy } from "~/lib/utils";
+import { cn, sortArrayOfObjectsBy } from "~/lib/utils";
 
 type Feature = {
   href: string;
@@ -17,7 +17,7 @@ type Feature = {
   hotkey: string;
 };
 
-const sortedFeatures: Feature[] = sortBy(
+const sortedFeatures: Feature[] = sortArrayOfObjectsBy(
   "name",
   [
     {
@@ -80,7 +80,7 @@ export function Header() {
   const { pathname } = useLocation();
 
   return (
-    <header className="flex flex-col items-center z-1000 mt-8 md:mt-0">
+    <header className="flex flex-col items-center mt-8 md:mt-0">
       <NavigationMenu viewport={false}>
         <NavigationMenuList>
           <NavigationMenuItem

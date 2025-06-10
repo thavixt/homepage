@@ -1,15 +1,18 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type RootState } from '../store'
 import { toast } from 'sonner';
+import type { SupportedLanguages } from '~/i18n';
+import i18n from '~/i18n';
 
-export type Setting = 'background';
+export type Setting = 'background' | 'language';
+export type SettingValueType<K extends keyof SettingsState> = SettingsState[K]["value"];
 
-export type BackgroundChangeFrequency = '5min' | '15min' | '30min' | 'hour' | 'day' | 'week';
-
-export type BackgroundSettings = SettingState<BackgroundChangeFrequency> & { counter: number };
+type BackgroundChangeFrequency = '5min' | '15min' | '30min' | 'hour' | 'day' | 'week';
+type SettingValue = BackgroundChangeFrequency | SupportedLanguages;
 
 export interface SettingsState {
-  background: BackgroundSettings,
+  background: SettingState<BackgroundChangeFrequency> & { counter: number },
+  language: SettingState<SupportedLanguages>,
 }
 
 export interface SettingState<T> {
@@ -25,6 +28,11 @@ export const initialState: SettingsState = {
     value: 'hour',
     counter: 0,
   },
+  language: {
+    id: 'language',
+    label: 'Language',
+    value: 'en',
+  }
 }
 
 export const settingsSlice = createSlice({
@@ -33,27 +41,51 @@ export const settingsSlice = createSlice({
   reducers: {
     changeSetting: (state, action: PayloadAction<{
       setting: Setting,
-      value: BackgroundChangeFrequency,
+      value: SettingValue,
     }>) => {
       const stat = state[action.payload.setting];
-      if (stat) {
-        state[action.payload.setting] = {
-          ...stat,
-          value: action.payload.value,
-        };
-      } else {
-        if (action.payload.setting === 'background') {
-          state[action.payload.setting] = {
-            id: action.payload.setting,
-            label: initialState[action.payload.setting].label,
-            value: 'day',
-            counter: 0,
-          };
-        } else {
-          const message = `Unknown setting ${action.payload.setting}`;
-          console.error(message);
-          toast.error(message);
+      if (!stat) {
+        // defaults
+        switch (action.payload.setting) {
+          case 'background': {
+            state.background = {
+              id: action.payload.setting,
+              label: initialState[action.payload.setting].label,
+              value: 'day',
+              counter: 0,
+            };
+            break;
+          }
+          case 'language': {
+            state.language = {
+              id: action.payload.setting,
+              label: initialState[action.payload.setting].label,
+              value: 'en',
+            };
+            break;
+          }
+          default: {
+            const message = `Unknown setting ${action.payload.setting}`;
+            console.error(message);
+            toast.error(message);
+          }
         }
+      }
+
+      // update settings
+      if (action.payload.setting === 'background') {
+        state.background = {
+          ...state.background,
+          value: action.payload.value as BackgroundChangeFrequency,
+        };
+      }
+      if (action.payload.setting === 'language') {
+        state.language = {
+          ...state.language,
+          value: action.payload.value as SupportedLanguages,
+        };
+        i18n.changeLanguage(action.payload.value);
+        window.localStorage.setItem('homepage-language', action.payload.value);
       }
     },
     resetSettings: (state) => {

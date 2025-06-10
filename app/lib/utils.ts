@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge"
-import type { BackgroundChangeFrequency, BackgroundSettings } from "~/reducers/settingsReducer";
+import type { SettingValueType } from "~/reducers/settingsReducer";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -25,10 +25,12 @@ export async function asyncForEach<T>(
   }
 }
 
-export function getBackgroundSeed(settings: Record<"background", BackgroundSettings>) {
-  const backgroundChangeFrequency = settings.background.value;
-  const seedFixedParts = [settings.background.counter, new Date().getFullYear()]
-  const seedVariableParts: Record<BackgroundChangeFrequency, string> = {
+export function getBackgroundSeed(
+  backgroundChangeFrequency: SettingValueType<'background'>,
+  counter: number,
+) {
+  const seedFixedParts = [counter, new Date().getFullYear()]
+  const seedVariableParts: Record<SettingValueType<'background'>, string> = {
     week: (new Date().getDate() % 7).toString(),
     day: new Date().getDate().toString(),
     hour: new Date().getHours().toString(),
@@ -70,7 +72,16 @@ export function getBackgroundSeed(settings: Record<"background", BackgroundSetti
   return [...seedFixedParts, ...Object.values(seedVariableParts)].join('-');
 }
 
-export function sortBy<T>(key: keyof T, arr: T[]): T[] {
+export function sortArray<T>(arr: T[]): T[] {
+  return arr.slice().sort((a, b) => {
+    if (typeof a === "string" && typeof b === "string") {
+      return a.toLowerCase().localeCompare(b.toLowerCase(), navigator.language);
+    }
+    return 0;
+  });
+}
+
+export function sortArrayOfObjectsBy<T>(key: keyof T, arr: T[]): T[] {
   return arr.slice().sort((a, b) => {
     const aValue = a[key];
     const bValue = b[key];

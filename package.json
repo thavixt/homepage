@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"react-router dev\" \"npm run translation:watch\"",
+    "dev": "concurrently \"npm run translation:watch\" \"react-router dev\"",
     "translation:typegen": "node --no-warnings --experimental-strip-types ./generateTranslationTypes.ts",
     "translation:watch": "nodemon --watch app/locales --ext json --exec \"npm run translation:typegen\"",
     "checks": "npm run translation:typegen && npm run typecheck && npm run test && npm run eslint && npm run build",

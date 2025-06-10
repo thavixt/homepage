@@ -1,1 +1,5 @@
-npm run checks
+npm run translation:typegen
+npm run typecheck
+npm run test
+npm run eslint
+npm run build

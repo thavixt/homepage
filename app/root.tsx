@@ -13,7 +13,7 @@ import { store } from './store'
 import { Toaster } from "./components/ui/sonner";
 import { useAppDispatch, useAppSelector } from "./hooks/state";
 import { incrementStat } from "./reducers/statsReducer";
-import { getSettings, incrementBackgroundCounter, type BackgroundSettings } from "./reducers/settingsReducer";
+import { changeSetting, getSettings, incrementBackgroundCounter, type SettingValueType } from "./reducers/settingsReducer";
 import { getBackgroundSeed } from "./lib/utils";
 import { Button } from "./components/ui/button";
 import { LoaderCircle } from "lucide-react";
@@ -40,7 +40,8 @@ function Root({ initialized }: { initialized: boolean }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const settings = useAppSelector(getSettings);
-  const backgroundSeed = getBackgroundSeed(settings);
+  const backgroundSeed = getBackgroundSeed(settings.background.value, settings.background.counter);
+  const currentLanguage = settings.language?.value;
   const backgroundCounter = settings.background.counter;
   const backgroundSettingValue = settings.background.value;
   const { i18n } = useTranslation(); 
@@ -62,7 +63,7 @@ function Root({ initialized }: { initialized: boolean }) {
     }
   }
 
-  // TODO: this effect is trash imo
+  // TODO: this effect is trash
   useEffect(() => {
     if (initialized) {
       return;
@@ -71,10 +72,14 @@ function Root({ initialized }: { initialized: boolean }) {
   }, [dispatch, initialized])
 
   useEffect(() => {
-    // NOTE: set an intitial count if missing (?)
-    // TODO: consider some migration processes instead
+    // set some initial state values
+    // TODO: consider some migration process instead
     if (typeof backgroundCounter !== 'number') {
       dispatch(incrementBackgroundCounter());
+      return;
+    }
+    if (typeof currentLanguage !== 'string') {
+      dispatch(changeSetting({setting: 'language', value: 'en'}));
       return;
     }
 
@@ -95,7 +100,7 @@ function Root({ initialized }: { initialized: boolean }) {
     return () => {
       cancelled = true;
     };
-  }, [backgroundCounter, backgroundSeed, dispatch]);
+  }, [backgroundCounter, backgroundSeed, currentLanguage, dispatch]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -250,7 +255,7 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-function getMsByBackgroundSettingValue(value: BackgroundSettings['value']) {
+function getMsByBackgroundSettingValue(value: SettingValueType<'background'>) {
   switch (value) {
     case "5min":
       return 5 * 60 * 1000; // 5 min in ms

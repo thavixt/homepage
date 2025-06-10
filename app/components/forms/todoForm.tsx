@@ -3,12 +3,15 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { DatePicker } from "../ui/date-picker";
 import { Textarea } from "../ui/textarea";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function TodoForm({ todo }: { todo?: Todo }) {
+  const t = useTypesafeTranslation();
+
   return (
     <div className="grid gap-4 my-4">
       <div className="grid gap-3">
-        <Label htmlFor="title">Title</Label>
+        <Label htmlFor="title">{t('todo.form.title')}</Label>
         <Input
           autoFocus
           id="title"
@@ -17,7 +20,7 @@ export function TodoForm({ todo }: { todo?: Todo }) {
         />
       </div>
       <div className="grid gap-3">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t('todo.form.description')}</Label>
         <Textarea
           id="description"
           name="description"
@@ -25,7 +28,7 @@ export function TodoForm({ todo }: { todo?: Todo }) {
         />
       </div>
       <div className="grid gap-3">
-        <Label htmlFor="href">Deadline</Label>
+        <Label htmlFor="href">{t('todo.form.deadline')}</Label>
         <DatePicker
           name="deadline"
           defaultValue={todo?.deadline

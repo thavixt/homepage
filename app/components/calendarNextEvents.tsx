@@ -5,7 +5,7 @@ import { getDateString } from "~/lib/date";
 
 export function CalendarNextEvents() {
   const events = useAppSelector(getCalendarEvents);
-  const eventsToday = events[getDateString(new Date)]
+  const eventsToday = events[getDateString(new Date)] ?? [];
 
   return (
     <div className="flex flex-col gap-4">

@@ -1,4 +1,4 @@
-import { BookOpenIcon, DownloadIcon, HardDriveUploadIcon, ImportIcon, Trash2Icon } from "lucide-react";
+import { BookOpenIcon, DownloadIcon, HardDriveUploadIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { clearBookmarks, createBookmark, getBookmarks, type Bookmark as IBookmark } from "~/reducers/bookmarksReducer";
@@ -12,17 +12,19 @@ import { FormDialog } from "./dialogs/formDialog";
 import { BookmarkForm } from "./forms/bookmarkForm";
 import { AlertDialog } from "./dialogs/alertDialog";
 import { Bookmark } from "./bookmark";
-import { exportDataToJson, importDataFromJson, sortBy } from "~/lib/utils";
+import { exportDataToJson, importDataFromJson, sortArrayOfObjectsBy } from "~/lib/utils";
 import { incrementStat } from "~/reducers/statsReducer";
 import { Separator } from "./ui/separator";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function BookmarkList() {
+  const t = useTypesafeTranslation();
   const bookmarks = useAppSelector(getBookmarks);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const filteredBookmarks = sortBy('name', bookmarks).filter(bookmark => {
+  const filteredBookmarks = sortArrayOfObjectsBy('name', bookmarks).filter(bookmark => {
     if (!searchValue) {
       return true;
     }
@@ -94,7 +96,7 @@ export function BookmarkList() {
           type="search"
           id="search"
           name="search"
-          placeholder="Type to search in your bookmarks"
+          placeholder={t('common.searchPlaceholder')}
           onChange={onSearch}
         />
       </div>
@@ -109,7 +111,7 @@ export function BookmarkList() {
             </div>
             <div className="flex flex-wrap gap-2 items-center">
               Click the Import button
-              <ImportIcon className="cursor-pointer" size={16} />
+              <HardDriveUploadIcon className="cursor-pointer" size={16} />
               on the left to import your old bookmarks.
             </div>
           </div>

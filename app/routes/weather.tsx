@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, ArrowUpIcon, CalendarSearchIcon, CloudRainIcon, CloudSnowIcon, CloudSunIcon, SunIcon, ThermometerIcon, ThermometerSnowflakeIcon, ThermometerSunIcon, WindIcon } from "lucide-react";
+import { Fragment } from "react";
 import { getWeatherForecast, type WeatherForecastDay } from "~/api/weather";
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function meta() {
   return [
@@ -13,6 +15,7 @@ export function meta() {
 }
 
 export default function WeatherPage() {
+  const t = useTypesafeTranslation();
   const { data: forecastData, isPending } = useQuery({
     queryFn: getWeatherForecast,
     queryKey: ['weather-forecast'],
@@ -20,67 +23,35 @@ export default function WeatherPage() {
   });
 
   return (
-     <Card className=" backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
+    <Card className="backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold">
         <div className="text-4xl">
-          Weather forecast{(!isPending && forecastData)
-            ? ` for ${forecastData.location.name}, ${forecastData.location.country}`
-            : ''
-          }
+          {t('weather.header', {
+            location: (!isPending && forecastData)
+              ? `${forecastData.location.name}, ${forecastData.location.country}`
+              : '...'
+          })}
         </div>
-        <div className="text-2xl">{(!isPending && forecastData) ? ' in the next 2 days' : ' is loading ...'}</div>
+        <div className="text-2xl">{(!isPending && forecastData) ? ' for the next 2 days' : ' is loading ...'}</div>
         <p className="font-light text-sm text-center">
-          Last updated {forecastData
-            ? new Date(forecastData.current.last_updated).toLocaleString()
-            : ' - not yet!'
-          }
+          {t('weather.subtitle', {
+            date: forecastData
+              ? new Date(forecastData.current.last_updated).toLocaleString()
+              : ' - not yet!'
+          })}
         </p>
       </CardHeader>
       <Separator />
       <CardContent className="min-h-[300px]">
         {forecastData ? (
-          <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <CalendarSearchIcon />
-                <span className="truncate">Day</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CloudSunIcon />
-                <span className="truncate">Weather condition</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <ThermometerIcon />
-                <span className="truncate">Average temperature</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CloudRainIcon />
-                <span className="truncate">Chance of rain</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CloudSnowIcon />
-                <span className="truncate">Chance of snow</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <ThermometerSunIcon /><span className="truncate">Max. temperature</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <ThermometerSnowflakeIcon />
-                <span className="truncate">Min. temperature</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <SunIcon />
-                <span className="truncate">UV index</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <WindIcon />
-                <span className="truncate">Max. wind speed</span>
-              </div>
-            </div>
-            <ScrollArea className="flex flex-col">
+          <div className="grid grid-cols-2 lg:grid-cols-[2fr_4fr] gap-4 py-4">
+            <ForecastLabels />
+            <ScrollArea className="flex flex-col pb-2">
               <div className="flex gap-8">
                 {forecastData.forecast.forecastday.map((day, i) => (
-                  <ForecastDay key={day.date_epoch} day={day} prevDay={forecastData.forecast.forecastday[i - 1]} />
+                  <Fragment key={day.date_epoch}>
+                    <ForecastDay day={day} prevDay={forecastData.forecast.forecastday[i - 1]} />
+                  </Fragment>
                 ))}
               </div>
               <ScrollBar orientation="horizontal" />
@@ -91,7 +62,9 @@ export default function WeatherPage() {
       <Separator />
       <CardFooter>
         <small className="text-xs opacity-50">
-          Forecast data from <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>, updated every hour.
+          <span>{t('weather.attribution1')}</span>{" "}
+          <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">weatherapi.com</a>
+          <span>{t('weather.attribution2')}</span>
         </small>
       </CardFooter>
     </Card>
@@ -105,11 +78,55 @@ const dateFormatOptions: Intl.DateTimeFormatOptions = {
   weekday: undefined,
 }
 
+function ForecastLabels() {
+  const t = useTypesafeTranslation();
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2" title={t('common.day')}>
+        <CalendarSearchIcon />
+        <span className="truncate">{t('common.day')}</span>
+      </div>
+      <div className="flex items-center gap-2" title={t('weather.condition')}>
+        <CloudSunIcon />
+        <span className="truncate">{t('weather.condition')}</span>
+      </div>
+      <div className="flex items-center gap-2" title={t('weather.temp_avg')}>
+        <ThermometerIcon />
+        <span className="truncate">{t('weather.temp_avg')}</span>
+      </div>
+      <div className="flex items-center gap-2" title={t('weather.rain_chance')}>
+        <CloudRainIcon />
+        <span className="truncate">{t('weather.rain_chance')}</span>
+      </div>
+      <div className="flex items-center gap-2" title={t('weather.snow_chance')}>
+        <CloudSnowIcon />
+        <span className="truncate">{t('weather.snow_chance')}</span>
+      </div>
+      <div className="flex items-center gap-2" title={t('weather.temp_max')}>
+        <ThermometerSunIcon />
+        <span className="truncate">{t('weather.temp_max')}</span>
+      </div>
+      <div className="flex items-center gap-2" title={t('weather.temp_min')}>
+        <ThermometerSnowflakeIcon />
+        <span className="truncate">{t('weather.temp_min')}</span>
+      </div>
+      <div className="flex items-center gap-2" title={t('weather.uv_index')}>
+        <SunIcon />
+        <span className="truncate">{t('weather.uv_index')}</span>
+      </div>
+      <div className="flex items-center gap-2" title={t('weather.wind_max')}>
+        <WindIcon />
+        <span className="truncate">{t('weather.wind_max')}</span>
+      </div>
+    </div>
+  )
+}
+
 function ForecastDay({ day, prevDay }: { day: WeatherForecastDay, prevDay?: WeatherForecastDay }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2 items-center justify-center">
-        <span className="text-xl font-extrabold">
+        <span className="font-bold">
           {new Date(day.date).toLocaleDateString(navigator.language, { weekday: 'long' })}
         </span>
         <span className="text-xs opacity-75">

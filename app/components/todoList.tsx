@@ -14,8 +14,10 @@ import { Input } from "./ui/input";
 import { AlertDialog } from "./dialogs/alertDialog";
 import { Separator } from "./ui/separator";
 import { TodoItem } from "./todoItem";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function TodoList() {
+  const t = useTypesafeTranslation();
   const todos = useAppSelector(getTodos);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState('');
@@ -53,7 +55,7 @@ export function TodoList() {
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
     if (!title || !deadline) {
-      toast('Must provide a title and deadline for the todo');
+      toast(t('todos.form.required'));
       return;
     }
     dispatch(createTodo({ deadline, title, description }));
@@ -77,23 +79,23 @@ export function TodoList() {
           className="w-36"
           id="search"
           name="search"
-          placeholder="Search" onChange={onSearch}
+          placeholder={t('common.searchPlaceholder')} onChange={onSearch}
         />
         <div className="flex items-center gap-2">
           <Switch defaultChecked={filter.initial} id="initial" onCheckedChange={onFilterChange('initial')} />
-          <Label htmlFor="initial">Show initial</Label>
+          <Label htmlFor="initial">{t('todos.filter.initial')}</Label>
         </div>
         <div className="flex items-center gap-2">
           <Switch defaultChecked={filter.inprogress} id="inprogress" onCheckedChange={onFilterChange('inprogress')} />
-          <Label htmlFor="inprogress">Show in progress</Label>
+          <Label htmlFor="inprogress">{t('todos.filter.inprogress')}</Label>
         </div>
         <div className="flex items-center gap-2">
           <Switch defaultChecked={filter.completed} id="completed" onCheckedChange={onFilterChange('completed')} />
-          <Label htmlFor="completed">Show completed</Label>
+          <Label htmlFor="completed">{t('todos.filter.completed')}</Label>
         </div>
         <div className="flex items-center gap-2">
           <Switch defaultChecked={filter.cancelled} id="cancelled" onCheckedChange={onFilterChange('cancelled')} />
-          <Label htmlFor="cancelled">Show cancelled</Label>
+          <Label htmlFor="cancelled">{t('todos.filter.cancelled')}</Label>
         </div>
       </div>
       <Separator />
@@ -101,11 +103,11 @@ export function TodoList() {
         <div className="flex flex-col gap-4 w-full">
           {!todos.length ? (
             <div className="flex flex-col gap-12 h-[250px] items-center justify-end">
-              <div>Nothing - for now.</div>
+              <div>{t('common.emptyText')}</div>
               <div className="flex gap-2 items-center">
-                <span>Click the</span>
-                <Badge>Create new task</Badge>
-                <span>button below to create a new <em>task to do</em>!</span>
+                <span>{t('todos.tip.part1')}</span>
+                <Badge>{t('todos.tip.part2')}</Badge>
+                <span>{t('todos.tip.part3')}</span>
               </div>
             </div>
           ) : (
@@ -126,16 +128,16 @@ export function TodoList() {
             </div>
           )}
           onConfirm={onClearAllTodosConfirm}
-          title="Delete all tasks"
-          description={`Are you sure you want to delete all the todos in the list?`}
+          title={t('todos.clear.title')}
+          description={t('todos.clear.description')}
         />
         <FormDialog
-          trigger={<Button>Create a new todo</Button>}
+          trigger={<Button>{t('todos.create.button')}</Button>}
           onSubmit={onSubmit}
           open={dialogOpen}
           onOpenChange={setDialogOpen}
-          title="Edit task"
-          description="Edit the title, description and deadline of the task."
+          title={t('todos.create.title')}
+          description={t('todos.create.description')}
         >
           <TodoForm />
         </FormDialog>

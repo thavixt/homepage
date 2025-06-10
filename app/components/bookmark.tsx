@@ -7,8 +7,10 @@ import { FormDialog } from "./dialogs/formDialog";
 import { BookmarkForm } from "./forms/bookmarkForm";
 import { AlertDialog } from "./dialogs/alertDialog";
 import { incrementStat } from "~/reducers/statsReducer";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
+  const t = useTypesafeTranslation();
   const dispatch = useAppDispatch();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
@@ -24,7 +26,7 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
     const href = formData.get("href") as string;
     const pinned = formData.get("pinned") === 'on';
     if (!name || !href) {
-      toast('Must provide a name and link for the bookmark');
+      toast(t('bookmark.form.required'));
       return;
     }
     dispatch(updateBookmark({ id: bookmark.id, name, href, pinned }));
@@ -46,9 +48,12 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
           </div>
         )}
         onConfirm={onDeleteConfirm}
-        title="Delete bookmark"
-        description={`Are you sure you want to delete the bookmark for "${bookmark.name}", that points to "${bookmark.href}"?`}
-        confirm="Delete bookmark"
+        title={t('bookmark.delete')}
+        description={t('bookmark.delete.description', {
+          title: bookmark.name,
+          url: bookmark.href,
+        })}
+        confirm={t('bookmark.delete.confirm')}
       />
       <FormDialog
         trigger={(
@@ -59,9 +64,9 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
         onSubmit={onEditSubmit}
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
-        title="Edit bookmark"
-        description="Edit the name and the URL it points to."
-        submit="Save bookmark"
+        title={t('bookmark.edit')}
+        description={t('bookmark.edit.description')}
+        submit={t('bookmark.edit.confirm')}
       >
         <BookmarkForm bookmark={bookmark} />
       </FormDialog>
