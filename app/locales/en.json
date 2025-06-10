@@ -32,6 +32,7 @@
   "common.description": "Description",
   "common.emptyText": "Nothing here - for now.",
   "common.from": "From",
+  "common.inputPlaceholder": "Type here...",
   "common.save": "Save",
   "common.searchPlaceholder": "Search...",
   "common.submit": "Submit",

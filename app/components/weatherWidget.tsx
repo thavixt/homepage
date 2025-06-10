@@ -50,8 +50,8 @@ export function WeatherWidget() {
           </div>
           <small className="text-[10px] opacity-50">
             {t('common.from')}
-            {' '}<a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>
-            {t('weather.attribution2')}
+            {" "}<a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>
+            {" "}{t('weather.attribution2')}
           </small>
         </div>
       ) : (

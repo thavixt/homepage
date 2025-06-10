@@ -62,9 +62,9 @@ export default function WeatherPage() {
       <Separator />
       <CardFooter>
         <small className="text-xs opacity-50">
-          <span>{t('weather.attribution1')}</span>{" "}
-          <a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">weatherapi.com</a>
-          <span>{t('weather.attribution2')}</span>
+          <span>{t('weather.attribution1')}</span>
+          {" "}<a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">weatherapi.com</a>
+          {" "}<span>{t('weather.attribution2')}</span>
         </small>
       </CardFooter>
     </Card>

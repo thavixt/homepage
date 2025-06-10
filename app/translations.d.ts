@@ -41,6 +41,7 @@ export interface Interpolations {
 	"common.description": [],
 	"common.emptyText": [],
 	"common.from": [],
+	"common.inputPlaceholder": [],
 	"common.save": [],
 	"common.searchPlaceholder": [],
 	"common.submit": [],

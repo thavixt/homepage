@@ -1,6 +1,6 @@
 {
   "404.back": "Menjünk vissza a kezdőlapra.",
-  "404.description": "... de lehet, hogy ez még nincs teljesen megvalósítva – egyelőre! Nézz vissza később :)",
+  "404.description": "... de lehet, hogy ez még nincs teljesen megvalósítva - egyelőre! Nézz vissza később :)",
   "404.subtitle": "Rendben, de ez itt nem létezik",
   "404.title": "404",
   "app.title": "Kezdőlap",
@@ -46,7 +46,7 @@
   "settings.header": "Beállítások és preferenciák",
   "settings.reset": "Beállítások visszaállítása",
   "settings.reset.description": "Biztosan visszaállítod az alapértelmezett beállításokat?",
-  "settings.reset.feedback": "Újratöltés – minden tárolt adat törölve/visszaállítva",
+  "settings.reset.feedback": "Újratöltés - minden tárolt adat törölve/visszaállítva",
   "settings.reset.title": "Minden beállítás visszaállítása alapértelmezettre",
   "stats.counter": "{{count}} alkalommal",
   "stats.header": "Gyűjtött statisztikák",

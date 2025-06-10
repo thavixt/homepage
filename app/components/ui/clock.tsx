@@ -23,6 +23,6 @@ export const dateFormatOptions: Intl.DateTimeFormatOptions = {
   weekday: 'long',
 }
 
-export const getCurrentDate = () => {
-  return new Date().toLocaleDateString(navigator.language, dateFormatOptions);
+export const getCurrentDate = (format?: Intl.DateTimeFormatOptions) => {
+  return new Date().toLocaleDateString(navigator.language, { ...dateFormatOptions, ...format});
 };

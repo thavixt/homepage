@@ -20,13 +20,13 @@ export default function HomePage() {
   const t = useTypesafeTranslation();
 
   return (
-     <Card className=" backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
+    <Card className=" backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
       <CardHeader className="w-full text-center font-bold text-4xl">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex gap-2 items-center">
             <CalendarDaysIcon />
             <span className="inline text-4xl">
-              {t('home.currentDate', {date: getCurrentDate()})}
+              {t('home.currentDate', { date: getCurrentDate({ year: undefined }) })}
             </span>
           </div>
           <Clock className="border rounded-md p-4 text-5xl" />

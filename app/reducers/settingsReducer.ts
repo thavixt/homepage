@@ -1,18 +1,18 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type RootState } from '../store'
 import { toast } from 'sonner';
-import type { SupportedLanguages } from '~/i18n';
+import type { SupportedLanguage } from '~/i18n';
 import i18n from '~/i18n';
 
 export type Setting = 'background' | 'language';
 export type SettingValueType<K extends keyof SettingsState> = SettingsState[K]["value"];
 
 type BackgroundChangeFrequency = '5min' | '15min' | '30min' | 'hour' | 'day' | 'week';
-type SettingValue = BackgroundChangeFrequency | SupportedLanguages;
+type SettingValue = BackgroundChangeFrequency | SupportedLanguage;
 
 export interface SettingsState {
   background: SettingState<BackgroundChangeFrequency> & { counter: number },
-  language: SettingState<SupportedLanguages>,
+  language: SettingState<SupportedLanguage>,
 }
 
 export interface SettingState<T> {
@@ -82,7 +82,7 @@ export const settingsSlice = createSlice({
       if (action.payload.setting === 'language') {
         state.language = {
           ...state.language,
-          value: action.payload.value as SupportedLanguages,
+          value: action.payload.value as SupportedLanguage,
         };
         i18n.changeLanguage(action.payload.value);
         window.localStorage.setItem('homepage-language', action.payload.value);
