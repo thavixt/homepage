@@ -1,6 +1,6 @@
 # Your home page
 
-Set the `https://homepage.komlosidev.net` URL as your home page, and customize it to you liking!
+Set the [https://homepage.komlosidev.net](https://homepage.komlosidev.net) URL as your home page, and customize it to you liking!
 
 - set your bookmarks, pin your favourites,
 - manage your calendar and diary,
@@ -11,32 +11,26 @@ Set the `https://homepage.komlosidev.net` URL as your home page, and customize i
 ## Features:
 
 - [ ] local settings
-- [ ] localization with react-i18n
-  - https://www.i18next.com/overview/getting-started#basic-sample
-  - https://dev.to/adrai/supercharge-your-typescript-app-mastering-i18next-for-type-safe-translations-2idp
 - [ ] notes
 - [ ] timer/reminder
 - [x] bookmarks with import/export
 - [x] calendar with diary
+- [x] current weather widget and 3 day forecast
 - [x] dynamic background
 - [x] keyboard navigation
+- [x] localization with react-i18n
 - [x] site statistics
 - [x] todo list
-- [x] current weather widget and 3 day forecast
+- [x] (optional) authentication with Google One-Tap login
 
 ### Made with
 
-- React + Typescript
-- React Router
-- Redux
-- Tailwind
-- Vite
-- shadcn components
-- deployed with Vercel
-
-### Todo
-
-- look into using react-compiler
-> - the official docs refer to a babel plugin for the react vite plugin
-> - but the react-router vite plugin is also used in this project
-> - ... so the fast-refresh in both (`react` and `react-router`) vite plugins cause a conflict, meaning I should just wait a bit and try later?
+- [React](https://react.dev/) with [Typescript](https://www.typescriptlang.org/)
+- [React Router](https://reactrouter.com/)
+- [Redux](https://redux.js.org/)
+- [Tailwind](https://tailwindcss.com/)
+- [Vite](https://vite.dev/)
+- [shadcn](https://ui.shadcn.com/)-based components
+- deployed with [Vercel](https://vercel.com/) to [live page](homepage.komlosidev.net)
+- [react-i18n](https://react.i18next.com/)
+  > used with a custom type-safe `useTypesafeTranslations` hook - see the [input dictionary](./app/locales/en.json), the [.d.ts generator](./generateTranslationTypes.ts), the [generated .d.ts file](./app/translations.d.ts) and the [custom hook](./app/i18n.ts) here
