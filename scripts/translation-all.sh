@@ -6,7 +6,7 @@ languages=("it" "pt" "ru" "zh" "ja")
 
 # Path to the neighbouring translate.sh script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TRANSLATE_SH="$SCRIPT_DIR/translate.sh"
+TRANSLATE_SH="$SCRIPT_DIR/translation.sh"
 
 for lang in "${languages[@]}"; do
   "$TRANSLATE_SH" "$lang"
