@@ -4,7 +4,7 @@ import { Badge } from "./ui/badge";
 import { AlertDialog } from "./dialogs/alertDialog";
 import { CheckIcon, PlayIcon, TrashIcon } from "lucide-react";
 import { useAppDispatch } from "~/hooks/state";
-import { dateFormatOptions } from "./ui/clock";
+import { dateFormatOptions } from "./clock";
 
 function getBadgeStatusText(todo: Todo) {
   switch (todo.status) {

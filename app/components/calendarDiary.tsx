@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { getDiaryEntries, updateDiaryEntry } from "~/reducers/calendarReducer";
-import { dateFormatOptions } from "./ui/clock";
+import { dateFormatOptions } from "./clock";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { useEffect, useRef, useState } from "react";

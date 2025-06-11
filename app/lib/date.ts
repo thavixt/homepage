@@ -1,5 +1,9 @@
-export function getDateString(date: Date) {
+export function getDateString(date = new Date) {
   return normalizeDate(date).toISOString();
+}
+
+export function getTimeString(date = new Date) {
+  return date.toTimeString().split(' ')[0]
 }
 
 export function normalizeDate(date: Date) {

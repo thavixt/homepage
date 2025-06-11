@@ -30,9 +30,10 @@ export function UserContextProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | undefined>();
 
   useEffect(() => {
-    const storedAuth = typeof window !== "undefined"
-      ? localStorage.getItem("homepage-auth")
-      : null;
+    if (typeof window === "undefined") {
+      return;
+    }
+    const storedAuth = localStorage.getItem("homepage-auth");
     if (storedAuth) {
       console.debug('Stored auth found...');
       const user = JSON.parse(storedAuth) as User;
@@ -55,26 +56,23 @@ export function UserContextProvider({ children }: PropsWithChildren) {
     onSuccess: async (response) => {
       if (!response.credential) {
         console.error('Missing credential after Google OneTap login');
-        toast.error('Failed to log in with Google');
+        toast.error('Failed to authenticate with Google OnTap Login');
         return;
       }
-
       const userData = await getGoogleUserDataFromCredential(response.credential);
       if (!userData) {
         localStorage.removeItem("homepage-auth");
-        toast.error('Failed to log in with Google');
+        toast.error('Failed to authenticate with Google');
         return;
       }
-
       const storedAuth: User = {
         token: response.credential,
         tokenType: 'one-tap-login',
         data: userData,
       };
-
-      setUser(storedAuth)
+      setUser(storedAuth);
       localStorage.setItem("homepage-auth", JSON.stringify(storedAuth));
-      toast.success('Logged in with Google');
+      toast.success('Authenticated with Google OnTap Login');
     },
     onError: () => {
       const error = new Error('Failed to log in with Google');
@@ -86,14 +84,14 @@ export function UserContextProvider({ children }: PropsWithChildren) {
   const login = useGoogleLogin({
     onSuccess: async (response) => {
       const userData = await getGoogleUserDataWithAccessToken(response.access_token);
-      console.log(userData);
-      setUser({
+      const storedAuth: User = {
         token: response.access_token,
         tokenType: 'access-token',
         data: userData,
-      })
-      localStorage.setItem("homepage-auth", JSON.stringify(response));
-      toast.success('Logged in with Google');
+      };
+      setUser(storedAuth);
+      localStorage.setItem("homepage-auth", JSON.stringify(storedAuth));
+      toast.success('Authenticated in with Google Login');
     },
     onError: (error) => {
       console.error(error);

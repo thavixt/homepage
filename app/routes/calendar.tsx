@@ -9,7 +9,7 @@ import { CalendarEventForm } from "~/components/forms/calendarEventForm";
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
-import { dateFormatOptions } from "~/components/ui/clock";
+import { dateFormatOptions } from "~/components/clock";
 import { Separator } from "~/components/ui/separator";
 import { useAppDispatch } from "~/hooks/state";
 import { useTypesafeTranslation } from "~/i18n";

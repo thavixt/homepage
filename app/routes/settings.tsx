@@ -36,6 +36,7 @@ export default function SettingsPage() {
     dispatch(resetSettings());
     dispatch(resetStats());
     dispatch(clearTodos());
+    window.localStorage.removeItem('homepage-auth');
     window.localStorage.removeItem('homepage-redux-state');
     window.localStorage.removeItem('homepage-tanstack-query-offline-cache');
     toast.success(t('settings.reset.feedback'));

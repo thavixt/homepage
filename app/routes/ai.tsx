@@ -11,6 +11,7 @@ import { sleep } from "~/lib/utils";
 import Showdown from 'showdown';
 import { useUser } from "~/context/userContext";
 import { toast } from "sonner";
+import { getTimeString } from "~/lib/date";
 
 const MarkdownConverter = new Showdown.Converter();
 const TYPING_DELAY = 250; // ms
@@ -25,7 +26,7 @@ export function meta() {
 export default function AboutPage() {
   const t = useTypesafeTranslation();
   const me = t('common.me');
-  const { userName = me } = useUser();
+  const { userName } = useUser();
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -51,23 +52,28 @@ export default function AboutPage() {
     responseRef.current.scrollIntoView({ block: 'end', behavior: 'smooth' });
   }
 
-  const renderMarkdown = async (md: string, options: { type: 'query' | 'response' }) => {
+  const renderMarkdown = async (md: string, options: { type: 'query' | 'response', duration?: number }) => {
     if (!responseRef.current) {
       return;
     }
 
-    if (options.type === "query") {
-      const div = document.createElement('div');
-      div.innerText = `${userName}:`
-      div.classList.add('aiChatNameplate');
-      responseRef.current.appendChild(div);
-    }
-    if (options.type === "response") {
-      const div = document.createElement('div');
-      div.innerText = "Gemini:"
-      div.classList.add('aiChatNameplate');
-      responseRef.current.appendChild(div);
-    }
+    const headerDiv = document.createElement('div');
+    headerDiv.classList.add('aiChatMessageHeader');
+    const timeDiv = document.createElement('code');
+    timeDiv.classList.add('aiChatTimestamp')
+
+    const userNameDiv = document.createElement('div');
+    userNameDiv.innerText = options.type === "query" ? `${userName ?? me}:` : "Gemini:";
+    userNameDiv.classList.add(options.type === "query" ? 'aiChatMe' : 'aiChatGemini');
+    headerDiv.appendChild(userNameDiv);
+
+    const t = new Date();
+    const duration = options.duration ? `(${options.duration}s) - ` : '';
+    timeDiv.innerText = `${duration}${getTimeString(t)}`;
+    timeDiv.title = t.toLocaleString();
+    headerDiv.appendChild(timeDiv);
+
+    responseRef.current.appendChild(headerDiv);
 
     // Convert the whole markdown to HTML once
     const html = MarkdownConverter.makeHtml(md);
@@ -101,8 +107,8 @@ export default function AboutPage() {
     await sleep(500);
   }
 
-  const writeResponse = async (text: string) => {
-    await renderMarkdown(text, { type: 'response' })
+  const writeResponse = async (text: string, duration: number) => {
+    await renderMarkdown(text, { type: 'response', duration })
     await sleep(500);
   }
 
@@ -115,11 +121,14 @@ export default function AboutPage() {
     clearInput();
     try {
       await writeQuery(query);
+      const start = performance.now();
       const response = await askGemini(query);
-      await writeResponse(response);
+      const done = performance.now();
+      const duration = +((done - start) / 1000).toFixed(1);
+      await writeResponse(response, duration);
     } catch (e) {
       console.error(e);
-      toast.error(t('error.unknown'));
+      toast.error(t('error.unknown'), { description: (e as Error).message });
     }
     setLoading(false);
     focusInput();
@@ -133,7 +142,7 @@ export default function AboutPage() {
   }
 
   return (
-    <Card className=" backdrop-blur-lg w-4xl">
+    <Card className="backdrop-blur-lg w-4xl">
       <CardHeader>
         <div className="flex flex-col gap-4">
           <Label>{t('chat.header')}</Label>
@@ -172,7 +181,7 @@ export default function AboutPage() {
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 items-start h-[450px] w-full relative">
-        <ScrollArea ref={scrollAreaRef} className="h-full py-4 w-full">
+        <ScrollArea ref={scrollAreaRef} className="w-full h-full px-4 py-0 flex items-center justify-center">
           <div ref={responseRef} className="aiChatBox"></div>
         </ScrollArea>
         {loading ? (

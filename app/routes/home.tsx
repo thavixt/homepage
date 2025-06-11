@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { Clock, getCurrentDate } from "~/components/ui/clock";
+import { Clock, getCurrentDate } from "~/components/clock";
 import { WeatherWidget } from "~/components/weatherWidget";
 import { BookmarkList } from "~/components/bookmarkList";
 import { FEATURES } from "~/components/header";

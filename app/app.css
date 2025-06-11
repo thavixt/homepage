@@ -46,17 +46,43 @@ a {
   @apply leading-normal text-blue-700 hover:underline dark:text-blue-500 truncate w-full;
 }
 
-.aiChatNameplate {
-  @apply px-2 my-2 bg-primary text-accent rounded-md w-fit;
-}
 .aiChatBox {
-  @apply w-full;
+  @apply w-full whitespace-normal m-auto max-w-[750px];
   p {
     @apply mb-4;
   }
   pre {
     @apply bg-black text-primary py-2 px-3 rounded-lg w-fit mb-2;
   }
+  p {
+    @apply m-0 mb-2;
+  }
+  ul {
+    @apply m-0 list-disc list-inside;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    li {
+      @apply my-2;
+    }
+  }
+}
+
+.aiChatMessageHeader {
+  @apply flex gap-2 items-center justify-between;
+  &:not(:first-child) {
+    @apply mt-8;
+  }
+}
+
+.aiChatMe {
+  @apply text-base px-2 my-2 rounded-md w-fit bg-accent text-primary;
+}
+.aiChatGemini {
+  @apply text-lg px-2 my-2 rounded-md w-fit bg-primary text-accent;
+}
+
+.aiChatTimestamp {
+  @apply font-mono text-sm pr-2;
 }
 
 @theme inline {
