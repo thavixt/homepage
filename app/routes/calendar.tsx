@@ -71,13 +71,12 @@ export default function CalendarPage() {
   }
 
   return (
-    <Card className=" backdrop-blur-lg w-full max-w-6xl flex flex-col items-center min-h-0 gap-0">
-      <CardHeader className="w-full text-center font-bold text-4xl">
+    <Card>
+      <CardHeader>
         {t('calendar.header')}
       </CardHeader>
-      <Separator className="mt-4" />
-      <CardContent className="flex gap-8 w-full space-y-6 items-center justify-center px-4 p-0">
-        <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_auto_2fr] items-center justify-center">
+      <CardContent className="flex gap-8">
+        <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_auto_2fr] gap-4 items-center justify-center">
           <div className="flex flex-col items-center justify-start gap-4 h-full py-4">
             <div className="flex gap-2 items-center">
               <Button title="Previous month" size="sm" variant="outline" onClick={onPrevMonth}>
@@ -101,13 +100,12 @@ export default function CalendarPage() {
               selected={date}
               showWeekNumber
             />
-            <Separator />
             <div className="w-full p-4">
               <CalendarNextEvents />
             </div>
           </div>
           <Separator orientation="vertical" />
-          <div className="grid grid-rows-[450px_200px] gap-2">
+          <div className="h-full grid grid-rows-[450px_200px] gap-2">
             <div className="flex flex-col gap-4 items-start justify-start size-full p-4">
               <div className="w-full flex items-center justify-between gap-4">
                 <span>
@@ -128,7 +126,10 @@ export default function CalendarPage() {
               </div>
               <CalendarEvents date={date} />
             </div>
-            <CalendarDiary date={date} />
+            <div className="flex flex-col gap-2">
+              <Separator />
+              <CalendarDiary date={date} />
+            </div>
           </div>
         </div>
       </CardContent>

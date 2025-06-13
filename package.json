@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run translation:watch\" \"react-router dev\"",
+    "dev": "concurrently \"npm run translation:watch\" \"react-router dev --host\"",
     "translation:typegen": "node --no-warnings --experimental-strip-types ./generateTranslationTypes.ts",
     "translation:watch": "nodemon --watch app/locales --ext json --exec \"npm run translation:typegen\"",
     "translation:ai": "bash ./scripts/translation.sh",

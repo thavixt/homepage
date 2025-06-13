@@ -12,7 +12,6 @@ export function BookmarkForm({ bookmark }: { bookmark?: Bookmark }) {
       <div className="grid gap-3">
         <Label htmlFor="name">{t('bookmark.form.name')}</Label>
         <Input
-          autoFocus
           id="name"
           name="name"
           defaultValue={bookmark?.name}

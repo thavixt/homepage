@@ -48,7 +48,7 @@ export default function AboutPage() {
     if (!responseRef.current) {
       return;
     }
-    sleep(500);
+    sleep(250);
     responseRef.current.scrollIntoView({ block: 'end', behavior: 'smooth' });
   }
 
@@ -68,7 +68,7 @@ export default function AboutPage() {
     headerDiv.appendChild(userNameDiv);
 
     const t = new Date();
-    const duration = options.duration ? `(${options.duration}s) - ` : '';
+    const duration = options.duration ? `(${options.duration}s) ` : '';
     timeDiv.innerText = `${duration}${getTimeString(t)}`;
     timeDiv.title = t.toLocaleString();
     headerDiv.appendChild(timeDiv);
@@ -142,11 +142,11 @@ export default function AboutPage() {
   }
 
   return (
-    <Card className="backdrop-blur-lg w-4xl">
+    <Card>
       <CardHeader>
-        <div className="flex flex-col gap-4">
-          <Label>{t('chat.header')}</Label>
-          <div className="grid grid-cols-[auto_1fr_auto] w-full gap-4 items-center">
+        <div className="flex flex-col gap-4 w-full">
+          <p>{t('chat.header')}</p>
+          <div className="grid grid-cols-[30px_1fr_auto] w-full gap-4 items-center">
             <div className="flex gap-2 items-center">
               <Label
                 htmlFor="input"
@@ -158,8 +158,7 @@ export default function AboutPage() {
             </div>
             <Textarea
               ref={inputRef}
-              className="h-[100px]"
-              autoFocus
+              className="h-[100px] resize-none"
               id="input"
               name="input"
               placeholder={t('common.inputPlaceholder')}
@@ -180,7 +179,7 @@ export default function AboutPage() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 items-start h-[450px] w-full relative">
+      <CardContent className="flex flex-col gap-4 items-start h-[450px] relative">
         <ScrollArea ref={scrollAreaRef} className="w-full h-full px-4 py-0 flex items-center justify-center">
           <div ref={responseRef} className="aiChatBox"></div>
         </ScrollArea>

@@ -13,15 +13,15 @@ export default function NotFoundPage() {
   const t = useTypesafeTranslation();
 
   return (
-     <Card className=" backdrop-blur-lg w-[600px]">
-      <CardHeader className="w-full text-center font-bold">
+    <Card>
+      <CardHeader>
         <p className="text-8xl">{t('404.title')}</p>
         <p className="text-lg">{t('404.subtitle')}</p>
       </CardHeader>
-      <CardContent className="flex items-center justify-center py-6">
+      <CardContent className="flex items-center justify-center text-center">
         <small>{t('404.description')}</small>
       </CardContent>
-      <CardFooter className="flex items-center justify-center py-6">
+      <CardFooter>
         <div>
           <Link viewTransition to="/">{t('404.back')}</Link>
         </div>

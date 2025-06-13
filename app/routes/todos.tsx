@@ -1,6 +1,15 @@
+import { Trash2Icon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { AlertDialog } from "~/components/dialogs/alertDialog";
+import { FormDialog } from "~/components/dialogs/formDialog";
+import { TodoForm } from "~/components/forms/todoForm";
 import { TodoList } from "~/components/todoList";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
+import { useAppDispatch } from "~/hooks/state";
 import { useTypesafeTranslation } from "~/i18n";
+import { createTodo, clearTodos } from "~/reducers/todosReducer";
 
 export function meta() {
   return [
@@ -11,14 +20,58 @@ export function meta() {
 
 export default function TodosPage() {
   const t = useTypesafeTranslation();
+  const dispatch = useAppDispatch();
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+  
+    const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget);
+      const deadline = formData.get("deadline") as string;
+      const title = formData.get("title") as string;
+      const description = formData.get("description") as string;
+      if (!title || !deadline) {
+        toast(t('todos.form.required'));
+        return;
+      }
+      dispatch(createTodo({ deadline, title, description }));
+      setDialogOpen(false);
+    }
+  
+    const onClearAllTodosConfirm = () => {
+      dispatch(clearTodos());
+    }
+
   return (
-     <Card className=" backdrop-blur-lg w-full max-w-4xl flex flex-col items-center min-h-0">
-      <CardHeader className="w-full text-center font-bold text-4xl">
+     <Card>
+      <CardHeader>
         {t('todos.header')}
       </CardHeader>
       <CardContent className="flex flex-col gap-4 w-full px-0">
         <TodoList />
       </CardContent>
+      <CardFooter>
+        <AlertDialog
+          trigger={(
+            <div className="border rounded-md p-1" title="Delete all tasks">
+              <Trash2Icon className="cursor-pointer" size={16} />
+            </div>
+          )}
+          onConfirm={onClearAllTodosConfirm}
+          title={t('todos.clear.title')}
+          description={t('todos.clear.description')}
+        />
+        <FormDialog
+          trigger={<Button>{t('todos.create.button')}</Button>}
+          onSubmit={onSubmit}
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          title={t('todos.create.title')}
+          description={t('todos.create.description')}
+        >
+          <TodoForm />
+        </FormDialog>
+      </CardFooter>
     </Card>
   );
 }

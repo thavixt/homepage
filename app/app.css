@@ -82,7 +82,7 @@ a {
 }
 
 .aiChatTimestamp {
-  @apply font-mono text-sm pr-2;
+  @apply font-mono text-sm pr-2 text-right;
 }
 
 @theme inline {

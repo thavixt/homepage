@@ -51,13 +51,13 @@ export default function SettingsPage() {
   }
 
   return (
-    <Card className="backdrop-blur-lg w-full max-w-2xl flex flex-col items-center min-h-0">
-      <CardHeader className="w-full text-center font-bold text-4xl">
+    <Card>
+      <CardHeader>
         {t('settings.header')}
       </CardHeader>
       <CardContent className="flex flex-col gap-4 w-full px-0">
         <Separator />
-        <div className="grid grid-cols-[1fr_250px] grid-rows-10 gap-2 items-start justify-start px-4 min-h-[300px]">
+        <div className="grid grid-cols-2 grid-rows-5 gap-2 items-start justify-start px-4 min-h-[300px]">
           {sortArray(Object.keys(settings)).map((k) => {
             const key = k as Setting;
             return <SettingSelector key={key} settingsKey={key} onChange={onChange(key)} />;
@@ -94,17 +94,18 @@ function SettingSelector<T extends keyof SettingsState>({ settingsKey, onChange 
   const settings = useAppSelector(getSettings);
   const values = getSettingValues<T>(settingsKey);
   const { label, value } = settings[settingsKey];
+  const currentValue = values[value as SettingValueType<T>];
 
   return (
     <Fragment>
-      <div className="whitespace-pre-wrap">{label}</div>
+      <div className="whitespace-pre-wrap" title={label}>{label}:</div>
       <Select
         name={settingsKey}
         value={value}
         onValueChange={(v) => onChange(v as SettingsState[T]['value'])}
       >
-        <SelectTrigger className="w-full">
-          <SelectValue>{values[value as SettingValueType<T>]}</SelectValue>
+        <SelectTrigger className="w-full" title={currentValue}>
+          <SelectValue>{currentValue}</SelectValue>
         </SelectTrigger>
         <SelectContent>
           {Object.entries(values).map(([k, v]) => (

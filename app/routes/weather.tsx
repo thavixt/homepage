@@ -4,7 +4,6 @@ import { Fragment } from "react";
 import { getWeatherForecast, type WeatherForecastDay } from "~/api/weather";
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
-import { Separator } from "~/components/ui/separator";
 import { useTypesafeTranslation } from "~/i18n";
 
 export function meta() {
@@ -23,8 +22,8 @@ export default function WeatherPage() {
   });
 
   return (
-    <Card className="backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
-      <CardHeader className="w-full text-center font-bold">
+    <Card>
+      <CardHeader>
         <div className="text-4xl">
           {t('weather.header', {
             location: (!isPending && forecastData)
@@ -41,7 +40,6 @@ export default function WeatherPage() {
           })}
         </p>
       </CardHeader>
-      <Separator />
       <CardContent className="min-h-[300px]">
         {forecastData ? (
           <div className="grid grid-cols-2 lg:grid-cols-[2fr_4fr] gap-4 py-4">
@@ -59,7 +57,6 @@ export default function WeatherPage() {
           </div>
         ) : null}
       </CardContent>
-      <Separator />
       <CardFooter>
         <small className="text-xs opacity-50">
           <span>{t('weather.attribution1')}</span>
@@ -94,11 +91,11 @@ function ForecastLabels() {
         <ThermometerIcon />
         <span className="truncate">{t('weather.temp_avg')}</span>
       </div>
-      <div className="flex items-center gap-2" title={t('weather.rain_chance')}>
+      <div className="flex items-center gap-2" title={t('weather.precip.description')}>
         <CloudRainIcon />
         <span className="truncate">{t('weather.rain_chance')}</span>
       </div>
-      <div className="flex items-center gap-2" title={t('weather.snow_chance')}>
+      <div className="flex items-center gap-2" title={t('weather.precip.description')}>
         <CloudSnowIcon />
         <span className="truncate">{t('weather.snow_chance')}</span>
       </div>
@@ -114,7 +111,7 @@ function ForecastLabels() {
         <SunIcon />
         <span className="truncate">{t('weather.uv_index')}</span>
       </div>
-      <div className="flex items-center gap-2" title={t('weather.wind_max')}>
+      <div className="flex items-center gap-2" title={t('weather.wind.description')}>
         <WindIcon />
         <span className="truncate">{t('weather.wind_max')}</span>
       </div>
@@ -170,13 +167,24 @@ function ForecastDay({ day, prevDay }: { day: WeatherForecastDay, prevDay?: Weat
 
 function ValueDifferenceArrow({ valueKey, day, prevDay }: { valueKey: keyof WeatherForecastDay['day'], day: WeatherForecastDay, prevDay?: WeatherForecastDay }) {
   if (!prevDay) {
-    return;
+    return null;
   }
+
   if (day.day[valueKey] < prevDay.day[valueKey]) {
-    return <ArrowDownIcon className="text-red-500" />;
+    return (
+      <div title="Lower than the previous day">
+        <ArrowDownIcon className="text-red-500" />
+      </div>
+    );
   }
+
   if (day.day[valueKey] > prevDay.day[valueKey]) {
-    return <ArrowUpIcon className="text-green-500" />;
+    return (
+      <div title="Higher than the previous day">
+        <ArrowUpIcon className="text-green-500" />
+      </div>
+    );
   }
+
   return null;
 }

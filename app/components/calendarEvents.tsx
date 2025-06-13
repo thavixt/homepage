@@ -15,11 +15,16 @@ export function CalendarEvents({ date }: { date: Date }) {
         <div className="w-full h-full grid grid-cols-3 gap-4">
           {currentEvents.length ? (
             currentEvents.map(event => (
-            <CalendarEventItem key={event.id} date={date} event={event} />
-          ))
+              <CalendarEventItem key={event.id} date={date} event={event} />
+            ))
           ) : (
-            <div className="col-span-3 p-4 flex flex-col items-center justify-center opacity-50 h-42 w-full">
-              <div>Press the <Badge>Create new event</Badge> button above to schedule some stuff for yourself.</div>
+            <div className="col-span-3 row-span-4 w-full h-full my-2 flex flex-col items-center justify-center gap-8 font-light text-sm">
+              <p>Nothing to do for now.</p>
+              <div className="flex flex-wrap gap-2 items-center justify-center">
+                <span>Press the</span>
+                <Badge>Create new event</Badge>
+                <span>button to schedule some stuff for yourself.</span>
+              </div>
             </div>
           )}
         </div>

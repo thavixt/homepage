@@ -92,7 +92,6 @@ export function BookmarkList() {
           <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
         </div>
         <Input
-          autoFocus
           type="search"
           id="search"
           name="search"
@@ -116,25 +115,29 @@ export function BookmarkList() {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
-            <ScrollArea className="h-[200px]">
-              <Label className="pb-2">Pinned:</Label>
-              <div className="w-full grid grid-cols-2 gap-x-2 items-start justify-center">
-                {pinnedBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
-              </div>
-            </ScrollArea>
-            <ScrollArea className="h-[300px]">
-              <Label className="pb-2">Other:</Label>
-              <div className="w-full grid grid-cols-2 gap-x-2 items-start justify-center">
-                {otherBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
-              </div>
-            </ScrollArea>
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-2">
+              <Label className="pb-2">Pinned bookmarks:</Label>
+              <ScrollArea className="h-[200px]">
+                <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-2 items-start justify-center">
+                  {pinnedBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
+                </div>
+              </ScrollArea>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label className="pb-2">Other bookmarks:</Label>
+              <ScrollArea className="h-[300px]">
+                <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-2 items-start justify-center">
+                  {otherBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
+                </div>
+              </ScrollArea>
+            </div>
           </div>
         )}
       </div>
       <Separator />
       <div className="flex justify-between gap-4 items-center">
-        <div className="flex gap-4 items-center">
+        <div className="flex flex-wrap gap-4 items-center">
           <AlertDialog
             trigger={(
               <div className="border rounded-md p-1" title="Delete all bookmarks">

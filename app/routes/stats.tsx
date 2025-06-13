@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { getStats, resetStats } from "~/reducers/statsReducer";
 import { toast } from "sonner";
@@ -10,7 +10,6 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { useState } from "react";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
-import { Separator } from "~/components/ui/separator";
 import { useTypesafeTranslation } from "~/i18n";
 
 export function meta() {
@@ -34,15 +33,14 @@ export default function StatsPage() {
   }
 
   return (
-     <Card className=" backdrop-blur-lg w-full max-w-xl flex flex-col items-center min-h-0">
-      <CardHeader className="w-full text-center font-bold text-4xl">
+    <Card>
+      <CardHeader>
         {t('stats.header')}
       </CardHeader>
       <CardContent className="flex flex-col gap-4 w-full px-0">
         <div className="w-full grid grid-cols-[1fr_2fr] px-8">
           <Label htmlFor="stat">{t('stats.searchLabel')}</Label>
           <Input
-            autoFocus
             type="search"
             name="stat"
             id="stat"
@@ -50,33 +48,31 @@ export default function StatsPage() {
             onChange={(e) => setSearchValue(e.currentTarget.value)}
           />
         </div>
-        <Separator />
         <ScrollArea className="h-[400px] w-full px-8">
-          <div className="grid grid-cols-[8fr_2fr] gap-1 items-start">
+          <div className="grid grid-cols-[6fr_4fr] lg:grid-cols-[7fr_3fr] gap-y-2 gap-x-4">
             {filteredStats
               .map((stat) => (
                 <Fragment key={stat.description}>
-                  <div className="truncate">{stat.description}:</div>
-                  <div>{t('stats.counter', {count: stat.count.toString()})}</div>
+                  <div title={stat.description} className="truncate">{stat.description}:</div>
+                  <div>{t('stats.counter', { count: stat.count.toString() })}</div>
                 </Fragment>
               ))}
           </div>
         </ScrollArea>
-        <Separator />
-        <div className="flex flex-col gap-4 justify-between items-center w-full px-8">
-          <AlertDialog
-            trigger={(
-              <div className="border rounded-md p-1" title={t('stats.reset.title')}>
-                <ArchiveXIcon className="cursor-pointer" size={16} />
-              </div>
-            )}
-            onConfirm={onReset}
-            title={t('stats.reset.title')}
-            description={t('stats.reset.description')}
-            confirm={t('stats.reset.confirm')}
-          />
-        </div>
       </CardContent>
+      <CardFooter>
+        <AlertDialog
+          trigger={(
+            <div className="border rounded-md p-1" title={t('stats.reset.title')}>
+              <ArchiveXIcon className="cursor-pointer" size={16} />
+            </div>
+          )}
+          onConfirm={onReset}
+          title={t('stats.reset.title')}
+          description={t('stats.reset.description')}
+          confirm={t('stats.reset.confirm')}
+        />
+      </CardFooter>
     </Card>
   );
 }

@@ -54,15 +54,27 @@ export function TodoItem({todo}: {todo: Todo}) {
         <div className="flex flex-col gap-2 w-full">
           <div className="font-bold text-2xl">{todo.title}</div>
           {todo.description ? (
-            <div className="rounded-sm bg-primary/10 px-2 py-1 italic text-xs w-full whitespace-pre-line">{todo.description}</div>
+            <div className="rounded-sm bg-primary/10 px-3 py-2 text-xs w-fit whitespace-pre-line">{todo.description}</div>
           ) : null}
-          <div className="font-light text-sm">
+          <div className="font-light text-sm italic">
             Due: {(new Date(todo.deadline)).toLocaleDateString(navigator.language, dateFormatOptions)}
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-2 justify-between items-end">
         <div className="flex justify-end gap-1">
+          {!['cancelled', 'completed'].includes(todo.status) ? (
+            <AlertDialog
+              trigger={(
+                <div className="border rounded-md p-1" title="Mark task as completed">
+                  <CheckIcon className="cursor-pointer" size={16} />
+                </div>
+              )}
+              onConfirm={() => onCompleteConfirm(todo.id)}
+              title="Mark this todo as completed?"
+              description="You cannot undo this action."
+            />
+          ) : null}
           {todo.status === 'initial' ? (
             <AlertDialog
               trigger={(
@@ -72,29 +84,20 @@ export function TodoItem({todo}: {todo: Todo}) {
               )}
               onConfirm={() => onStartConfirm(todo.id)}
               title="Mark this todo as in-progress?"
-            />
-          ) : null}
-          {!['cancelled', 'completed'].includes(todo.status) ? (
-            <AlertDialog
-              trigger={(
-                <div className="border rounded-md p-1" title="Start task">
-                  <CheckIcon className="cursor-pointer" size={16} />
-                </div>
-              )}
-              onConfirm={() => onCompleteConfirm(todo.id)}
-              title="Mark this todo as completed?"
+              description="You cannot undo this action."
             />
           ) : null}
         </div>
         {!['cancelled', 'completed'].includes(todo.status) ? (
           <AlertDialog
             trigger={
-              <div className="border rounded-md p-1" title="Start task">
+              <div className="border rounded-md p-1" title="Cancel task">
                 <TrashIcon className="cursor-pointer" size={16} />
               </div>
             }
             onConfirm={() => onCancelConfirm(todo.id)}
             title="Mark this todo as cancelled?"
+            description="You cannot undo this action."
           />
         ) : null}
       </div>

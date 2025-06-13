@@ -20,8 +20,8 @@ export default function HomePage() {
   const t = useTypesafeTranslation();
 
   return (
-    <Card className=" backdrop-blur-lg w-full max-w-5xl flex flex-col items-center min-h-0">
-      <CardHeader className="w-full text-center font-bold text-4xl">
+    <Card>
+      <CardHeader>
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex gap-2 items-center">
             <CalendarDaysIcon />
@@ -32,9 +32,8 @@ export default function HomePage() {
           <Clock className="border rounded-md p-4 text-5xl" />
         </div>
       </CardHeader>
-      <Separator />
-      <CardContent className="grid grid-cols-1 md:grid-cols-[3fr_auto_7fr] gap-8 w-full space-y-6 px-4">
-        <div className="flex flex-col justify-between gap-4">
+      <CardContent className="grid grid-cols-1 md:grid-cols-[3fr_auto_7fr] gap-8 space-y-6">
+        <div className="flex flex-col h-full justify-between gap-4">
           <WeatherWidget />
           <FeatureList />
         </div>
