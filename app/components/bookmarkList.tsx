@@ -99,7 +99,7 @@ export function BookmarkList() {
           onChange={onSearch}
         />
       </div>
-      <div className="h-full flex flex-col gap-2 min-h-[520px] justify-between">
+      <div className="h-full flex flex-col gap-2 justify-between">
         {!filteredBookmarks.length ? (
           <div className="h-full my-2 flex flex-col items-center justify-center gap-8 font-light text-sm">
             <p>Nothing to visit for now.</p>
@@ -118,7 +118,7 @@ export function BookmarkList() {
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-2">
               <Label className="pb-2">Pinned bookmarks:</Label>
-              <ScrollArea className="h-[200px]">
+              <ScrollArea className="h-full">
                 <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-2 items-start justify-center">
                   {pinnedBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
                 </div>
@@ -126,7 +126,7 @@ export function BookmarkList() {
             </div>
             <div className="flex flex-col gap-2">
               <Label className="pb-2">Other bookmarks:</Label>
-              <ScrollArea className="h-[300px]">
+              <ScrollArea className="h-full">
                 <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-2 items-start justify-center">
                   {otherBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
                 </div>

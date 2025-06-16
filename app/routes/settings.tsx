@@ -56,8 +56,7 @@ export default function SettingsPage() {
         {t('settings.header')}
       </CardHeader>
       <CardContent className="flex flex-col gap-4 w-full px-0">
-        <Separator />
-        <div className="grid grid-cols-2 grid-rows-5 gap-2 items-start justify-start px-4 min-h-[300px]">
+        <div className="grid grid-cols-2 gap-y-2 gap-x-8 items-start justify-start px-4">
           {sortArray(Object.keys(settings)).map((k) => {
             const key = k as Setting;
             return <SettingSelector key={key} settingsKey={key} onChange={onChange(key)} />;
