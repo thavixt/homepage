@@ -1,13 +1,13 @@
 import { LoaderCircleIcon, PenLineIcon, SendHorizonalIcon } from "lucide-react";
 import { useRef, useState, type KeyboardEventHandler } from "react";
-import { askGemini } from "~/api/gemini";
+import { askGemini, type ChatMessage } from "~/api/gemini";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Textarea } from "~/components/ui/textarea";
 import { useTypesafeTranslation } from "~/i18n";
-import { sleep } from "~/lib/utils";
+import { cn, sleep } from "~/lib/utils";
 import Showdown from 'showdown';
 import { useUser } from "~/context/userContext";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ import { getTimeString } from "~/lib/date";
 
 const MarkdownConverter = new Showdown.Converter();
 const TYPING_DELAY = 250; // ms
+const MAX_MESSAGE_HISTORY_LENGTH = 20;
 
 export function meta() {
   return [
@@ -31,6 +32,7 @@ export default function AboutPage() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const responseRef = useRef<HTMLDivElement>(null);
+  const pastMessages = useRef<ChatMessage[]>([]);
 
   const focusInput = async (delay = 250) => {
     await sleep(delay);
@@ -118,11 +120,17 @@ export default function AboutPage() {
     }
     const query = inputRef.current.value;
     setLoading(true);
-    clearInput();
     try {
       await writeQuery(query);
       const start = performance.now();
-      const response = await askGemini(query);
+      const context = pastMessages.current;
+      const response = await askGemini(query, context);
+      clearInput();
+      pastMessages.current.push({role: 'user', text: query});
+      pastMessages.current.push({role: 'model', text: response});
+      if (pastMessages.current.length > MAX_MESSAGE_HISTORY_LENGTH) {
+        pastMessages.current.splice(0, 2);
+      }
       const done = performance.now();
       const duration = +((done - start) / 1000).toFixed(1);
       await writeResponse(response, duration);
@@ -179,17 +187,22 @@ export default function AboutPage() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 items-start h-[450px] relative">
-        <ScrollArea ref={scrollAreaRef} className="w-full h-full px-4 py-0 flex items-center justify-center">
+      <CardContent className="isolate relative flex flex-col gap-4 items-start h-[450px]">
+        <ScrollArea
+          ref={scrollAreaRef}
+          className={cn(
+            "z-1 w-full h-full px-4 py-0 flex items-center justify-center",
+            { "pointer-events-none": loading },
+          )}
+        >
           <div ref={responseRef} className="aiChatBox"></div>
         </ScrollArea>
-        {loading ? (
-          <div className="absolute top-0 left-0 flex w-full h-full items-center justify-center animate-pulse z-100 bg-accent opacity-35">
-            <LoaderCircleIcon size={48} className="animate-spin" />
-          </div>
-        ) : (
-          null
-        )}
+        <div className={cn(
+          "absolute z-10 top-0 left-0 flex w-full h-full items-center justify-center animate-pulse bg-transparent",
+          { "hidden": !loading },
+        )}>
+          <LoaderCircleIcon size={48} className="animate-spin" />
+        </div>
       </CardContent>
     </Card>
   );
