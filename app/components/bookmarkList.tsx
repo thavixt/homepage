@@ -85,7 +85,7 @@ export function BookmarkList() {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full h-full">
       <div className="grid grid-cols-[auto_1fr] gap-4 items-center">
         <div className="flex gap-2 items-center">
           <BookOpenIcon />

@@ -77,7 +77,7 @@ export function TodoList() {
           </div>
         </div>
       </div>
-      <ScrollArea className="w-full h-[500px] pr-3 px-4">
+      <ScrollArea className="w-full h-fit max-h-[350px] px-4">
         <div className="flex flex-col gap-4 w-full">
           {!todos.length ? (
             <div className="flex flex-col gap-12 h-[250px] items-center justify-end">

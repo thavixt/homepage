@@ -1,3 +1,4 @@
+import i18n from "../i18n";
 import { AlarmClockIcon, CalendarXIcon, ChartLineIcon, CheckCheckIcon, CloudSunIcon, HomeIcon, LightbulbIcon, PenIcon, SettingsIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "~/components/ui/navigation-menu"
@@ -23,7 +24,7 @@ const sortedFeatures: Feature[] = sortArrayOfObjectsBy(
     {
       href: "/ai",
       name: "AI assistant",
-      description: "Ask anything",
+      description: i18n.t('feature.ai'),
       hotkey: "G",
       Icon: LightbulbIcon,
     },
@@ -31,35 +32,35 @@ const sortedFeatures: Feature[] = sortArrayOfObjectsBy(
       href: "/todos",
       name: "Todos",
       Icon: CheckCheckIcon,
-      description: "That sounds important - better write that down!",
+      description: i18n.t('feature.todos'),
       hotkey: 'T',
     },
     {
       href: "/calendar",
       name: "Calendar / diary",
       Icon: CalendarXIcon,
-      description: "What am I supposed to be doing this weekend?",
+      description: i18n.t('feature.calendar'),
       hotkey: 'C',
     },
     {
       href: "/notes",
       name: "Notes",
       Icon: PenIcon,
-      description: "Keeping notes of the things that happened.",
+      description: i18n.t('feature.notes'),
       hotkey: 'X',
     },
     {
       href: "/weather",
       name: "Weather forecast",
       Icon: CloudSunIcon,
-      description: "I should bring an umbrella tomorrow...",
+      description: i18n.t('feature.weather'),
       hotkey: 'W',
     },
     {
       href: "/timer",
       name: "Reminder / timer",
       Icon: AlarmClockIcon,
-      description: "Set a timer or reminder for something important.",
+      description: i18n.t('feature.timer'),
       hotkey: 'R',
     },
   ],
@@ -71,14 +72,14 @@ export const FEATURES: Feature[] = [
     href: "/stats",
     name: "Statistics",
     Icon: ChartLineIcon,
-    description: "See how you are using this app.",
+    description: i18n.t('feature.stats'),
     hotkey: 'S',
   },
   {
     href: "/settings",
     name: "Settings",
     Icon: SettingsIcon,
-    description: "Change the way this app works.",
+    description: i18n.t('feature.settings'),
     hotkey: 'Y',
   },
 ];

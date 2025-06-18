@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"npm run translation:watch\" \"react-router dev --host\"",
     "translation:typegen": "node --no-warnings --experimental-strip-types ./generateTranslationTypes.ts",
-    "translation:watch": "nodemon --watch app/locales --ext json --exec \"npm run translation:typegen\"",
+    "translation:watch": "nodemon --watch app/locales/en.json --ext json --exec \"npm run translation:typegen\"",
     "translation:ai": "bash ./scripts/translation.sh",
     "translation:ai-all": "bash ./scripts/translation-all.sh",
     "checks": "npm run translation:typegen && npm run typecheck && npm run test && npm run eslint && npm run build",

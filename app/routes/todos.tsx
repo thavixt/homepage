@@ -1,4 +1,3 @@
-import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
@@ -52,11 +51,8 @@ export default function TodosPage() {
       </CardContent>
       <CardFooter>
         <AlertDialog
-          trigger={(
-            <div className="border rounded-md p-1" title="Delete all tasks">
-              <Trash2Icon className="cursor-pointer" size={16} />
-            </div>
-          )}
+          triggerAsChild  
+          trigger={<Button variant="outline">{t('todos.deleteAll.button')}</Button>}
           onConfirm={onClearAllTodosConfirm}
           title={t('todos.clear.title')}
           description={t('todos.clear.description')}

@@ -51,12 +51,12 @@ export function TodoItem({todo}: {todo: Todo}) {
     <div key={todo.id} className={classes}>
       <div className="flex flex-col gap-2 items-start w-full">
         <Badge>{getBadgeStatusText(todo)}</Badge>
-        <div className="flex flex-col gap-2 w-full">
-          <div className="font-bold text-2xl">{todo.title}</div>
+        <div className="flex flex-col justify-between gap-3 w-full h-full">
+          <div className="font-bold">{todo.title}</div>
           {todo.description ? (
             <div className="rounded-sm bg-primary/10 px-3 py-2 text-xs w-fit whitespace-pre-line">{todo.description}</div>
           ) : null}
-          <div className="font-light text-sm italic">
+          <div className="font-light text-xs italic">
             Due: {(new Date(todo.deadline)).toLocaleDateString(navigator.language, dateFormatOptions)}
           </div>
         </div>

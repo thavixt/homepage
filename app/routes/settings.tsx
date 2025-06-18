@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { useAppDispatch, useAppSelector } from "~/hooks/state";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
@@ -6,7 +6,6 @@ import { changeSetting, getSettings, resetSettings, type Setting, type SettingsS
 import { Fragment } from "react/jsx-runtime";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
-import { Separator } from "~/components/ui/separator";
 import { clearBookmarks } from "~/reducers/bookmarksReducer";
 import { clearCalendar } from "~/reducers/calendarReducer";
 import { resetStats } from "~/reducers/statsReducer";
@@ -55,33 +54,32 @@ export default function SettingsPage() {
       <CardHeader>
         {t('settings.header')}
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 w-full px-0">
+      <CardContent className="flex flex-col gap-4 w-full px-0 min-h-[300px]">
         <div className="grid grid-cols-2 gap-y-2 gap-x-8 items-start justify-start px-4">
           {sortArray(Object.keys(settings)).map((k) => {
             const key = k as Setting;
             return <SettingSelector key={key} settingsKey={key} onChange={onChange(key)} />;
           })}
         </div>
-        <Separator />
-        <div className="flex gap-4 justify-center items-center w-full px-4">
-          <AlertDialog
-            trigger={<Button variant="ghost">{t('settings.clear')}</Button>}
-            triggerAsChild
-            onConfirm={onClearAllData}
-            title={t('settings.clear.title')}
-            description={t('settings.clear.description')}
-            confirm={t('settings.clear')}
-          />
-          <AlertDialog
-            trigger={<Button variant="outline">{t('settings.reset')}</Button>}
-            triggerAsChild
-            onConfirm={onResetSettings}
-            title={t('settings.reset.title')}
-            description={t('settings.reset.description')}
-            confirm={t('settings.reset')}
-          />
-        </div>
       </CardContent>
+      <CardFooter>
+        <AlertDialog
+          trigger={<Button variant="ghost">{t('settings.clear')}</Button>}
+          triggerAsChild
+          onConfirm={onClearAllData}
+          title={t('settings.clear.title')}
+          description={t('settings.clear.description')}
+          confirm={t('settings.clear')}
+        />
+        <AlertDialog
+          trigger={<Button variant="outline">{t('settings.reset')}</Button>}
+          triggerAsChild
+          onConfirm={onResetSettings}
+          title={t('settings.reset.title')}
+          description={t('settings.reset.description')}
+          confirm={t('settings.reset')}
+        />
+      </CardFooter>
     </Card>
   );
 }

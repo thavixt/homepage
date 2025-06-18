@@ -2,16 +2,18 @@ import { useAppSelector } from "~/hooks/state";
 import { getCalendarEvents, type CalendarEvent } from "~/reducers/calendarReducer";
 import { ScrollArea } from "./ui/scroll-area";
 import { getDateString } from "~/lib/date";
+import { useTypesafeTranslation } from "~/i18n";
 
 export function CalendarNextEvents() {
+  const t = useTypesafeTranslation();
   const events = useAppSelector(getCalendarEvents);
   const eventsToday = events[getDateString(new Date)] ?? [];
 
   return (
     <div className="flex flex-col gap-4">
-      <div>Events today:</div>
+      <div>{t('calendar.eventsToday')}:</div>
       <ScrollArea>
-        <div className="flex flex-col pb-4 gap-2 h-[200px] w-full">
+        <div className="flex flex-col gap-2 h-[150px] w-full">
           {eventsToday.map(event => (
             <CalendarNextEvent key={event.id} event={event} />
           ))}

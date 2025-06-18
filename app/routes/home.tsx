@@ -33,7 +33,7 @@ export default function HomePage() {
         </div>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-[3fr_auto_7fr] gap-8 space-y-6">
-        <div className="flex flex-col h-full justify-between gap-4">
+        <div className="flex flex-col h-full justify-between gap-8">
           <WeatherWidget />
           <FeatureList />
         </div>

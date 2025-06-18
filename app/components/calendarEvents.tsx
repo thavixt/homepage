@@ -10,7 +10,7 @@ export function CalendarEvents({ date }: { date: Date }) {
   const currentEvents = events[getDateString(date)] ?? [];
 
   return (
-    <div className="flex flex-col gap-4 items-start justify-start size-full p-4">
+    <div className="flex flex-col gap-4 items-center justify-start h-full w-full">
       <ScrollArea className="w-full h-full">
         <div className="w-full h-full grid grid-cols-3 gap-4">
           {currentEvents.length ? (

@@ -4,13 +4,13 @@ import { getStats, resetStats } from "~/reducers/statsReducer";
 import { toast } from "sonner";
 import { sortArrayOfObjectsBy } from "~/lib/utils";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
-import { ArchiveXIcon } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { useState } from "react";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { useTypesafeTranslation } from "~/i18n";
+import { Button } from "~/components/ui/button";
 
 export function meta() {
   return [
@@ -48,7 +48,7 @@ export default function StatsPage() {
             onChange={(e) => setSearchValue(e.currentTarget.value)}
           />
         </div>
-        <ScrollArea className="h-[400px] w-full px-8">
+        <ScrollArea className="h-fit max-h-[350px] w-full px-8">
           <div className="grid grid-cols-[6fr_4fr] lg:grid-cols-[7fr_3fr] gap-y-2 gap-x-4">
             {filteredStats
               .map((stat) => (
@@ -62,11 +62,7 @@ export default function StatsPage() {
       </CardContent>
       <CardFooter>
         <AlertDialog
-          trigger={(
-            <div className="border rounded-md p-1" title={t('stats.reset.title')}>
-              <ArchiveXIcon className="cursor-pointer" size={16} />
-            </div>
-          )}
+          trigger={<Button variant="outline" asChild>{t('common.reset')}</Button>}
           onConfirm={onReset}
           title={t('stats.reset.title')}
           description={t('stats.reset.description')}
