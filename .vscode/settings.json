@@ -1,0 +1,12 @@
+{
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": true,
+  "editor.indentSize": "tabSize",
+  "editor.tabSize": 2,
+  "eslint.format.enable": true,
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "typescript"
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+}

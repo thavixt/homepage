@@ -20,29 +20,28 @@ export function meta() {
 export default function TodosPage() {
   const t = useTypesafeTranslation();
   const dispatch = useAppDispatch();
-    const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false)
 
-  
-    const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
-      const deadline = formData.get("deadline") as string;
-      const title = formData.get("title") as string;
-      const description = formData.get("description") as string;
-      if (!title || !deadline) {
-        toast(t('todos.form.required'));
-        return;
-      }
-      dispatch(createTodo({ deadline, title, description }));
-      setDialogOpen(false);
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const deadline = formData.get("deadline") as string;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    if (!title || !deadline) {
+      toast(t('todos.form.required'));
+      return;
     }
-  
-    const onClearAllTodosConfirm = () => {
-      dispatch(clearTodos());
-    }
+    dispatch(createTodo({ deadline, title, description }));
+    setDialogOpen(false);
+  }
+
+  const onClearAllTodosConfirm = () => {
+    dispatch(clearTodos());
+  }
 
   return (
-     <Card>
+    <Card>
       <CardHeader>
         {t('todos.header')}
       </CardHeader>
@@ -51,7 +50,7 @@ export default function TodosPage() {
       </CardContent>
       <CardFooter>
         <AlertDialog
-          triggerAsChild  
+          triggerAsChild
           trigger={<Button variant="outline">{t('todos.deleteAll.button')}</Button>}
           onConfirm={onClearAllTodosConfirm}
           title={t('todos.clear.title')}
