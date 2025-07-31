@@ -37,7 +37,7 @@ function NavigationMenuList({
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
       className={cn(
-        "group grid grid-cols-5 md:grid-cols-10 gap-1",
+        "group grid grid-cols-4 sm:grid-cols-7 gap-1",
         className
       )}
       {...props}

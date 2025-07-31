@@ -1,5 +1,5 @@
 import i18n from "../i18n";
-import { AlarmClockIcon, CalendarXIcon, ChartLineIcon, CheckCheckIcon, CloudSunIcon, HomeIcon, LightbulbIcon, PenIcon, SettingsIcon } from "lucide-react";
+import { CalendarXIcon, ChartLineIcon, CheckCheckIcon, CloudSunIcon, HomeIcon, LightbulbIcon, SettingsIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "~/components/ui/navigation-menu"
 import { cn, sortArrayOfObjectsBy } from "~/lib/utils";
@@ -42,13 +42,14 @@ const sortedFeatures: Feature[] = sortArrayOfObjectsBy(
       description: i18n.t('feature.calendar'),
       hotkey: 'C',
     },
-    {
-      href: "/notes",
-      name: "Notes",
-      Icon: PenIcon,
-      description: i18n.t('feature.notes'),
-      hotkey: 'X',
-    },
+    // TODO: not yet implemented
+    // {
+    //   href: "/notes",
+    //   name: "Notes",
+    //   Icon: PenIcon,
+    //   description: i18n.t('feature.notes'),
+    //   hotkey: 'X',
+    // },
     {
       href: "/weather",
       name: "Weather forecast",
@@ -56,13 +57,14 @@ const sortedFeatures: Feature[] = sortArrayOfObjectsBy(
       description: i18n.t('feature.weather'),
       hotkey: 'W',
     },
-    {
-      href: "/timer",
-      name: "Reminder / timer",
-      Icon: AlarmClockIcon,
-      description: i18n.t('feature.timer'),
-      hotkey: 'R',
-    },
+    // TODO: not yet implemented
+    // {
+    //   href: "/timer",
+    //   name: "Reminder / timer",
+    //   Icon: AlarmClockIcon,
+    //   description: i18n.t('feature.timer'),
+    //   hotkey: 'R',
+    // },
   ],
 );
 
@@ -92,7 +94,7 @@ export function Header() {
       <NavigationMenu viewport={false}>
         <NavigationMenuList>
           <NavigationMenuItem
-            className={cn('rounded-xl border-6 border-transparent', {'border-slate-500': pathname === '/'})}
+            className={cn('rounded-xl border-6 border-transparent', { 'border-slate-500': pathname === '/' })}
             title={`(Shift+Space) Home`}
           >
             <NavigationMenuLink asChild>
@@ -104,7 +106,7 @@ export function Header() {
           {FEATURES.map(({ Icon, description, href, name, hotkey }) => (
             <NavigationMenuItem
               key={href}
-              className={cn('rounded-xl border-6 border-transparent', {'border-slate-500': pathname === href})}
+              className={cn('rounded-xl border-6 border-transparent', { 'border-slate-500': pathname === href })}
               title={`(Shift+${hotkey}) ${name} - ${description}`}
             >
               <NavigationMenuLink asChild>

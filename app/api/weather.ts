@@ -1,20 +1,15 @@
-// TODO: should use React Query or something instead!
+import { getApiRequestUrl } from "./utils";
+
 export async function getCurrentWeather() {
   const location = await getCurrentLocation();
-  // corsproxy.io is used to bypass CORS issues
-  // TODO: should use proper CORS handling on the server side
-  const url = `https://corsproxy.io/?https://personal.komlosidev.net/api/weather?location=${location}`;
-  const response = await fetch(url);
+  const response = await fetch(getApiRequestUrl('weather', { location }));
   const json = await response.json() as WeatherCurrentResponse;
   return json;
 }
 
 export async function getWeatherForecast() {
   const location = await getCurrentLocation();
-  // corsproxy.io is used to bypass CORS issues
-  // TODO: should use proper CORS handling on the server side
-  const url = `https://corsproxy.io/?https://personal.komlosidev.net/api/weather_forecast?location=${location}`;
-  const response = await fetch(url);
+  const response = await fetch(getApiRequestUrl('weather_forecast', { location }));
   const json = await response.json() as WeatherForecastResponse;
   return json;
 }
