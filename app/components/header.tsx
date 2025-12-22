@@ -1,5 +1,5 @@
 import i18n from "../i18n";
-import { CalendarXIcon, ChartLineIcon, CheckCheckIcon, CloudSunIcon, HomeIcon, LightbulbIcon, SettingsIcon } from "lucide-react";
+import { CalendarXIcon, ChartLineIcon, CheckCheckIcon, CloudSunIcon, HomeIcon, LightbulbIcon, SettingsIcon, ScreenShareIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "~/components/ui/navigation-menu"
 import { cn, sortArrayOfObjectsBy } from "~/lib/utils";
@@ -65,6 +65,13 @@ const sortedFeatures: Feature[] = sortArrayOfObjectsBy(
     //   description: i18n.t('feature.timer'),
     //   hotkey: 'R',
     // },
+    {
+      href: "/dashboard",
+      name: "Dashboard WIP",
+      Icon: ScreenShareIcon,
+      description: i18n.t('feature.dashboard'),
+      hotkey: 'F',
+    },
   ],
 );
 

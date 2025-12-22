@@ -1,6 +1,6 @@
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { Link } from "react-router";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
 
 export function meta() {
   return [
@@ -10,20 +10,20 @@ export function meta() {
 }
 
 export default function NotFoundPage() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
 
   return (
     <Card>
       <CardHeader>
-        <p className="text-8xl">{t('404.title')}</p>
-        <p className="text-lg">{t('404.subtitle')}</p>
+        <p className="text-8xl">{t('notFound.title')}</p>
+        <p className="text-lg">{t('notFound.subtitle')}</p>
       </CardHeader>
       <CardContent className="flex items-center justify-center text-center">
-        <small>{t('404.description')}</small>
+        <small>{t('notFound.description')}</small>
       </CardContent>
       <CardFooter>
         <div>
-          <Link viewTransition to="/">{t('404.back')}</Link>
+          <Link viewTransition to="/">{t('notFound.back')}</Link>
         </div>
       </CardFooter>
     </Card>

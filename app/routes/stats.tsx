@@ -9,8 +9,8 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { useState } from "react";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
-import { useTypesafeTranslation } from "~/i18n";
 import { Button } from "~/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 export function meta() {
 	return [
@@ -20,7 +20,7 @@ export function meta() {
 }
 
 export default function StatsPage() {
-	const t = useTypesafeTranslation();
+	const { t } = useTranslation();
 	const stats = useAppSelector(getStats);
 	const dispatch = useAppDispatch();
 	const [searchValue, setSearchValue] = useState('');
@@ -54,7 +54,7 @@ export default function StatsPage() {
 							.map((stat) => (
 								<Fragment key={stat.description}>
 									<div title={stat.description} className="truncate">{stat.description}:</div>
-									<div>{t('stats.counter', { count: stat.count.toString() })}</div>
+									<div>{t('stats.counter', { count: stat.count })}</div>
 								</Fragment>
 							))}
 					</div>

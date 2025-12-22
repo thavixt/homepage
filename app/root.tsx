@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigate } from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigate } from "react-router";
 import { Provider as ReduxProvider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -13,23 +13,21 @@ import { store } from './store'
 import { Toaster } from "./components/ui/sonner";
 import { useAppDispatch, useAppSelector } from "./hooks/state";
 import { incrementStat } from "./reducers/statsReducer";
-import { changeSetting, getSettings, incrementBackgroundCounter, type SettingValueType } from "./reducers/settingsReducer";
-import { getBackgroundSeed } from "./lib/utils";
-import { Button } from "./components/ui/button";
+import { changeSetting, getSettings, incrementBackgroundCounter } from "./reducers/settingsReducer";
 import { LoaderCircle } from "lucide-react";
 import { HotkeyContextProvider } from "./context/hotkeyContext";
 import { FEATURES } from "./components/header";
-import { toast } from "sonner";
 import { AuthButton } from "./components/authButton";
 import { UserContextProvider } from "./context/userContext";
-import "./i18n";
-import { useTranslation } from "react-i18next";
+import i18n from "./i18n";
+import { I18nextProvider, useTranslation } from "react-i18next";
+import { getMsByBackgroundSettingValue } from "./lib/background";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       gcTime: 1000 * 60 * 60 * 12, // 12 hours
-      networkMode: 'offlineFirst',
+      networkMode: 'online',
       retry: 3,
       staleTime: 30 * 60 * 1000, // 30 minutes
     },
@@ -37,14 +35,14 @@ const queryClient = new QueryClient({
 });
 
 function Root({ initialized }: { initialized: boolean }) {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const settings = useAppSelector(getSettings);
-  const backgroundSeed = getBackgroundSeed(settings.background.value, settings.background.counter);
   const currentLanguage = settings.language?.value;
   const backgroundCounter = settings.background.counter;
   const backgroundSettingValue = settings.background.value;
-  const { i18n } = useTranslation(); 
+  const backgroundUrl = settings.background.currentUrl;
 
   const onClick = () => {
     dispatch(incrementStat({ stat: 'click' }));
@@ -79,32 +77,30 @@ function Root({ initialized }: { initialized: boolean }) {
       return;
     }
     if (typeof currentLanguage !== 'string') {
-      dispatch(changeSetting({setting: 'language', value: 'en'}));
+      dispatch(changeSetting({ setting: 'language', value: 'en' }));
       return;
     }
 
     let cancelled = false;
     document.body.classList.remove('bg-loaded');
     const img = new Image();
-    const backgroundSrc = `https://picsum.photos/seed/${backgroundSeed}/1920/1080`;
 
     img.addEventListener('load', () => {
       if (cancelled) {
         return;
       }
-      document.body.style.setProperty('--bg-img', `url('${backgroundSrc}')`);
+      document.body.style.setProperty('--bg-img', `url('${backgroundUrl}')`);
       document.body.classList.add('bg-loaded');
     });
-    img.src = backgroundSrc;
+    img.src = backgroundUrl;
 
     return () => {
       cancelled = true;
     };
-  }, [backgroundCounter, backgroundSeed, currentLanguage, dispatch]);
+  }, [backgroundCounter, backgroundUrl, currentLanguage, dispatch]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      toast('Background changed');
       dispatch(incrementBackgroundCounter());
     }, getMsByBackgroundSettingValue(backgroundSettingValue));
     return () => clearInterval(interval);
@@ -134,7 +130,6 @@ export default function App() {
     if (initialized) {
       return;
     }
-
     if (typeof window !== "undefined") {
       const localStoragePersister = createSyncStoragePersister({
         storage: window.localStorage,
@@ -145,72 +140,24 @@ export default function App() {
         persister: localStoragePersister,
       });
     }
-
     setInitialized(true);
   }, [initialized]);
 
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <UserContextProvider>
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={true} buttonPosition="bottom-left" />
-          <ReduxProvider store={store}>
-            <Root initialized={initialized} />
-            <Toaster />
-            <AuthButton />
-          </ReduxProvider>
-        </QueryClientProvider>
-      </UserContextProvider>
-    </GoogleOAuthProvider>
-  );
-}
-
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops! Something went really wrong.";
-  let details = "An unexpected error occurred.";
-  let stack: string | undefined;
-
-  if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
-    details = error.message;
-    stack = error.stack;
-  }
-
-  const reload = () => {
-    window.location.reload();
-  }
-  const resetAndReload = () => {
-    window.localStorage.removeItem('homepage-redux-state');
-    window.localStorage.removeItem('homepage-tanstack-query-offline-cache');
-    reload();
-  }
-
-  return (
-    <main className="flex flex-col gap-8 pt-16 p-4 container mx-auto">
-      <h1 className="text-4xl">{message}</h1>
-      <div>
-        <div className="flex flex-col gap-2">
-          <span>You could try to:</span>
-          <ul className="flex flex-col gap-2">
-            <li><Button onClick={reload}>Just reload the page</Button></li>
-            <li><Button onClick={resetAndReload}>Reset all settings and reload</Button></li>
-          </ul>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p>So the problem was: {details}</p>
-        {stack && (
-          <pre className="w-full p-4 overflow-x-auto rounded border-2 bg-accent">
-            <code>{stack}</code>
-          </pre>
-        )}
-      </div>
-    </main>
+    <I18nextProvider i18n={i18n}>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <UserContextProvider>
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={true} buttonPosition="bottom-left" />
+            <ReduxProvider store={store}>
+              <Root initialized={initialized} />
+              <Toaster />
+              <AuthButton />
+            </ReduxProvider>
+          </QueryClientProvider>
+        </UserContextProvider>
+      </GoogleOAuthProvider>
+    </I18nextProvider>
   );
 }
 
@@ -222,6 +169,8 @@ export function HydrateFallback() {
     </div>
   );
 }
+
+export { ErrorBoundary } from "./components/ErrorBoundary";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -254,22 +203,3 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
-
-function getMsByBackgroundSettingValue(value: SettingValueType<'background'>) {
-  switch (value) {
-    case "5min":
-      return 5 * 60 * 1000; // 5 min in ms
-    case "15min":
-      return 15 * 60 * 1000; // 15 min in ms
-    case "30min":
-      return 30 * 60 * 1000; // 30 min in ms
-    case "hour":
-      return 60 * 60 * 1000; // 1 hour in ms
-    case "day":
-      return 24 * 60 * 60 * 1000; // 1 day in ms
-    case "week":
-      return 7 * 24 * 60 * 60 * 1000; // 1 week in ms
-    default:
-      return 24 * 60 * 60 * 1000; // fallback to 1 day
-  }
-}

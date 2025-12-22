@@ -17,7 +17,7 @@ export interface ChatMessage {
  * 2: client error
  * 3: internal server error
  */
-export async function askGemini(input: string, context: ChatMessage[]) {
+export async function askGemini(input: string, context: ChatMessage[] = []) {
   try {
     const res = await fetch(
       getApiRequestUrl('gemini'),

@@ -12,13 +12,14 @@ import { FormDialog } from "./dialogs/formDialog";
 import { BookmarkForm } from "./forms/bookmarkForm";
 import { AlertDialog } from "./dialogs/alertDialog";
 import { Bookmark } from "./bookmark";
-import { exportDataToJson, importDataFromJson, sortArrayOfObjectsBy } from "~/lib/utils";
 import { incrementStat } from "~/reducers/statsReducer";
 import { Separator } from "./ui/separator";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
+import { sortArrayOfObjectsBy } from "~/lib/utils";
+import { exportDataToJson, importDataFromJson } from "~/lib/json";
 
 export function BookmarkList() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
   const bookmarks = useAppSelector(getBookmarks);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState('');

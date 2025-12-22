@@ -1,11 +1,11 @@
 import { useUser } from '~/context/userContext';
 import { Button } from './ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { useTypesafeTranslation } from '~/i18n';
+import { useTranslation } from 'react-i18next';
 
 export function AuthButton() {
   const { authenticated, login } = useUser();
-  const t = useTypesafeTranslation(); 
+  const { t } = useTranslation();
 
   return (
     <div className="absolute top-4 right-4 z-2000">
@@ -22,7 +22,7 @@ export function AuthButton() {
 
 function LoggedInButton() {
   const { userName, logout } = useUser();
-  const t = useTypesafeTranslation(); 
+  const { t } = useTranslation();
 
   if (!userName) {
     return null;
@@ -35,7 +35,7 @@ function LoggedInButton() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="secondary">{t('auth.loggedInAs', {name: userName})}</Button>
+        <Button variant="secondary">{t('auth.loggedInAs', { name: userName })}</Button>
       </PopoverTrigger>
       <PopoverContent className="w-fit mr-4">
         <div className='flex flex-col gap-2 items-start justify-center'>

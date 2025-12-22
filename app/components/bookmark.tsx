@@ -7,16 +7,16 @@ import { FormDialog } from "./dialogs/formDialog";
 import { BookmarkForm } from "./forms/bookmarkForm";
 import { AlertDialog } from "./dialogs/alertDialog";
 import { incrementStat } from "~/reducers/statsReducer";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
 
 export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const onDeleteConfirm = () => {
     dispatch(deleteBookmark(bookmark.id));
-    dispatch(incrementStat({stat: "bookmarkDeleted"}));
+    dispatch(incrementStat({ stat: "bookmarkDeleted" }));
   }
 
   const onEditSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -30,12 +30,12 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
       return;
     }
     dispatch(updateBookmark({ id: bookmark.id, name, href, pinned }));
-    dispatch(incrementStat({stat: "bookmarkEdited"}));
+    dispatch(incrementStat({ stat: "bookmarkEdited" }));
     setEditDialogOpen(false);
   }
 
   const onBookmarkClick = () => {
-    dispatch(incrementStat({stat: "bookmarkClicked"}));
+    dispatch(incrementStat({ stat: "bookmarkClicked" }));
   }
 
   return (

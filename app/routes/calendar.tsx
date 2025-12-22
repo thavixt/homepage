@@ -12,9 +12,11 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { dateFormatOptions } from "~/components/clock";
 import { Separator } from "~/components/ui/separator";
 import { useAppDispatch } from "~/hooks/state";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
 import { getDateString } from "~/lib/date";
 import { addEvent } from "~/reducers/calendarReducer";
+// import { useGoogleCalendar } from "~/hooks/google";
+import { useUser } from "~/context/userContext";
 
 export function meta() {
   return [
@@ -24,11 +26,13 @@ export function meta() {
 }
 
 export default function CalendarPage() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
   const [date, setDate] = useState<Date>(new Date());
   const today = useRef(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useAppDispatch();
+  // const { events } = useGoogleCalendar();
+  const { login } = useUser();
 
   const onDateSelected = (d: Date | null) => {
     if (!d) {
@@ -74,6 +78,9 @@ export default function CalendarPage() {
     <Card>
       <CardHeader>
         {t('calendar.header')}
+        <p className="text-sm font-normal">
+          To sync with your Google Calendar, log in with the regular Google login flow by <a className="font-bold cursor-pointer" onClick={login}>clicking here</a>.
+        </p>
       </CardHeader>
       <CardContent className="flex gap-8">
         <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_auto_2fr] gap-4 items-center justify-center">
@@ -114,11 +121,11 @@ export default function CalendarPage() {
                   })}
                 </span>
                 <FormDialog
-                  trigger={<Button>{t('calendar.createEvent')}</Button>}
+                  trigger={<Button>{t('calendar.createEvent.description')}</Button>}
                   onSubmit={onSubmitEvent}
                   open={dialogOpen}
                   onOpenChange={setDialogOpen}
-                  title={t('calendar.createEvent')}
+                  title={t('calendar.createEvent.title')}
                   description={t('calendar.createEvent.description')}
                 >
                   <CalendarEventForm currentDate={date} />

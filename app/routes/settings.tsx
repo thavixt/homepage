@@ -10,8 +10,8 @@ import { clearBookmarks } from "~/reducers/bookmarksReducer";
 import { clearCalendar } from "~/reducers/calendarReducer";
 import { resetStats } from "~/reducers/statsReducer";
 import { clearTodos } from "~/reducers/todosReducer";
-import { useTypesafeTranslation } from "~/i18n";
 import { sortArray } from "~/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export function meta() {
   return [
@@ -21,7 +21,7 @@ export function meta() {
 }
 
 export default function SettingsPage() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
   const settings = useAppSelector(getSettings);
   const dispatch = useAppDispatch();
 
@@ -64,20 +64,20 @@ export default function SettingsPage() {
       </CardContent>
       <CardFooter>
         <AlertDialog
-          trigger={<Button variant="ghost">{t('settings.clear')}</Button>}
+          trigger={<Button variant="ghost">{t('settings.clear.action')}</Button>}
           triggerAsChild
           onConfirm={onClearAllData}
           title={t('settings.clear.title')}
           description={t('settings.clear.description')}
-          confirm={t('settings.clear')}
+          confirm={t('settings.clear.action')}
         />
         <AlertDialog
-          trigger={<Button variant="outline">{t('settings.reset')}</Button>}
+          trigger={<Button variant="outline">{t('settings.reset.action')}</Button>}
           triggerAsChild
           onConfirm={onResetSettings}
           title={t('settings.reset.title')}
           description={t('settings.reset.description')}
-          confirm={t('settings.reset')}
+          confirm={t('settings.reset.action')}
         />
       </CardFooter>
     </Card>

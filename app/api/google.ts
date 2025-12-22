@@ -38,3 +38,33 @@ export async function getGoogleUserDataWithAccessToken(accessToken: string): Pro
   const json = await response.json() as GoogleUserData;
   return json;
 }
+
+export interface GoogleCalendarEvent {
+  id: string;
+  summary?: string;
+  description?: string;
+  start: { dateTime?: string; date?: string };
+  end: { dateTime?: string; date?: string };
+  location?: string;
+  htmlLink?: string;
+}
+
+export async function getGoogleUpcomingEvents(accessToken: string, maxResults: number = 10): Promise<GoogleCalendarEvent[]> {
+  const headers = new Headers();
+  headers.append('Authorization', `Bearer ${accessToken}`);
+  const params = new URLSearchParams({
+    maxResults: maxResults.toString(),
+    orderBy: 'startTime',
+    singleEvents: 'true',
+    timeMin: new Date().toISOString(),
+  });
+  const response = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?${params.toString()}`,
+    { headers }
+  );
+  if (!response.ok) {
+    return [];
+  }
+  const data = await response.json();
+  return data.items as GoogleCalendarEvent[];
+}

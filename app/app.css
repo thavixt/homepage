@@ -35,7 +35,23 @@ body::before {
   transition: opacity 0.5s ease-in;
 }
 body.bg-loaded::before {
-  opacity: 0.75;
+  opacity: 0.5;
+  filter: blur(4px);
+}
+
+#fullscreenGridBackground {
+  display: none;
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--bg-img, none);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.25;
+  pointer-events: none;
+  filter: blur(4px);
 }
 
 body {

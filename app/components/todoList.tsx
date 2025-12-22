@@ -7,10 +7,10 @@ import { Label } from "~/components/ui/label";
 import { useState } from "react";
 import { Input } from "./ui/input";
 import { TodoItem } from "./todoItem";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
 
 export function TodoList() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
   const todos = useAppSelector(getTodos);
   const [searchValue, setSearchValue] = useState('');
 

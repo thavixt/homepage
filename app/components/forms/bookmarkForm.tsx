@@ -2,10 +2,10 @@ import type { Bookmark } from "~/reducers/bookmarksReducer";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
 
 export function BookmarkForm({ bookmark }: { bookmark?: Bookmark }) {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
 
   return (
     <div className="grid gap-4 my-4">

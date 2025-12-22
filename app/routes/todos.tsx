@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { AlertDialog } from "~/components/dialogs/alertDialog";
 import { FormDialog } from "~/components/dialogs/formDialog";
@@ -7,7 +8,6 @@ import { TodoList } from "~/components/todoList";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { useAppDispatch } from "~/hooks/state";
-import { useTypesafeTranslation } from "~/i18n";
 import { createTodo, clearTodos } from "~/reducers/todosReducer";
 
 export function meta() {
@@ -18,7 +18,7 @@ export function meta() {
 }
 
 export default function TodosPage() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [dialogOpen, setDialogOpen] = useState(false)
 

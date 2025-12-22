@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, ArrowUpIcon, CalendarSearchIcon, CloudRainIcon, CloudSnowIcon, CloudSunIcon, SunIcon, ThermometerIcon, ThermometerSnowflakeIcon, ThermometerSunIcon, WindIcon } from "lucide-react";
 import { Fragment } from "react";
+import { useTranslation } from "react-i18next";
 import { getWeatherForecast, type WeatherForecastDay } from "~/api/weather";
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
-import { useTypesafeTranslation } from "~/i18n";
 
 export function meta() {
   return [
@@ -14,7 +14,7 @@ export function meta() {
 }
 
 export default function WeatherPage() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
   const { data: forecastData, isPending } = useQuery({
     queryFn: getWeatherForecast,
     queryKey: ['weather-forecast'],
@@ -76,7 +76,8 @@ const dateFormatOptions: Intl.DateTimeFormatOptions = {
 }
 
 function ForecastLabels() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2" title={t('common.day')}>

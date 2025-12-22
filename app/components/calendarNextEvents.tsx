@@ -2,10 +2,10 @@ import { useAppSelector } from "~/hooks/state";
 import { getCalendarEvents, type CalendarEvent } from "~/reducers/calendarReducer";
 import { ScrollArea } from "./ui/scroll-area";
 import { getDateString } from "~/lib/date";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
 
 export function CalendarNextEvents() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
   const events = useAppSelector(getCalendarEvents);
   const eventsToday = events[getDateString(new Date)] ?? [];
 

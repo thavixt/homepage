@@ -6,12 +6,13 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Textarea } from "~/components/ui/textarea";
-import { useTypesafeTranslation } from "~/i18n";
 import { cn, sleep } from "~/lib/utils";
 import Showdown from 'showdown';
 import { useUser } from "~/context/userContext";
 import { toast } from "sonner";
 import { getTimeString } from "~/lib/date";
+import { useTranslation } from "react-i18next";
+import { getCurrentWeather } from "~/api/weather";
 
 const MarkdownConverter = new Showdown.Converter();
 const TYPING_DELAY = 250; // ms
@@ -25,9 +26,10 @@ export function meta() {
 }
 
 export default function AboutPage() {
-  const t = useTypesafeTranslation();
-  const me = t('common.me');
+  const { t } = useTranslation();
   const { userName } = useUser();
+  const me = userName ?? t('common.me');
+  const homie = t('chat.homie');
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -65,7 +67,7 @@ export default function AboutPage() {
     timeDiv.classList.add('aiChatTimestamp')
 
     const userNameDiv = document.createElement('div');
-    userNameDiv.innerText = options.type === "query" ? `${userName ?? me}:` : "Gemini:";
+    userNameDiv.innerText = options.type === "query" ? `${me}:` : `${homie}:`;
     userNameDiv.classList.add(options.type === "query" ? 'aiChatMe' : 'aiChatGemini');
     headerDiv.appendChild(userNameDiv);
 
@@ -123,11 +125,20 @@ export default function AboutPage() {
     try {
       await writeQuery(query);
       const start = performance.now();
-      const context = pastMessages.current;
+      const { location, current: temp } = await getCurrentWeather();
+      const time = new Date().toDateString();
+      const initialContext: ChatMessage = {
+        role: "user",
+        text: `It's ${time} in ${location.name}, ${location.country}, the temperature is ${temp.temp_c} °C, with ${temp.condition.text} conditions outside.`
+      }
+      const context = [
+        initialContext,
+        ...pastMessages.current,
+      ];
       const response = await askGemini(query, context);
       clearInput();
-      pastMessages.current.push({role: 'user', text: query});
-      pastMessages.current.push({role: 'model', text: response});
+      pastMessages.current.push({ role: 'user', text: query });
+      pastMessages.current.push({ role: 'model', text: response });
       if (pastMessages.current.length > MAX_MESSAGE_HISTORY_LENGTH) {
         pastMessages.current.splice(0, 2);
       }

@@ -2,12 +2,12 @@ import { Link } from "react-router";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { Clock, getCurrentDate } from "~/components/clock";
-import { WeatherWidget } from "~/components/weatherWidget";
+import { WeatherWidget } from "~/components/widgets/weatherWidget";
 import { BookmarkList } from "~/components/bookmarkList";
 import { FEATURES } from "~/components/header";
 import { HotKey } from "~/components/ui/hotkey";
 import { CalendarDaysIcon } from "lucide-react";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
 
 export function meta() {
   return [
@@ -17,7 +17,7 @@ export function meta() {
 }
 
 export default function HomePage() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
 
   return (
     <Card>
@@ -45,7 +45,7 @@ export default function HomePage() {
 }
 
 function FeatureList() {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
 
   return (
     <ul>

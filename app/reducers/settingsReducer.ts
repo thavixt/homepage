@@ -3,6 +3,8 @@ import { type RootState } from '../store'
 import { toast } from 'sonner';
 import type { SupportedLanguage } from '~/i18n';
 import i18n from '~/i18n';
+import { incrementStat } from './statsReducer';
+import { getBackgroundSeed } from '~/lib/background';
 
 export type Setting = 'background' | 'language';
 export type SettingValueType<K extends keyof SettingsState> = SettingsState[K]["value"];
@@ -11,11 +13,11 @@ type BackgroundChangeFrequency = '5min' | '15min' | '30min' | 'hour' | 'day' | '
 type SettingValue = BackgroundChangeFrequency | SupportedLanguage;
 
 export interface SettingsState {
-  background: SettingState<BackgroundChangeFrequency> & { counter: number },
-  language: SettingState<SupportedLanguage>,
+  background: Settings<BackgroundChangeFrequency> & { counter: number, currentUrl: string },
+  language: Settings<SupportedLanguage>,
 }
 
-export interface SettingState<T> {
+export interface Settings<T> {
   id: Setting;
   label: string;
   value: T;
@@ -27,6 +29,7 @@ export const initialState: SettingsState = {
     label: 'Change background every',
     value: 'hour',
     counter: 0,
+    currentUrl: "",
   },
   language: {
     id: 'language',
@@ -53,6 +56,7 @@ export const settingsSlice = createSlice({
               label: initialState[action.payload.setting].label,
               value: 'day',
               counter: 0,
+              currentUrl: "",
             };
             break;
           }
@@ -94,12 +98,17 @@ export const settingsSlice = createSlice({
     },
     incrementBackgroundCounter: (state) => {
       state.background.counter++;
-    }
+      const backgroundSeed = getBackgroundSeed(state.background.value, state.background.counter);
+      state.background.currentUrl = `https://picsum.photos/seed/${backgroundSeed}/1920/1080`;
+      toast.success(`Background updated`);
+      incrementStat({ stat: 'backgroundChange' });
+    },
   },
 })
 
 export const { changeSetting, resetSettings, incrementBackgroundCounter } = settingsSlice.actions
 
 export const getSettings = (state: RootState) => state.settings;
+export const getBackground = (state: RootState) => state.settings.background.currentUrl;
 
 export default settingsSlice.reducer

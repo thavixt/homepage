@@ -3,10 +3,9 @@ import { getCurrentWeather } from "~/api/weather";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
 import { Link } from "react-router";
-import { useTypesafeTranslation } from "~/i18n";
-
-export function WeatherWidget() {
-  const t = useTypesafeTranslation();
+import { useTranslation } from "react-i18next";
+export function WeatherWidget({ className, slim = false }: { className?: string, slim?: boolean }) {
+  const { t } = useTranslation();
   const { data: weatherData, isPending } = useQuery({
     queryFn: getCurrentWeather,
     queryKey: ['weather'],
@@ -14,7 +13,7 @@ export function WeatherWidget() {
   });
 
   return (
-    <div className="relative border rounded-md p-4">
+    <div className={cn("flex flex-col items-center justify-center relative rounded-md p-4", { "border": !slim }, className)}>
       {(weatherData && !isPending) ? (
         <div className="flex flex-col gap-2 items-center">
           <div title={t('common.yourLocation')} className="font-bold text-lg">
@@ -34,25 +33,27 @@ export function WeatherWidget() {
           </div>
           <div className="w-full flex justify-between">
             <small title={t('weather.wind.description')}>
-              {t('weather.wind')}: {weatherData.current.wind_kph}km/h
+              {t('weather.wind.title')}: {weatherData.current.wind_kph}km/h
             </small>
             <small title={t('weather.heat_index.description')}>
-              {t('weather.heat_index')}: {weatherData.current.heatindex_c}°C
+              {t('weather.heat_index.title')}: {weatherData.current.heatindex_c}°C
             </small>
           </div>
           <div className="w-full flex justify-between">
             <small title={t('weather.precip.description')}>
-              {t('weather.precip')}: {weatherData.current.precip_mm}mm
+              {t('weather.precip.title')}: {weatherData.current.precip_mm}mm
             </small>
             <small title={t('weather.humidity.description')}>
-              {t('weather.humidity')}: {weatherData.current.humidity}%
+              {t('weather.humidity.title')}: {weatherData.current.humidity}%
             </small>
           </div>
-          <small className="text-[10px] opacity-50">
-            {t('common.from')}
-            {" "}<a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>
-            {" "}{t('weather.attribution2')}
-          </small>
+          {slim ? null : (
+            <small className="text-[10px] opacity-50">
+              {t('common.from')}
+              {" "}<a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>
+              {" "}{t('weather.attribution2')}
+            </small>
+          )}
         </div>
       ) : (
         <div className="animate-pulse flex items-center justify-center h-40 gap-2">

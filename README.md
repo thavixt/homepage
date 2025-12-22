@@ -33,5 +33,4 @@ Set the [https://homepage.komlosidev.net](https://homepage.komlosidev.net) URL a
 - [Vite](https://vite.dev/)
 - [shadcn](https://ui.shadcn.com/)-based components
 - localization with [react-i18next](https://react.i18next.com/)
-  > used with a custom type-safe `useTypesafeTranslations` hook - see the [input dictionary](./app/locales/en.json), the [.d.ts generator](./generateTranslationTypes.ts), the [generated .d.ts file](./app/translations.d.ts) and the [custom hook](./app/i18n.ts) here
 - deployment with [Vercel](https://vercel.com/)

@@ -3,10 +3,10 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { DatePicker } from "../ui/date-picker";
 import { Textarea } from "../ui/textarea";
-import { useTypesafeTranslation } from "~/i18n";
+import { useTranslation } from "react-i18next";
 
 export function TodoForm({ todo }: { todo?: Todo }) {
-  const t = useTypesafeTranslation();
+  const { t } = useTranslation();
 
   return (
     <div className="grid gap-4 my-4">

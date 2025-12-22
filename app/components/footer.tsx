@@ -1,12 +1,10 @@
 import { useAppDispatch } from "~/hooks/state"
 import { incrementBackgroundCounter } from "~/reducers/settingsReducer";
-import { incrementStat } from "~/reducers/statsReducer";
 
 export function Footer() {
   const dispatch = useAppDispatch();
   const changeRandomBackground = () => {
     dispatch(incrementBackgroundCounter());
-    dispatch(incrementStat({stat: 'backgroundChange'}));
   }
 
   return (
