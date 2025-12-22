@@ -5,7 +5,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig((): UserConfig => {
   // const apiProxyTarget = "http://localhost:8080/api";
-  // const apiProxyTarget = "https://personal.komlosidev.net";
+  // const apiProxyTarget = "https://personal.komlosidev.net/api";
   return {
     plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
     // server: {

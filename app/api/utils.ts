@@ -5,7 +5,7 @@ type ApiEndpoint =
   | 'ping';
 
 const localApi = "http://localhost:8080/api";
-const liveApi = "https://personal.komlosidev.net";
+const liveApi = "https://personal.komlosidev.net/api";
 
 const getApi = () => {
   if (import.meta.env.MODE === "development") {
