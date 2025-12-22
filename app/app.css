@@ -54,7 +54,15 @@ body.bg-loaded::before {
   filter: blur(4px);
 }
 :fullscreen {
-  font-size: 2.65vh;
+  font-size: 3vh;
+  padding: 12px;
+}
+
+.grid-masonry {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-rows: masonry;
 }
 
 body {

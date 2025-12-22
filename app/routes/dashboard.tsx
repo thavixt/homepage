@@ -8,9 +8,7 @@ import { Input } from "~/components/ui/input";
 import { useTranslation } from "react-i18next";
 import { CurrencyWidget } from "~/components/widgets/currencyWidget";
 import { RssWidget } from "~/components/widgets/rssWidget";
-import { AiGreetingWidget } from "~/components/widgets/aiGreetingWidget";
 import { ClockWidget } from "~/components/widgets/ClockWidget";
-// import { FullscreenBackground } from "~/components/fullscreenBackground";
 
 export function meta() {
   return [
@@ -62,15 +60,13 @@ export default function DashboardPage() {
         <div
           ref={ref}
           id="fullscreenDashboard"
-          className="grid grid-cols-4 grid-rows-4 gap-12 *:flex *:items-center *:justify-center w-full h-full *:w-full *:h-full"
+          className="w-full h-full grid grid-cols-4 grid-rows-4 gap-12 *:flex *:items-center *:justify-center *:w-full *:h-full"
         >
-          {/* <FullscreenBackground /> */}
-          <RssWidget className="row-span-4 col-span-2 px-4" />
-          <ClockWidget className="row-span-1 col-span-2 px-4" />
           <CurrencyWidget className="row-span-1 col-span-1" />
+          <ClockWidget className="row-span-1 col-span-2 px-4" />
           <WeatherWidget slim className="row-span-1 col-span-1" />
-          <div className="row-span-1 col-span-2">&nbsp;</div>
-          <AiGreetingWidget className="row-span-1 col-span-2 flex gap-2" />
+          <div className="row-span-1 col-span-4" />
+          <RssWidget className="row-span-2 col-span-2" />
         </div>
       </CardContent>
     </Card>

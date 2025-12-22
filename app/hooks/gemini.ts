@@ -11,7 +11,8 @@ export function useAiGreeting() {
   const time = new Date().toDateString();
   const template = [
     `It's ${time} in ${city}, ${country}, the temperature is ${temp} °C, with ${condition} conditions outside.`,
-    "Tell me a relevant, funny greeting to start my day with. Separate sentences with two line breaks. Make it 2 sentences long, and include a single emoji.",
+    "Tell me a relevant, funny or snarky greeting to start my day with in a single sentence.",
+    // "Separate sentences with two line breaks. Make it 2 sentences long, and include a single emoji.",
     // "If there's an interesting historical fact about this day, tell me about it."
   ].join("\n");
 

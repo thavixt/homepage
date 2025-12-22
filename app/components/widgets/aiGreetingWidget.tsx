@@ -15,9 +15,9 @@ export function AiGreetingWidget({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn("flex flex-col items-center justify-center text-right", className)}>
+    <div className={cn("flex flex-col items-center justify-center", className)}>
       {data ? (
-        <p className="whitespace-pre-wrap w-full italic px-4">{data}</p>
+        <p className="whitespace-pre-wrap w-full italic px-4 text-center">{data}</p>
       ) : (
         <>
           <LoaderCircle className="animate-spin size-14 opacity-35" />

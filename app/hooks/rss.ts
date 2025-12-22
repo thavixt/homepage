@@ -26,8 +26,7 @@ export interface RssItem {
 export async function getRssFeed(options = {
   // url: "https://telex.hu/rss",
   url: "https://telex.hu/rss/archivum?filters=%7B%22flags%22%3A%5B%22legfontosabb%22%5D%2C%22parentId%22%3A%5B%22null%22%5D%7D&perPage=10",
-  count: 3
-}): Promise<RssItem[] | null> {
+}): Promise<RssItem[]> {
   const rssFeedUrl = `https://corsproxy.io/?${options.url}`;
   try {
     const response = await fetch(rssFeedUrl);
@@ -48,8 +47,8 @@ export async function getRssFeed(options = {
         pubDate: new Date(pubDate).toLocaleTimeString(),
       })
     });
-    return results.slice(0, options.count);
+    return results;
   } catch {
-    return null;
+    return [];
   }
 }
