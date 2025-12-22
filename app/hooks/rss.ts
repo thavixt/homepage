@@ -1,5 +1,16 @@
-import { askGemini } from "~/api/gemini";
-import { getCurrentWeather } from "~/api/weather";
+import { useQuery } from "@tanstack/react-query";
+
+export function useRssFeed() {
+  const { data, isLoading } = useQuery(
+    {
+      queryKey: ["rss-feed"],
+      queryFn: () => getRssFeed(),
+      staleTime: 10 * 60 * 1000, // 10min
+    }
+  );
+
+  return { data, isLoading };
+}
 
 export interface RssItem {
   link: string;
@@ -8,10 +19,14 @@ export interface RssItem {
   pubDate: string;
 }
 
+/**
+ * @TODO this should be configurable
+ */
+
 export async function getRssFeed(options = {
   // url: "https://telex.hu/rss",
   url: "https://telex.hu/rss/archivum?filters=%7B%22flags%22%3A%5B%22legfontosabb%22%5D%2C%22parentId%22%3A%5B%22null%22%5D%7D&perPage=10",
-  count: 4
+  count: 3
 }): Promise<RssItem[] | null> {
   const rssFeedUrl = `https://corsproxy.io/?${options.url}`;
   try {
@@ -37,16 +52,4 @@ export async function getRssFeed(options = {
   } catch {
     return null;
   }
-}
-
-export async function getAiGreeting(): Promise<string> {
-  const { location, current: temp } = await getCurrentWeather();
-  const time = new Date().toDateString();
-  const template = [
-    `It's ${time} in ${location.name}, ${location.country}, the temperature is ${temp.temp_c} °C, with ${temp.condition.text} conditions outside.`,
-    "Tell me a relevant, funny greeting to start my day with. Separate sentences with two line breaks. Make it 2 sentences long, and include a single emoji.",
-    // "If there's an interesting historical fact about this day, tell me about it."
-  ].join("\n");
-  const aiGreeting = await askGemini(template);
-  return aiGreeting;
 }

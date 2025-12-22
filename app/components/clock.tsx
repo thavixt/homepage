@@ -1,7 +1,7 @@
-import { useState, useEffect, type HTMLAttributes } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "~/lib/utils";
 
-export function Clock(props: HTMLAttributes<HTMLElement>) {
+export function Clock({ className }: { className?: string }) {
   const [time, setTime] = useState(Date.now());
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function Clock(props: HTMLAttributes<HTMLElement>) {
   }, []);
 
   return (
-    <code {...props} className={cn("inline", props.className)}>
+    <code className={cn("inline", className)}>
       {new Date(time).toLocaleTimeString(navigator.language)}
     </code>
   )
@@ -51,5 +51,5 @@ export const dateFormatOptions: Intl.DateTimeFormatOptions = {
 }
 
 export const getCurrentDate = (format?: Intl.DateTimeFormatOptions) => {
-  return new Date().toLocaleDateString(navigator.language, { ...dateFormatOptions, ...format});
+  return new Date().toLocaleDateString(navigator.language, { ...dateFormatOptions, ...format });
 };

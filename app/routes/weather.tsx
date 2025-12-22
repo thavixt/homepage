@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { ArrowDownIcon, ArrowUpIcon, CalendarSearchIcon, CloudRainIcon, CloudSnowIcon, CloudSunIcon, SunIcon, ThermometerIcon, ThermometerSnowflakeIcon, ThermometerSunIcon, WindIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, CalendarSearchIcon, CloudRainIcon, CloudSnowIcon, CloudSunIcon, LoaderCircle, SunIcon, ThermometerIcon, ThermometerSnowflakeIcon, ThermometerSunIcon, WindIcon } from "lucide-react";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { getWeatherForecast, type WeatherForecastDay } from "~/api/weather";
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { useWeatherForecast } from "~/hooks/weather";
+import type { WeatherForecastDay } from "~/lib/weather";
 
 export function meta() {
   return [
@@ -15,11 +15,13 @@ export function meta() {
 
 export default function WeatherPage() {
   const { t } = useTranslation();
-  const { data: forecastData, isPending } = useQuery({
-    queryFn: getWeatherForecast,
-    queryKey: ['weather-forecast'],
-    refetchInterval: 60 * 1000 * 60, // 60 minutes
-  });
+  const { data: forecastData, isPending } = useWeatherForecast();
+
+  if (!forecastData || isPending) {
+    return <div className="flex flex-col">
+      <LoaderCircle className="animate-spin size-20 opacity-35" />
+    </div>
+  }
 
   return (
     <Card>

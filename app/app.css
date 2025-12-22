@@ -53,6 +53,9 @@ body.bg-loaded::before {
   pointer-events: none;
   filter: blur(4px);
 }
+:fullscreen {
+  font-size: 2.65vh;
+}
 
 body {
   animation: 0.75s ease-in 0s 1 appear;

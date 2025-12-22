@@ -1,20 +1,22 @@
-import { LoaderPinwheel } from "lucide-react";
-import { getCurrentWeather } from "~/api/weather";
-import { useQuery } from "@tanstack/react-query";
+import { LoaderCircle, LoaderPinwheel } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useWeather } from "~/hooks/weather";
+
 export function WeatherWidget({ className, slim = false }: { className?: string, slim?: boolean }) {
   const { t } = useTranslation();
-  const { data: weatherData, isPending } = useQuery({
-    queryFn: getCurrentWeather,
-    queryKey: ['weather'],
-    refetchInterval: 60 * 1000 * 60, // 60 minutes
-  });
+  const { data: weatherData, isPending: isLoading } = useWeather();
+
+  if (!weatherData || isLoading) {
+    return <div className={cn("flex flex-col", className)}>
+      <LoaderCircle className="animate-spin size-20 opacity-35" />
+    </div>
+  }
 
   return (
     <div className={cn("flex flex-col items-center justify-center relative rounded-md p-4", { "border": !slim }, className)}>
-      {(weatherData && !isPending) ? (
+      {(weatherData && !isLoading) ? (
         <div className="flex flex-col gap-2 items-center">
           <div title={t('common.yourLocation')} className="font-bold text-lg">
             {weatherData.location.country}, {weatherData.location.region}
@@ -58,7 +60,7 @@ export function WeatherWidget({ className, slim = false }: { className?: string,
       ) : (
         <div className="animate-pulse flex items-center justify-center h-40 gap-2">
           <span>{t('weather.loadingText')}</span>
-          <LoaderPinwheel className={cn('opacity-50', { 'animate-spin': isPending })} />
+          <LoaderPinwheel className={cn('opacity-50', { 'animate-spin': isLoading })} />
         </div>
       )}
     </div>

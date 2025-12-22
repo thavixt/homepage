@@ -4,7 +4,17 @@ type ApiEndpoint =
   | 'weather_forecast'
   | 'ping';
 
+const localApi = "http://localhost:8080/api";
+const liveApi = "https://personal.komlosidev.net";
+
+const getApi = () => {
+  if (import.meta.env.MODE === "development") {
+    return localApi;
+  }
+  return liveApi;
+}
+
 export function getApiRequestUrl(endpoint: ApiEndpoint, query: Record<string, string> = {}) {
   const queryString = new URLSearchParams(query).toString();
-  return `api/${endpoint}${queryString ? `?${queryString}` : ''}`;
+  return `${getApi()}/${endpoint}${queryString ? `?${queryString}` : ''}`;
 }
