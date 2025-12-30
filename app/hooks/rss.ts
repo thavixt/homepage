@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
-export function useRssFeed() {
+export function useRssFeed({ url }: { url: string }) {
   const { data, isLoading } = useQuery(
     {
-      queryKey: ["rss-feed"],
-      queryFn: () => getRssFeed(),
-      staleTime: 10 * 60 * 1000, // 10min
+      queryKey: ["rss-feed", url],
+      queryFn: () => getRssFeed({ url }),
+      staleTime: 5 * 60 * 1000, // 5min
     }
   );
 
@@ -23,11 +23,10 @@ export interface RssItem {
  * @TODO this should be configurable
  */
 
-export async function getRssFeed(options = {
-  // url: "https://telex.hu/rss",
-  url: "https://telex.hu/rss/archivum?filters=%7B%22flags%22%3A%5B%22legfontosabb%22%5D%2C%22parentId%22%3A%5B%22null%22%5D%7D&perPage=10",
+export async function getRssFeed({ url }: {
+  url: string,
 }): Promise<RssItem[]> {
-  const rssFeedUrl = `https://corsproxy.io/?${options.url}`;
+  const rssFeedUrl = `https://corsproxy.io/?${url}`;
   try {
     const response = await fetch(rssFeedUrl);
     const data = await response.text();

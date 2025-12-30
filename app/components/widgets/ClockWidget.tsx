@@ -12,11 +12,10 @@ export function ClockWidget({ className }: { className?: string }) {
         <div className="flex gap-4 text-4xl items-center justify-center">
           <CalendarDaysIcon size="48" />
           <span className="flex flex-col">
-            {/* {getCurrentDate({ year: undefined })} */}
             <div>{d1}</div>
             <div>{d2}</div>
           </span>
-          <Clock className="p-4 text-7xl" />
+          <Clock className="p-4 text-7xl" iso />
         </div>
         <AiGreetingWidget className="row-span-2 col-span-2" />
       </div>

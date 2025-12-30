@@ -18,11 +18,14 @@ export interface ChatMessage {
  * 3: internal server error
  */
 export async function askGemini(input: string, context: ChatMessage[] = []) {
+  const headers = new Headers();
+  headers.append('Content-Type', 'application/json');
   try {
     const res = await fetch(
       getApiRequestUrl('gemini'),
       {
         method: "POST", body: JSON.stringify({ text: input, context }),
+        headers,
       },
     );
     const response = await res.json() as GeminiResponse;

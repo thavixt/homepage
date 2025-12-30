@@ -8,7 +8,8 @@ import { Input } from "~/components/ui/input";
 import { useTranslation } from "react-i18next";
 import { CurrencyWidget } from "~/components/widgets/currencyWidget";
 import { RssWidget } from "~/components/widgets/rssWidget";
-import { ClockWidget } from "~/components/widgets/ClockWidget";
+import { ClockWidget } from "~/components/widgets/clockWidget";
+import { CameraWidget } from "~/components/widgets/cameraWidget";
 
 export function meta() {
   return [
@@ -16,6 +17,9 @@ export function meta() {
     { name: "description", content: "Let's put this on a display somewhere" },
   ];
 }
+
+const rssUrl1 = "https://telex.hu/rss/archivum?filters=%7B%22superTagSlugs%22%3A%5B%22belfold%22%5D%2C%22parentId%22%3A%5B%22null%22%5D%7D&perPage=10";
+const rssUrl2 = "https://telex.hu/rss/archivum?filters=%7B%22superTagSlugs%22%3A%5B%22kulfold%22%5D%2C%22parentId%22%3A%5B%22null%22%5D%7D&perPage=10";
 
 export default function DashboardPage() {
   const { t } = useTranslation();
@@ -56,17 +60,19 @@ export default function DashboardPage() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex items-center justify-center text-center">
+      <CardContent className="flex items-center justify-center text-center isolate max-h-asd[500px]">
         <div
           ref={ref}
           id="fullscreenDashboard"
-          className="w-full h-full grid grid-cols-4 grid-rows-4 gap-12 *:flex *:items-center *:justify-center *:w-full *:h-full"
+          className="relative z-20 w-full h-full grid grid-cols-4 grid-rows-3 gap-12 *:flex *:items-center *:justify-center *:w-full *:h-full"
         >
           <CurrencyWidget className="row-span-1 col-span-1" />
           <ClockWidget className="row-span-1 col-span-2 px-4" />
           <WeatherWidget slim className="row-span-1 col-span-1" />
-          <div className="row-span-1 col-span-4" />
-          <RssWidget className="row-span-2 col-span-2" />
+          {/* <div className="row-span-1 col-span-full" />  */} {/* placeholder grid row */}
+          <RssWidget className="row-span-2 col-span-2" rssUrl={rssUrl1} />
+          <RssWidget className="row-span-2 col-span-2" rssUrl={rssUrl2} />
+          <CameraWidget className="absolute inset-0 size-full z-10 opacity-50" />
         </div>
       </CardContent>
     </Card>

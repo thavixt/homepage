@@ -31,6 +31,7 @@ export async function getGoogleUserDataFromCredential(credential: string): Promi
 export async function getGoogleUserDataWithAccessToken(accessToken: string): Promise<GoogleUserData | null> {
   const headers = new Headers();
   headers.append('Authorization', `Bearer ${accessToken}`);
+  headers.append('Content-Type', 'application/json');
   const response = await fetch(
     "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
     { headers },
@@ -52,6 +53,7 @@ export interface GoogleCalendarEvent {
 export async function getGoogleUpcomingEvents(accessToken: string, maxResults: number = 10): Promise<GoogleCalendarEvent[]> {
   const headers = new Headers();
   headers.append('Authorization', `Bearer ${accessToken}`);
+  headers.append('Content-Type', 'application/json');
   const params = new URLSearchParams({
     maxResults: maxResults.toString(),
     orderBy: 'startTime',

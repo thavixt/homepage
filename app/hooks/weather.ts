@@ -3,11 +3,14 @@ import { getApiRequestUrl } from "~/api/utils";
 import { getCurrentLocation, useLocation } from "~/lib/location";
 import type { WeatherCurrentResponse, WeatherForecastResponse } from "~/lib/weather";
 
+const headers = new Headers();
+headers.append('Content-Type', 'application/json');
+
 export function useWeather() {
   const location = useLocation();
   const { data, isPending } = useQuery({
     queryFn: async () => {
-      const response = await fetch(getApiRequestUrl('weather', { location: location! }));
+      const response = await fetch(getApiRequestUrl('weather', { location: location! }), { headers });
       const json = await response.json() as WeatherCurrentResponse;
       return json;
     },
@@ -22,7 +25,7 @@ export function useWeatherForecast() {
   const { data, isPending } = useQuery({
     queryFn: async () => {
       const location = await getCurrentLocation();
-      const response = await fetch(getApiRequestUrl('weather_forecast', { location }));
+      const response = await fetch(getApiRequestUrl('weather_forecast', { location }), { headers });
       const json = await response.json() as WeatherForecastResponse;
       return json;
     },

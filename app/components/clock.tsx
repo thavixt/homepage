@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { cn } from "~/lib/utils";
 
-export function Clock({ className }: { className?: string }) {
+const isoDateFormat = new Intl.DateTimeFormat("en-GB", {
+  timeStyle: "medium",
+})
+
+export function Clock({ className, iso }: { className?: string; iso?: boolean }) {
   const [time, setTime] = useState(Date.now());
 
   useEffect(() => {
@@ -38,7 +42,10 @@ export function Clock({ className }: { className?: string }) {
 
   return (
     <code className={cn("inline", className)}>
-      {new Date(time).toLocaleTimeString(navigator.language)}
+      {iso
+        ? isoDateFormat.format(time)
+        : new Date(time).toLocaleTimeString(navigator.language)
+      }
     </code>
   )
 }

@@ -54,7 +54,7 @@ body.bg-loaded::before {
   filter: blur(4px);
 }
 :fullscreen {
-  font-size: 3vh;
+  font-size: 2.5vh;
   padding: 12px;
 }
 

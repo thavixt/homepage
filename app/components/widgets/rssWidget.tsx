@@ -3,10 +3,10 @@ import { LoaderCircle } from "lucide-react";
 import { useRssFeed } from "~/hooks/rss";
 import { cn } from "~/lib/utils";
 
-const TEXT_SLIDE_MS = 15 * 1000;
+const TEXT_SLIDE_MS = 10 * 1000;
 
-export function RssWidget({ className }: { className?: string }) {
-  const { data, isLoading } = useRssFeed()
+export function RssWidget({ className, rssUrl }: { className?: string; rssUrl: string }) {
+  const { data, isLoading } = useRssFeed({ url: rssUrl })
 
   if (!data || isLoading) {
     return <div className={cn("flex flex-col", className)}>
@@ -18,7 +18,7 @@ export function RssWidget({ className }: { className?: string }) {
   const descriptions = data.map(article => `${article.description}`);
 
   return (
-    <div className={cn("w-full h-full flex flex-col items-center justify-center gap-8 p-8", className)}>
+    <div className={cn("w-full h-full flex flex-col items-center justify-end! gap-2 p-8", className)}>
       <RotatingText
         text={titles}
         style={{ fontWeight: "bold" }}
