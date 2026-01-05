@@ -4,7 +4,7 @@ type ApiEndpoint =
   | 'weather_forecast'
   | 'ping';
 
-const localApi = "http://localhost:8080/api";
+const localApi = "http://localhost:3000/api";
 const liveApi = "https://personal.komlosidev.net/api";
 
 const getApi = () => {

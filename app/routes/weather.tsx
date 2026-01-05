@@ -37,7 +37,7 @@ export default function WeatherPage() {
         <p className="font-light text-sm text-center">
           {t('weather.subtitle', {
             date: forecastData
-              ? new Date(forecastData.current.last_updated).toLocaleString()
+              ? forecastData.current.last_updated
               : ' - not yet!'
           })}
         </p>
