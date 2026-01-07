@@ -22,7 +22,7 @@
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
-    },
+      "~/*": ["app/*"]
+    }
   }
 }
