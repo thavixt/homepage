@@ -14,9 +14,6 @@ export default defineConfig((): UserConfig => {
         "~": resolve(__dirname, "app"),
       },
     },
-    build: {
-      sourcemap: false,
-    },
     // server: {
     //   proxy: {
     //     '^api/.*': {
