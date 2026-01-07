@@ -90,7 +90,7 @@ export function BookmarkList() {
       <div className="grid grid-cols-[auto_1fr] gap-4 items-center">
         <div className="flex gap-2 items-center">
           <BookOpenIcon />
-          <Label htmlFor="search" className="pb-2 text-xl">Your bookmarks</Label>
+          <Label htmlFor="search" className="pb-2 text-xl">My bookmarks</Label>
         </div>
         <Input
           type="search"
@@ -120,7 +120,7 @@ export function BookmarkList() {
             <div className="flex flex-col gap-2">
               <Label className="pb-2">Pinned bookmarks:</Label>
               <ScrollArea className="h-full">
-                <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-2 items-start justify-center">
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 items-start justify-center">
                   {pinnedBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
                 </div>
               </ScrollArea>
@@ -128,7 +128,7 @@ export function BookmarkList() {
             <div className="flex flex-col gap-2">
               <Label className="pb-2">Other bookmarks:</Label>
               <ScrollArea className="h-full">
-                <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-x-2 items-start justify-center">
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 items-start justify-center">
                   {otherBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
                 </div>
               </ScrollArea>
@@ -166,7 +166,7 @@ export function BookmarkList() {
           </div>
         </div>
         <FormDialog
-          trigger={<Button>Add a new bookmark</Button>}
+          trigger={<Button variant="outline">New bookmark</Button>}
           onSubmit={onSubmit}
           open={dialogOpen}
           onOpenChange={setDialogOpen}

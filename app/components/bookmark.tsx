@@ -39,16 +39,23 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
   }
 
   return (
-    <div className="flex justify-between items-center gap-2 hover:bg-primary/10 rounded-sm px-3 py-1">
-      <a href={bookmark.href} rel="noopener noreferrer" onClick={onBookmarkClick}>{bookmark.name}</a>
+    <div className="h-8 group flex justify-between items-center gap-2 hover:bg-primary/10 rounded-sm px-3 py-1">
+      <a
+        title={bookmark.name}
+        href={bookmark.href}
+        rel="noopener noreferrer"
+        onClick={onBookmarkClick}
+      >
+        {bookmark.name}
+      </a>
       <AlertDialog
         trigger={(
-          <div className="border rounded-md p-1" title="Delete bookmark">
+          <div className="hidden group-hover:block border rounded-md p-1" title="Delete bookmark">
             <TrashIcon className="cursor-pointer" size={16} />
           </div>
         )}
         onConfirm={onDeleteConfirm}
-        title={t('bookmark.delete')}
+        title={t('bookmark.delete.title')}
         description={t('bookmark.delete.description', {
           title: bookmark.name,
           url: bookmark.href,
@@ -57,19 +64,19 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
       />
       <FormDialog
         trigger={(
-          <div className="border rounded-md p-1" title="Edit bookmark">
+          <div className="hidden group-hover:block border rounded-md p-1" title="Edit bookmark">
             <PenIcon className="cursor-pointer" size={16} />
           </div>
         )}
         onSubmit={onEditSubmit}
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
-        title={t('bookmark.edit')}
+        title={t('bookmark.edit.title')}
         description={t('bookmark.edit.description')}
         submit={t('bookmark.edit.confirm')}
       >
         <BookmarkForm bookmark={bookmark} />
       </FormDialog>
-    </div >
+    </div>
   );
 }
