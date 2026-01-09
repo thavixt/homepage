@@ -98,6 +98,7 @@ function getBookmarkImage(bookmarkTitle: string) {
     `https://ui-avatars.com/api/`,
     `?name=${bookmarkTitle}`,
     `&length=3`,
+    `&uppercase=false`,
     `&bold=true`,
     `&background=303030`,
     `&color=c0c0c0`,
