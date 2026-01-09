@@ -11,6 +11,7 @@ export type Bookmark = {
   name: string;
   href: string;
   pinned?: boolean;
+  abbrev?: string;
 }
 
 export const initialState: BookmarksState = {
@@ -74,7 +75,7 @@ export const bookmarkSlice = createSlice({
       ]
       toast.success(`Bookmark "${action.payload.name}" saved`);
     },
-    updateBookmark: (state, action: PayloadAction<Pick<Bookmark, 'id' | 'name' | 'href' | 'pinned'>>) => {
+    updateBookmark: (state, action: PayloadAction<Pick<Bookmark, 'id' | 'name' | 'href' | 'pinned' | 'abbrev'>>) => {
       if (state.bookmarks.find(b => b.name === action.payload.name && b.id !== action.payload.id)) {
         toast.error(`A bookmark with the same name already exists for "${action.payload.name}"`);
         return;

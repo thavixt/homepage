@@ -25,6 +25,7 @@ const en = {
     form: {
       name: "Name",
       pinned: "Pinned",
+      abbrev: "Abbrev. (max 3 chars.)",
       required: "Must provide a name and link for the bookmark",
       url: "URL"
     }

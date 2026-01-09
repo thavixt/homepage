@@ -25,6 +25,15 @@ export function BookmarkForm({ bookmark }: { bookmark?: Bookmark }) {
           defaultValue={bookmark?.href ?? 'http://'}
         />
       </div>
+      <div className="grid gap-3">
+        <Label htmlFor="abbrev">{t('bookmark.form.abbrev')}</Label>
+        <Input
+          id="abbrev"
+          name="abbrev"
+          defaultValue={bookmark?.abbrev ?? ''}
+          maxLength={3}
+        />
+      </div>
       <div className="grid grid-cols-[auto_1fr] gap-3">
         <Label htmlFor="pinned">{t('bookmark.form.pinned')}</Label>
         <Checkbox
