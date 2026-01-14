@@ -9,6 +9,12 @@ import { AlertDialog } from "./dialogs/alertDialog";
 import { incrementStat } from "~/reducers/statsReducer";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "./ui/hover-card"
+import { Button } from "./ui/button";
 
 export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
   const { t } = useTranslation();
@@ -41,53 +47,63 @@ export function Bookmark({ bookmark }: { bookmark: IBookmark }) {
   }
 
   return (
-    <div className="h-8 group grid grid-rows-1 grid-cols-[1rem_auto] justify-between items-center gap-2 hover:bg-primary/10 rounded-sm px-3 py-5">
-      <div>
-        <a
-          title={bookmark.name}
-          href={bookmark.href}
-          rel="noopener noreferrer"
-          onClick={onBookmarkClick}
-        >
-          <div className="flex gap-1 items-center justify-start">
-            <Avatar className="w-8 h-8 rounded-full">
-              <AvatarImage src={getBookmarkImage(bookmark.abbrev ?? bookmark.name)} alt="@shadcn" />
-            </Avatar>
-            <span>{bookmark.name}</span>
-          </div>
-        </a>
-      </div>
-      <div className="flex gap-2 items-center justify-center">
-        <AlertDialog
-          trigger={(
-            <div className="hidden group-hover:block border rounded-md p-1" title="Delete bookmark">
-              <TrashIcon className="cursor-pointer" size={16} />
+    <div className="h-8 w-full flex justify-between items-center gap-2 hover:bg-primary/10 rounded-sm px-3 py-5">
+      <div className="flex w-full">
+        <HoverCard>
+          <HoverCardTrigger
+            href={bookmark.href}
+            rel="noopener noreferrer"
+            onClick={onBookmarkClick}
+          >
+            <div className="flex gap-1 items-center justify-start">
+              <Avatar className="w-8 h-8 rounded-full">
+                <AvatarImage src={getBookmarkImage(bookmark.abbrev ?? bookmark.name)} alt="@shadcn" />
+              </Avatar>
+              <div className="truncate">{bookmark.name}</div>
             </div>
-          )}
-          onConfirm={onDeleteConfirm}
-          title={t('bookmark.delete.title')}
-          description={t('bookmark.delete.description', {
-            title: bookmark.name,
-            url: bookmark.href,
-            interpolation: { escapeValue: false }
-          })}
-          confirm={t('bookmark.delete.confirm')}
-        />
-        <FormDialog
-          trigger={(
-            <div className="hidden group-hover:block border rounded-md p-1" title="Edit bookmark">
-              <PenIcon className="cursor-pointer" size={16} />
+          </HoverCardTrigger>
+          <HoverCardContent align="center" side="bottom" className="w-fit flex flex-col gap-4 items-start">
+            <div>
+              <p><b>{bookmark.name}</b></p>
+              <p><small><code>{bookmark.href}</code></small></p>
             </div>
-          )}
-          onSubmit={onEditSubmit}
-          open={editDialogOpen}
-          onOpenChange={setEditDialogOpen}
-          title={t('bookmark.edit.title')}
-          description={t('bookmark.edit.description')}
-          submit={t('bookmark.edit.confirm')}
-        >
-          <BookmarkForm bookmark={bookmark} />
-        </FormDialog>
+            <div className="flex gap-2 items-center justify-center text-white">
+              <AlertDialog
+                triggerAsChild
+                trigger={(
+                  <Button variant="ghost" size="sm" title="Delete bookmark">
+                    <span>Delete</span>
+                    <TrashIcon size={16} />
+                  </Button>
+                )}
+                onConfirm={onDeleteConfirm}
+                title={t('bookmark.delete.title')}
+                description={t('bookmark.delete.description', {
+                  title: bookmark.name,
+                  url: bookmark.href,
+                  interpolation: { escapeValue: false }
+                })}
+                confirm={t('bookmark.delete.confirm')}
+              />
+              <FormDialog
+                trigger={(
+                  <Button variant="outline" size="sm" title="Delete bookmark">
+                    <span>Edit</span>
+                    <PenIcon size={16} />
+                  </Button>
+                )}
+                onSubmit={onEditSubmit}
+                open={editDialogOpen}
+                onOpenChange={setEditDialogOpen}
+                title={t('bookmark.edit.title')}
+                description={t('bookmark.edit.description')}
+                submit={t('bookmark.edit.confirm')}
+              >
+                <BookmarkForm bookmark={bookmark} />
+              </FormDialog>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
       </div>
     </div>
   );

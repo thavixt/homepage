@@ -10,7 +10,7 @@ export function AiGreetingWidget({ className }: { className?: string }) {
 
   if (!data || isLoading) {
     return <div className={cn("flex flex-col", className)}>
-      <LoaderCircle className="animate-spin size-20 opacity-35" />
+      <LoaderCircle className="animate-spin size-20 opacity-50" />
     </div>
   }
 
@@ -20,7 +20,7 @@ export function AiGreetingWidget({ className }: { className?: string }) {
         <p className="whitespace-pre-wrap w-full italic px-4 text-center">{data}</p>
       ) : (
         <>
-          <LoaderCircle className="animate-spin size-14 opacity-35" />
+          <LoaderCircle className="animate-spin size-14" />
           <p className="whitespace-pre-wrap">{t("common.loading")}</p>
         </>
       )}

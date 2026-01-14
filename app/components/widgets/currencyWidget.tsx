@@ -11,7 +11,7 @@ export function CurrencyWidget({ className }: { className?: string }) {
 
   if (!data || isPending) {
     return <div className={cn("flex flex-col", className)}>
-      <LoaderCircle className="animate-spin size-20 opacity-35" />
+      <LoaderCircle className="animate-spin size-20 opacity-50" />
     </div>
   }
 

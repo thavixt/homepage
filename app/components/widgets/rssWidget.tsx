@@ -10,7 +10,7 @@ export function RssWidget({ className, rssUrl }: { className?: string; rssUrl: s
 
   if (!data || isLoading) {
     return <div className={cn("flex flex-col", className)}>
-      <LoaderCircle className="animate-spin size-20 opacity-35" />
+      <LoaderCircle className="animate-spin size-20 opacity-50" />
     </div>
   }
 

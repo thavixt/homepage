@@ -121,7 +121,9 @@ export function BookmarkList() {
               <Label className="pb-2">Pinned bookmarks:</Label>
               <ScrollArea className="h-full">
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 items-start justify-center">
-                  {pinnedBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
+                  {pinnedBookmarks.map(bookmark => (
+                    <Bookmark key={bookmark.id} bookmark={bookmark} />
+                  ))}
                 </div>
               </ScrollArea>
             </div>
@@ -129,7 +131,9 @@ export function BookmarkList() {
               <Label className="pb-2">Other bookmarks:</Label>
               <ScrollArea className="h-full">
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 items-start justify-center">
-                  {otherBookmarks.map(bookmark => <Bookmark key={bookmark.id} bookmark={bookmark} />)}
+                  {otherBookmarks.map(bookmark => (
+                    <Bookmark key={bookmark.id} bookmark={bookmark} />
+                  ))}
                 </div>
               </ScrollArea>
             </div>

@@ -10,7 +10,7 @@ export function WeatherWidget({ className, slim = false }: { className?: string,
 
   if (!weatherData || isLoading) {
     return <div className={cn("flex flex-col", className)}>
-      <LoaderCircle className="animate-spin size-20 opacity-35" />
+      <LoaderCircle className="animate-spin size-20 opacity-50" />
     </div>
   }
 
@@ -50,7 +50,7 @@ export function WeatherWidget({ className, slim = false }: { className?: string,
             </small>
           </div>
           {slim ? null : (
-            <small className="text-[10px] opacity-50">
+            <small className="text-[10px]">
               {t('common.from')}
               {" "}<a href="https://www.weatherapi.com/" target="_blank" rel="noreferrer">WeatherAPI</a>
               {" "}{t('weather.attribution2')}
@@ -60,7 +60,7 @@ export function WeatherWidget({ className, slim = false }: { className?: string,
       ) : (
         <div className="animate-pulse flex items-center justify-center h-40 gap-2">
           <span>{t('weather.loadingText')}</span>
-          <LoaderPinwheel className={cn('opacity-50', { 'animate-spin': isLoading })} />
+          <LoaderPinwheel className={cn({ 'animate-spin': isLoading })} />
         </div>
       )}
     </div>

@@ -72,7 +72,7 @@ export default function DashboardPage() {
           {/* <div className="row-span-1 col-span-full" />  */} {/* placeholder grid row */}
           <RssWidget className="row-span-2 col-span-2" rssUrl={rssUrl1} />
           <RssWidget className="row-span-2 col-span-2" rssUrl={rssUrl2} />
-          <CameraWidget className="absolute inset-0 size-full z-10 opacity-50" />
+          <CameraWidget className="absolute inset-0 size-full z-10 opacity-35" />
         </div>
       </CardContent>
     </Card>
